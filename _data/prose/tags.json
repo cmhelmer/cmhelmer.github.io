@@ -1,0 +1,28 @@
+---
+# Site data tags for Prose.io
+# Set permalink in order to output file for API (and include _data in config)
+permalink:	/data/prose/tags.json
+---
+
+{%- comment -%} Assemble and sort tags for all documents {%- endcomment -%}
+{%- assign tags = site.documents | map: "tags" | uniq | sort_natural -%}
+
+{%- capture site_tags -%}
+
+	{%- for tag in tags -%}
+
+		{%- comment -%}
+		Prose.io format: { "name": "Granny Apples", "value": "granny-apples" }
+		{%- endcomment -%}
+
+		{"name":{{- tag | jsonify -}},"value":{{- tag | jsonify -}}}
+
+		{%- unless forloop.last -%}
+			,
+		{%- endunless -%}
+
+	{%- endfor -%}
+
+{%- endcapture -%}
+
+{{ site_tags | strip_newlines | normalize_whitespace | strip }}
