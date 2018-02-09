@@ -21,8 +21,6 @@ order:	0
 	{%- endif -%}
 {%- endif -%}
 
-{%- comment -%}
-
 {%- assign documents = site.documents | where: "uid", true | sort: "uid" | reverse -%}
 {%- assign home_docs = "" | split: "," -%}
 
@@ -47,7 +45,7 @@ order:	0
 
 			{%- include doc-list.html docs=limited_latest_docs -%}
 
-<!-- <p><a href="{{ "/contents" | relative_url }}" rel="archives">See more…</a></p> -->
+			<!-- <p><a href="{{ "/contents" | relative_url }}" rel="archives">See more…</a></p> -->
 
 		</section>
 		{%- endif -%}
@@ -73,6 +71,8 @@ order:	0
 		</section>
 		{%- endif -%}
 
+		{%- comment -%}
+
 		{%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
 		{%- if updated_docs.size > 0 -%}
 		<section>
@@ -94,7 +94,7 @@ order:	0
 		</section>
 		{%- endif -%}
 
+		{%- endcomment -%}
+
 	</div>
 </article>
-
-{%- endcomment -%}
