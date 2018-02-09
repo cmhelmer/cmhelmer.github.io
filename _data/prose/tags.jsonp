@@ -1,13 +1,16 @@
 ---
 # Site data tags for Prose.io
 # Set permalink in order to output file for API (and include _data in config)
-permalink:	/data/prose/tags.json
+# Return callback with json data
+permalink:	/data/prose/tags.jsonp
 ---
 
 {%- comment -%} Assemble and sort tags for all documents {%- endcomment -%}
 {%- assign tags = site.documents | map: "tags" | uniq | sort_natural -%}
 
 {%- capture site_tags -%}
+
+callback([
 
 	{%- for tag in tags -%}
 
@@ -22,6 +25,8 @@ permalink:	/data/prose/tags.json
 		{%- endunless -%}
 
 	{%- endfor -%}
+
+])
 
 {%- endcapture -%}
 

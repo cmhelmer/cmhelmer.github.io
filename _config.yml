@@ -145,5 +145,11 @@ prose:
     _posts:
       - name: "date"
         field:
-          element: "text"
-          label: CURRENT_DATETIME
+          element: hidden
+          value: CURRENT_DATETIME
+      - name: "tags"
+        field:
+          element: "multiselect"
+          label: "tags"
+          options: "https://cmhelmer.com/data/prose/tags.jsonp"
+          alterable: true
