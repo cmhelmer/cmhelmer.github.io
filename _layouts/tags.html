@@ -5,11 +5,11 @@ layout: default
 
 {%- comment -%}
 
-This tags page builds a tag archive for a site or a collection (site.tags does not include tags from collections). It builds out a list of tags, followed by a section for each tag with a list of documents containing that tag.
+Build a tag archive for the site or a collection (site.tags does not include tags from collections), with links to documents.
 
-Tags are run through the "slugify" filter for urls/ids. This filter might cause mismatches or duplicate ids if tags contain non-alphanumeric characters (hashtags are stripped, for example). If so, look at Jekyll's other (non-default) options for the "slugify" filter (https://jekyllrb.com/docs/templates/).
+Tags are treated as case-insensitive for the purpose of urls (all downcase), so use them accordingly. Tags are also run through the "slugify" filter. Watch out for similar tags which contain non-alphanumeric characters (hashtags are stripped, for example, so #tag = tag). If this is a problem, look at Jekyll's other (non-default) options for the "slugify" filter (https://jekyllrb.com/docs/templates/).
 
-Tags are treated as case-insensitive for the purpose of urls (all downcase), so use them accordingly.
+To link to a tag from elsewhere, use https://cmhelmer.com/tags#<tag>
 
 {%- endcomment -%}
 
