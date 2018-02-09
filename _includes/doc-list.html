@@ -1,0 +1,43 @@
+{%- comment -%}
+
+Include document list
+Builds out list with title (or excerpt) and ID (not date)
+- Pass in documents
+
+{%- endcomment -%}
+
+{%- assign docs = include.docs -%}
+
+{%- if docs.size > 0 -%}
+<ol class="doc-list">
+
+	{%- for doc in docs -%}
+
+	{%- assign doc_title = doc.title | strip -%}
+	{%- assign doc_uid = doc.uid | strip -%}
+
+	{%- if doc_title != doc_uid -%}
+
+	{%- capture doc_preview -%}{%- include filter-title.html title=doc_title -%}{%- endcapture -%}
+	{%- assign preview_class = "doc-name" -%}
+
+	{%- else -%}
+
+	{%- capture doc_preview -%}{%- include filter-excerpt.html excerpt=doc.content -%}{%- endcapture -%}
+	{%- assign preview_class = "doc-excerpt" -%}
+
+	{%- endif -%}
+	
+	{%- assign collection = site.collections | where_exp: "collection", "collection.label == doc.collection" | first -%}
+
+	<li class="doc-item {{ doc.collection }}-collection"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+		<a href="{{ doc.url | relative_url }}" rel="bookmark">
+			<span class="doc-preview {{ preview_class }}">{{ doc_preview | strip }}</span>
+			<span class="doc-id">{{ doc_uid }}</span>
+		</a>
+	</li>
+
+	{%- endfor -%}
+
+</ol>
+{%- endif -%}

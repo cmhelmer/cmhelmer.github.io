@@ -1,0 +1,44 @@
+.doc-list {
+	list-style: none;
+	.doc-item {
+		margin-left: 0; // override
+	}
+	a {
+		display: flex;
+		justify-content: space-between;
+		text-decoration: none; // defer to child
+		&:hover,
+		&:focus,
+		&:active {
+			.doc-preview {
+				text-decoration: none;
+			}
+		}
+	}
+	.doc-preview {
+		text-decoration: underline;
+	}
+	.doc-preview,
+	.doc-id {
+		display: inline-block; // fallback for flexbox
+		vertical-align: top;   // fallback for flexbox
+	}
+	.doc-id {
+		margin-top: 0; // override * + *
+		margin-left: .1875rem;
+	}
+	.doc-preview {
+		position: relative; // for pseudo-content
+		text-overflow: ellipsis;
+		white-space: nowrap; // required for text-overflow
+		overflow: hidden; // required for text-overflow
+		hanging-punctuation: none; // because of hidden overflow
+		width: 100%; // required for text-overflow to work properly with flex
+		&::after {
+			position: absolute; // avoid triggering text-overflow unnecessarily
+			font-family: $font-body; // override .doc-title
+			font-weight: normal; // override .doc-title
+			content: "\A0. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ."; // long enough to span $measure * 1.5
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{%- comment -%}
+
+Include datetime
+
+Fabricate datetime from ID
+Because collection documents don't have dates by default
+And because we can
+
+- Pass in uid
+- Assume 12-digit ID string (YYYYMMDDhhmm)
+- Output YYYY-MM-DD hh:mm
+- Capture this include and use filter "strip" to remove whitespace
+- Use Jekyll filter "date_to_xmlschema" to format to ISO8601 standard for feeds and html "datetime" attribute
+
+TODO:
+- Set ID and output format in config
+
+{%- endcomment -%}
+
+{%- assign uid = include.uid -%}
+
+{%- assign date_year   = uid | slice:  0, 4 -%}
+{%- assign date_month  = uid | slice:  4, 2 -%}
+{%- assign date_day    = uid | slice:  6, 2 -%}
+{%- assign date_hour   = uid | slice:  8, 2 -%}
+{%- assign date_minute = uid | slice: 10, 2 -%}
+
+{{ date_year }}-{{ date_month }}-{{ date_day }} {{ date_hour }}:{{ date_minute }}

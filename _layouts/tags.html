@@ -1,0 +1,53 @@
+---
+# Tags layout
+layout: default
+---
+
+{%- comment -%}
+
+This tags page builds a tag archive for a site or a collection (site.tags does not include tags from collections). It builds out a list of tags, followed by a section for each tag with a list of documents containing that tag.
+
+Tags are run through the "slugify" filter for urls/ids. This filter might cause mismatches or duplicate ids if tags contain non-alphanumeric characters (hashtags are stripped, for example). If so, look at Jekyll's other (non-default) options for the "slugify" filter (https://jekyllrb.com/docs/templates/).
+
+Tags are treated as case-insensitive for the purpose of urls (all downcase), so use them accordingly.
+
+{%- endcomment -%}
+
+{%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
+
+<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
+
+		{{ content }}
+
+		{%- comment -%} Get list of unique tags for site or collection {%- endcomment -%}
+
+		{%- if page.collection -%}
+		{%- assign documents = site.documents | where: "collection", page.collection -%}
+		{%- else -%}
+		{%- assign documents = site.documents -%}
+		{%- endif -%}
+		{%- assign tags = documents | map: "tags" | uniq | sort_natural -%}
+
+		<ol class="tag-list">
+			{%- for tag in tags -%}
+			<li class="tag-item"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></li>
+			{%- endfor -%}
+		</ol>
+
+		{%- comment -%} Get tagged documents (in collection if we're in one) {%- endcomment -%}
+		{%- for tag in tags -%}
+		<section id="{{ tag | slugify }}" class="tag-details">
+			<h2 class="tag-summary"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></h2>
+
+			{%- assign tagged_docs = documents | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
+			{%- include doc-list.html docs=tagged_docs -%}
+
+		</section>
+		{%- endfor -%}
+
+	</div>
+</article>

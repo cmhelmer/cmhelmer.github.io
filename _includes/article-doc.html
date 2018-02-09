@@ -1,0 +1,83 @@
+{%- comment -%}
+
+Include document article
+- Pass in page
+
+{%- endcomment -%}
+
+{%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
+
+{%- assign page_uid = page.uid | strip -%}
+{%- assign page_title = page.title | strip -%}
+{%- assign page_image = page.image.path | default: page.image -%}
+{%- assign page_author = page.author | default: page.authors.first | default: site.author -%}
+{%- assign page_author = site.data.authors[page_author] | default: page_author -%}
+{%- assign page_author_name = page_author.name | default: page_author | default: '' -%}
+{%- assign page_author_email = page_author.email | default: nil -%}
+
+<article id="doc-{{ page_uid }}" class="{{ page.collection }}-collection main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+
+	<header class="doc-header">
+
+		<div class="doc-index doc-meta">
+
+			{%- if page.collection != "posts" -%}
+			<div class="doc-collection">{{ site.collections[page.collection].title | default: page.collection }}</div>
+			{%- endif -%}
+
+			{%- capture page_datetime -%}{%- include uid-to-datetime.html uid=page_uid -%}{%- endcapture -%}
+			<div class="doc-id"><time datetime="{{ page_datetime | strip | date_to_xmlschema }}">{{ page_uid }}</time></div>
+
+		</div>
+
+	    {%- if page_image -%}
+	    {%- unless page_image contains "://" -%}
+	    {%- assign page_image = page_image | absolute_url -%}
+	    {%- endunless -%}
+		<figure class="doc-image doc-meta"><img src="{{ page_image }}" alt="">{%- if page.image.description -%}<figcaption>{{ page.image.description }}</figcaption>{%- endif -%}</figure>
+		{%- endif -%}
+
+		{%- if page_title != page_uid -%}
+		{%- capture page_title -%}{%- include filter-title.html title=page_title -%}{%- endcapture -%}
+		<h1 class="doc-title doc-meta">{{ page_title | strip }}</h1>
+		{%- endif -%}
+
+		{%- if page_author_name != site.author and page_author_name != site.author.name -%}
+		<p class="doc-author doc-meta">By {{ page_author_name }}</p>
+		{%- endif -%}
+
+		{%- if page.updated -%}
+		<p class="doc-updated doc-meta">Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: site.date_format }}</time></p>
+		{%- endif -%}
+		
+		{%- if page.location and site.google_static_maps -%}
+		{%- comment -%} No check of location; Google parses addresses and coordinates {%- endcomment -%}
+		<div class="doc-location doc-meta">
+			<img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ page.location | url_encode }}&zoom=6&size=640x274&scale=2&key={{ site.google_static_maps }}" alt="Located at {{ page.location | escape }}">
+		</div>
+		{%- endif -%}
+
+	</header>
+
+	<div class="doc-content">
+
+		{%- capture page_content -%}{%- include filter-content.html content=page.content -%}{%- endcapture -%}
+		{{ page_content | strip }}
+
+	</div>
+	
+	<div class="doc-footer">
+
+		{%- comment -%} Reply by email {%- endcomment -%}
+		{%- if page_author_email -%}
+		<div class="doc-reply doc-meta"><a href="mailto:{{ page_author_email }}?subject=Re: {{ page.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>Reply</a></div>
+		{%- endif -%}
+
+		{%- comment -%} Link to GitHub history {%- endcomment -%}
+		{%- if site.github -%}
+		<div class="doc-history doc-meta"><a href="https://github.com/{{ site.github }}/{{ site.github }}.github.io/commits/master/{{ page.path }}"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>History</a></div>
+		{%- endif -%}
+
+	</div>
+
+</article>

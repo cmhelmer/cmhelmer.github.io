@@ -1,0 +1,23 @@
+.main-aside {
+	max-width: $measure;
+	margin-left: auto;
+	margin-right: auto;
+	padding: ( $gap / 2 );         // fallback for calc
+	padding: calc(#{$gutter} / 2); // split with body
+/*
+	.aside-title {
+		&::after {
+			content: "—";
+			margin-left: .25em;
+		}
+	}
+*/
+}
+
+.aside-content * + * {
+	margin-top: $gap;
+}
+
+.aside-content * + li {
+	margin-top: 0;
+}

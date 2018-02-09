@@ -1,0 +1,270 @@
+.doc-name,
+.doc-title,
+.collection-name {
+	@include font-display;
+}
+
+.doc-collection,
+.section-title,
+.aside-title,
+.aside-link {
+	@include font-smcp;
+}
+
+.doc-id {
+	// Would make this smcp but Source Sans Pro (unlike Source Serif Pro) doesn't have tnum for smcp
+	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
+	// @supports (font-variant-numeric: lining-nums tabular-nums) {
+	//	font-feature-settings: normal;
+	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
+	// }
+// 	letter-spacing: .03125em;
+}
+
+.icon {
+	width: 1em;
+	height: 1em;
+	transform: translateY(.25em);
+	margin-right: .5em;
+}
+
+/*
+// Archives
+a[href$=".7z"],
+a[href$=".cab"],
+a[href$=".gz"],
+a[href$=".lzh"],
+a[href$=".rar"],
+a[href$=".tar"],
+a[href$=".zip"] {}
+
+// Design
+a[href$=".ai"],
+a[href$=".indd"],
+a[href$=".indt"],
+a[href$=".sketch"],
+a[href$=".psb"],
+a[href$=".psd"],
+a[href$=".xcf"] {}
+
+// Development
+a[href$=".atom"],
+a[href$=".cgi"],
+a[href$=".coffee"],
+a[href$=".css"],
+a[href$=".csv"],
+a[href$=".erb"],
+a[href$=".htm"],
+a[href$=".html"],
+a[href$=".js"],
+a[href$=".less"],
+a[href$=".markdown"],
+a[href$=".md"],
+a[href$=".php"],
+a[href$=".php"],
+a[href$=".pl"],
+a[href$=".py"],
+a[href$=".rb"],
+a[href$=".rb"],
+a[href$=".rss"],
+a[href$=".sass"],
+a[href$=".scss"],
+a[href$=".styl"],
+a[href$=".swf"],
+a[href$=".xhtml"],
+a[href$=".xml"],
+a[href$=".yml"] {}
+
+// Documents
+a[href$=".doc"],
+a[href$=".docx"],
+a[href$=".key"],
+a[href$=".numbers"],
+a[href$=".odt"],
+a[href$=".pages"],
+a[href$=".pdf"],
+a[href$=".pps"],
+a[href$=".ppsx"],
+a[href$=".ppt"],
+a[href$=".pptx"],
+a[href$=".ps"],
+a[href$=".pub"],
+a[href$=".rtf"],
+a[href$=".txt"],
+a[href$=".xls"],
+a[href$=".xlr"] {}
+
+// E-books
+a[href$=".azw"],
+a[href$=".azw3"],
+a[href$=".cbr"],
+a[href$=".cbz"],
+a[href$=".epub"],
+a[href$=".mobi"] {}
+
+// Fonts
+a[href$=".eot"],
+a[href$=".otf"],
+a[href$=".ttf"],
+a[href$=".woff"],
+a[href$=".woff2"] {}
+
+// Images
+a[href$=".bmp"],
+a[href$=".gif"],
+a[href$=".gifv"],
+a[href$=".ico"],
+a[href$=".jpg"],
+a[href$=".jpeg"],
+a[href$=".png"],
+a[href$=".svg"],
+a[href$=".svz"],
+a[href$=".tiff"],
+a[href$=".tif"],
+a[href$=".webp"] {}
+
+// Movies
+a[href$=".avi"],
+a[href$=".flv"],
+a[href$=".mkv"],
+a[href$=".mov"],
+a[href$=".mp4"],
+a[href$=".mpg"],
+a[href$=".mpeg"],
+a[href$=".wmv"] {}
+
+// Music
+a[href$=".aac"],
+a[href$=".aif"],
+a[href$=".aiff"],
+a[href$=".flac"],
+a[href$=".m4a"],
+a[href$=".mid"],
+a[href$=".midi"],
+a[href$=".mp3"],
+a[href$=".ogg"],
+a[href$=".vob"] {}
+
+// Version Control
+a[href$=".git"],
+a[href$=".svn"] {}
+*/
+
+.output {
+	@include box-block( transparent );
+	border: $border-width dotted;
+}
+
+.poem p {
+	text-indent: -1.5rem;
+	margin-left: 1.5rem;
+}
+
+// Responsive Embed
+// Credit: Nicolas Gallagher and SUIT CSS.
+.video {
+	@include box( #000 );
+// 	display: block; // redundant
+// 	width: 100%; // redundant
+	position: relative;
+	overflow: hidden;
+	&::before {
+		padding-top: percentage(9 / 16);
+		display: block;
+		content: "";
+	}
+	&.video-square::before {
+		padding-top: percentage(1 / 1);
+	}
+	&.video-traditional::before {
+		padding-top: percentage(3 / 4);
+	}
+	&.video-wide::before {
+		padding-top: percentage(9 / 21);
+	}
+	> iframe {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+}
+
+.-dim {
+	@include dim;
+}
+
+.-left {
+	float: left;
+}
+.-right {
+	float: right;
+}
+
+.more {
+	font-style: italic;
+	.site-main > & {
+		max-width: $measure;
+		margin-left: auto;
+		margin-right: auto;
+		padding: ( $gap / 2 );         // fallback for calc
+		padding: calc(#{$gutter} / 2); // split with body
+	}
+}
+
+// H5BP
+.reader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+// 	padding: 0;
+	border: 0;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
+	&:active,
+	&:focus {
+		width: auto;
+		height: auto;
+		margin: $gap; // fallback for calc
+		margin: $gutter;
+		clip: auto;
+		clip-path: none;
+		overflow: visible;
+		white-space: inherit;
+	}
+}
+
+:target {
+	animation: target 3s ease forwards;
+	outline: 4px solid rgba( $color-3, .9 );
+	outline-offset: 4px;
+}
+
+@keyframes target {
+	0% {
+		outline-color: transparent;
+	}
+	25% {
+		outline-color: rgba( $color-3, .9 );
+	}
+	60% {
+		outline-color: rgba( $color-3, .9 );
+	}
+	100% {
+		outline-color: transparent;
+	}
+}
+
+.-test *,
+.-test *::before,
+.-test *::after {
+	outline: 1px solid cyan;
+}

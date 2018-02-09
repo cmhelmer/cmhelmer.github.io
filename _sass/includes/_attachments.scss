@@ -1,0 +1,52 @@
+.file-list {
+	list-style: none;
+	max-width: ( $measure * 1.5 );
+	margin-right: auto;
+	margin-left: auto;
+	display: flex;
+	flex-wrap: wrap;
+/*
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 18rem);
+// 	grid-auto-rows: minmax(1fr, 10.5rem);
+	grid-gap: $gap;
+*/
+}
+
+.file-item {
+margin-left: 0; // override
+	margin: ( $gap / -2 ); // = .file-item padding (for alignment)	display: inline-block; // fallback for flexbox
+	flex: 1 1 25%;
+	min-width: 17.5rem;
+// 	max-width: 17.5rem;
+	min-height: 7.5rem;
+	max-height: 13.5rem;
+	padding: ( $gap / 2 );
+	box-sizing: border-box;
+	
+	&::before {
+		display: none;
+	}
+	a {
+		display: block;
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		margin: 0; // override box-span
+		padding: 0; // override box-span
+		> img {
+			min-height: 100%;
+			min-width: 100%;
+			object-fit: cover;
+			border-radius: $border-radius;
+			background-color: $color-b; // for transparent images
+		}
+		&:hover,
+		&:focus,
+		&:active {
+			transform: scale(1.088);
+			> img {
+			}
+		}
+	}
+}

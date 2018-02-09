@@ -1,0 +1,26 @@
+{%- comment -%}
+
+Include post/blog article
+- Pass in post
+
+{%- endcomment -%}
+
+{%- assign post = include.post -%}
+
+{%- capture post_date -%}<time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.date_format }}</time>{%- endcapture -%}
+
+{%- if page.url != post.url -%}
+{%- capture post_date -%}<a href="{{ post.url | relative_url }}" rel="permalink">{{ post_date }}</a>{%- endcapture -%}
+{%- endif -%}
+
+<article id="post-{{ post.uid | strip }}" class="post-doc main-doc" role="document">
+	<header class="doc-header">
+		<div class="post-date doc-meta">{{ post_date }}</div>
+	</header>
+	<div class="doc-content">
+
+		{%- capture content -%}{%- include filter-content.html content=post.content -%}{%- endcapture -%}
+		{{ content | strip }}
+
+	</div>
+</article>

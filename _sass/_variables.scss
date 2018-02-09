@@ -1,0 +1,36 @@
+/* Variables */
+
+// Widths (specify in px for devices)
+$width-min:  320px; // ~mobile; site is designed mobile-first!
+$width-max: 1280px; // cap
+
+// Colors
+$color-a: #263d4b;               // primary: text (dark blue)
+$color-b: #f5f2df;               // background: body (cream)
+$color-c: rgba( $color-a, .15 ); // background: blockquotes, etc. (opaque dark blue)
+$color-d: rgba( #fff, .85);      // background: code, pre (opaque white)
+$color-1: #a6565e;               // accent: note IDs, collection names (red)
+// $color-2: #63603d;               // accent: tags (bronze) (OLD: #c0910a)
+$color-3: #1d9bf6;               // accent: outline, splash (blue)
+
+// Fonts (include @font-face in fonts.scss)
+// Body font here as default; see "directives" partial for more
+$font-body:  "Source Sans", "Source Sans Extended", "Source Sans Pro", sans-serif;
+$font-sizes: (
+	"font-size-min": 16px,
+	"font-size-max": 20px,
+	"width-min":     $width-min,
+	"width-max":     $width-max,
+);                      // specify in px; called in font-size-fluid
+$font-size-small: .875; // unitless factor
+$interval: 1.5;         // vertical rhythm
+$measure: 32rem;        // 60-70 characters
+
+// Margins
+$gap:    1rem * $interval; // between block elements
+$gutter: calc(#{$gap / 3} + 5vw); // page margin, balance white-space and sanity (= 1 gap @320px) // note: if calc, then calc will be nested within calc (ok!), but provide fallback
+
+// Borders
+$border-style:  solid;
+$border-width:  .09375rem;
+$border-radius: .09375rem;

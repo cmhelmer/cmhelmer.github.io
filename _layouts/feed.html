@@ -1,0 +1,133 @@
+{%- comment -%}
+
+Feed layout
+
+Generates feed for site or current collection
+Based on feed.xml of "jekyll-feed" plugin by Ben Balter
+
+Ignores any passed in content
+
+{%- endcomment -%}
+
+<?xml version="1.0" encoding="utf-8"?>
+{%- if page.xsl -%}
+<?xml-stylesheet type="text/xml" href="{{ '/feed.xslt.xml' | absolute_url }}"?>
+{%- endif -%}
+<feed xmlns="http://www.w3.org/2005/Atom" {%- if site.lang -%}xml:lang="{{ site.lang }}"{%- endif -%}>
+  <generator uri="https://jekyllrb.com/" version="{{ jekyll.version }}">Jekyll</generator>
+  <link href="{{ page.url | absolute_url }}" rel="self" type="application/atom+xml" />
+  <link href="{{ '/' | absolute_url }}" rel="alternate" type="text/html" {%- if site.lang -%}hreflang="{{ site.lang | default: 'en' }}" {%- endif -%}/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ '/' | absolute_url | xml_escape }}</id>
+
+  {%- if site.title -%}
+  <title type="html">{{ site.title | smartify | xml_escape }}</title>
+  {%- elsif site.name -%}
+  <title type="html">{{ site.name | smartify | xml_escape }}</title>
+  {%- endif -%}
+
+  {%- if site.description -%}
+  <subtitle>{{ site.description | xml_escape }}</subtitle>
+  {%- endif -%}
+
+  {%- if site.author -%}
+  <author>
+    <name>{{ site.author.name | default: site.author | xml_escape }}</name>
+    {%- if site.author.email -%}
+    <email>{{ site.author.email | xml_escape }}</email>
+    {%- endif -%}
+    {%- if site.author.uri -%}
+    <uri>{{ site.author.uri | xml_escape }}</uri>
+    {%- endif -%}
+  </author>
+  {%- endif -%}
+
+  {%- comment -%} Get list of docs by ID; reverse to show recent first {%- endcomment -%}
+
+  {%- if page.collection -%}
+  {%- assign documents = site.documents | where: "collection", page.collection -%}
+  {%- else -%}
+  {%- assign documents = site.documents -%}
+  {%- endif -%}
+  {%- assign docs = documents | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
+
+  {%- for doc in docs limit: 10 -%}
+
+  {%- comment -%} Pretty titles: title by default, fall back to date for posts, ID for notes {%- endcomment -%}
+  {%- if doc.title == empty and doc.date -%}
+  {%- assign doc_title = doc.date | date: site.date_format -%}
+  {%- else -%}
+  {%- assign doc_title = doc.title | smartify | strip_html | normalize_whitespace -%}
+  {%- endif -%}
+
+  {%- if doc.date -%}
+  {%- assign doc_date = doc.date -%}
+  {%- else -%}
+  {%- capture doc_date -%}{%- include uid-to-datetime.html uid=doc.uid -%}{%- endcapture -%}
+  {%- endif -%}
+
+  {%- comment -%} Get featured image (consider adding this as enclosure if we can parse `type`) {%- endcomment -%}
+
+  {%- assign doc_image = doc.image.path | default: doc.image -%}
+  {%- assign image_description = doc.image.description -%}
+  {%- unless doc_image contains "://" -%}
+  {%- assign doc_image = doc_image | absolute_url | xml_escape  -%}
+  {%- endunless -%}
+
+  <entry{%- if doc.lang -%}{{" "}}xml:lang="{{ doc.lang }}"{%- endif -%}>
+    <title type="html">{{ doc_title | xml_escape }}</title>
+    <link href="{{ doc.url | absolute_url }}" rel="alternate" type="text/html" title="{{ doc_title | xml_escape }}" />
+    <published>{{ doc_date | strip | date_to_xmlschema }}</published>
+    <updated>{{ doc.updated | default: doc_date | strip | date_to_xmlschema }}</updated>
+    <id>{{ doc.url | absolute_url | xml_escape }}</id>
+    <content type="html" xml:base="{{ doc.url | absolute_url | xml_escape }}">
+
+    	{%- comment -%} Shoehorn in featured image {%- endcomment -%}
+    	{%- if doc_image != empty -%}
+    	{%- if image_description != empty -%}
+    	<figure><img src="{{ doc_image }}" alt="{{ image_description }}" /><figcaption>{{ image_description }}</figcaption></figure>
+    	{%- else -%}
+    	<img src="{{ doc_image }}" alt="" />
+    	{%- endif -%}
+    	{%- endif -%}
+
+    	{%- capture doc_content -%}{%- include filter-content.html content=doc.content -%}{%- endcapture -%}
+    	{{ doc_content | strip | xml_escape }}
+    </content>
+
+    {%- assign doc_author = doc.author | default: doc.authors.first | default: site.author -%}
+    {%- assign doc_author = site.data.authors[doc_author] | default: doc_author -%}
+    {%- assign doc_author_email = doc_author.email | default: nil -%}
+    {%- assign doc_author_uri = doc_author.uri | default: nil -%}
+    {%- assign doc_author_name = doc_author.name | default: doc_author -%}
+    <author>
+      <name>{{ doc_author_name | default: '' | xml_escape }}</name>
+      {%- if doc_author_email != empty -%}
+      <email>{{ doc_author_email | xml_escape }}</email>
+      {%- endif -%}
+      {%- if doc_author_uri != empty -%}
+      <uri>{{ doc_author_uri | xml_escape }}</uri>
+      {%- endif -%}
+    </author>
+
+	{%- if doc.collection != "posts" -%}
+    <category term="{{ site.collections[doc.collection].title | default: doc.collection | xml_escape }}" />
+    {%- endif -%}
+
+    {%- if doc.category != empty -%}
+    <category term="{{ doc.category | xml_escape }}" />
+    {%- endif -%}
+
+    {%- for tag in doc.tags -%}
+    <category term="{{ tag | xml_escape }}" />
+    {%- endfor -%}
+
+	{%- capture doc_excerpt -%}{%- include filter-excerpt.html excerpt=doc.content -%}{%- endcapture -%}
+    <summary type="html">{{ doc_excerpt | xml_escape }}</summary>
+
+    {%- if doc_image != empty -%}
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="{{ doc_image }}" />
+    {%- endif -%}
+  </entry>
+  {%- endfor -%}
+</feed>

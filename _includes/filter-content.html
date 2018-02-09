@@ -1,0 +1,269 @@
+{%- comment -%}
+
+Filter content
+
+Order of filters in config takes precedence in conflict (if two overlap). Splits content by blank lines: "\n\n" (kramdown "block boundary") and ignores other kramdown "block boundaries" (EOB marker "\n^\n" and block inline attribute list "{: ...}").
+
+This is maddening without functions and regular expressions.
+
+- Pass in rendered content
+- Capture this include and use "strip" filter to remove whitespace.
+- Set in `_config.yml`:
+	content_filters:
+	- wiki
+	- mark
+	- figure
+
+To extend:
+- Add needles variable
+- Add needles as a `when` condition to site_needles (when set in config)
+- Add the custom filter handling and output in the loop as a `when` condition in "The filters"
+
+TODO:
+- Check if part being replaced contains any open html elements
+- Find another way to express block boundary besides literal newlines?
+- Provide a way to short-circuit the loop once enough matches have been replaced
+- Match wiki-links to note titles (regardless of ID) as secondary option
+- Other filter ideas:
+	- Video and audio links?
+	- Replace task items with (disabled) checkboxes?
+	- File transclusion
+	- Inline hashtags as links to tags
+	
+{%- endcomment -%}
+
+{%- assign content = include.content -%}
+
+{%- assign figure_needles = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
+{%- assign mark_needles   = '::...::' | split: '...' -%}
+{%- assign wiki_needles   = '[[...]]' | split: '...' -%}
+
+{%- assign site_needles = '' | split: ',' -%}
+{%- for content_filter in site.content_filters -%}
+	{%- comment -%} If this filter exists in config {%- endcomment -%}
+	{%- case content_filter -%}
+	{%- when 'figure' -%}
+		{%- assign site_needles = site_needles | push: figure_needles -%}
+	{%- when 'mark' -%}
+		{%- assign site_needles = site_needles | push: mark_needles -%}
+	{%- when 'wiki' -%}
+		{%- assign site_needles = site_needles | push: wiki_needles -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- if site_needles.size > 0 -%}
+
+	{%- comment -%} Basic check for match in content {%- endcomment -%}
+	{%- assign content_needles = '' | split: ',' -%}
+	{%- for needle in site_needles -%}
+		{%- if content contains needle.first -%}
+			{%- assign content_needles = content_needles | push: needle -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	{%- if content_needles.size > 0 -%}
+
+		{%- comment -%} Block boundary is 2 newlines (a blank line) {%- endcomment -%}
+		{%- assign block_boundary = "
+
+" -%}
+		{%- assign content_blocks = content | split: block_boundary -%}
+		{%- assign filtered_blocks = '' | split: ',' -%}
+
+		{%- comment -%} Walk through blocks to make it more robust and avoid accidental inline elements spanning blocks {%- endcomment -%}
+		{%- for block in content_blocks -%}
+
+			{%- assign block_needles = '' | split: ',' -%}
+			{%- assign filtered_block = block -%}
+
+			{%- for needle in content_needles -%}
+
+				{%- comment -%}
+				Basic check for match in block
+				Check for both opening and closing needles to prevent false positives
+				{%- endcomment -%}
+				{%- if block contains needle.first and block contains needle.last -%}
+					{%- assign block_needles = block_needles | push: needle -%}
+				{%- endif -%}
+
+			{%- endfor -%}
+
+			{%- if block_needles.size > 0 -%}
+
+				{%- for needle in block_needles -%}
+
+					{%- comment -%}
+					Split on first needle
+					Skip empty item added by Liquid split filter on string-initial match
+					{%- endcomment -%}
+
+					{%- assign block_parts = filtered_block | split: needle.first | compact -%}
+
+					{%- comment -%} Keep past parts for open `<code>` check {%- endcomment -%}
+					{%- assign previous_parts = '' | split: ',' -%}
+
+					{%- for part in block_parts -%}
+
+						{%- comment -%}
+						Check if part is nested in code (previous open `<code>` but no closing `</code>`)
+						Any markup demarcated by code tag is not intended for rendering
+						Must check all previous content because `pre > code` can contain an unknown number of blocks
+						{%- endcomment -%}
+
+						{%- assign previous_content = filtered_blocks | concat: previous_parts | join: '' -%}
+
+						{%- if previous_content contains '<code>' or previous_content contains '<code ' -%}
+
+							{%- assign code_opened_one = previous_content | split: '<code>' | shift | size -%}
+							{%- assign code_opened_two = previous_content | split: '<code ' | shift | size -%}
+							{%- assign code_opened = code_opened_one | plus: code_opened_two -%}
+							{%- assign code_closed = previous_content | split: '</code>' | shift | size -%}
+
+							{%- comment -%}
+							Check if previous content ends with code to get accurate count
+							No array item is added by Liquid split filter for string-final match
+							Slice previous_content from end on size of strings:
+							- '<code>' and '<code ': 6
+							- '</code>': 7
+							{%- endcomment -%}
+
+							{%- assign end_code_opened = previous_content | slice: -6, 6 -%}
+							{%- assign end_code_closed = previous_content | slice: -7, 7 -%}
+
+							{%- if end_code_opened == '<code>' or end_code_opened == '<code ' -%}
+								{%- assign code_opened = code_opened | plus: 1 -%}
+							{%- elsif end_code_closed == '</code>' -%}
+								{%- assign code_closed = code_closed | plus: 1 -%}
+							{%- endif -%}
+
+							{%- unless code_opened == code_closed -%}
+								{%- assign previous_parts = previous_parts | push: part -%}
+								{%- continue -%}
+							{%- endunless -%}
+
+						{%- endif -%}
+
+						{%- comment -%} Split again on closing needle (redundant for identical needles like mark {%- endcomment -%}
+						{%- assign fragment = part | split: needle.last | first -%}
+
+						{%- comment -%} Check that we captured something useful {%- endcomment -%}
+						{%- if fragment.size > 0 -%}
+
+							{%- comment -%}
+							TODO: Check if part contains any open or unmatched html elements without closing tag
+							Replacements may overlap; priority goes to the first needle
+							{%- endcomment -%}
+
+							{%- comment -%} Assemble matched content string {%- endcomment -%}
+							{%- assign content_find = fragment | prepend: needle.first | append: needle.last -%}
+							{%- assign content_replace = content_find -%}
+
+							{%- comment -%} The filters {%- endcomment -%}
+
+							{%- case needle -%}
+
+							{%- when figure_needles -%}
+
+								{%- comment -%}
+								
+								Figure filter
+
+								Split on remaining needles: closing src with opening alt attribute, and closing alt attribute
+								Keep whatever extra attributes may have been added to image 
+								Relies on consistent output of kramdown 
+								Avoids multiple inline images
+								
+								{%- endcomment -%}
+
+								{%- assign image_fragments_one = fragment | split: figure_needles[1] -%}
+								{%- assign image_src           = image_fragments_one | first -%}
+								{%- assign image_fragments_two = image_fragments_one | shift | join: figure_needles[1] | split: figure_needles[2] -%}
+								{%- assign image_alt           = image_fragments_two | first -%}
+								{%- assign image_attributes    = image_fragments_two | shift | join: figure_needles[2] | split: figure_needles.last | first -%}
+
+								{%- comment -%} Assume that no description means no figure intended {%- endcomment -%}
+								{%- if image_src.size > 0 and image_alt.size > 0 -%}
+
+									{%- capture content_replace -%}
+
+										<figure><img src="{{ image_src }}" alt="{{ image_alt }}"{{ image_attributes }}><figcaption>{{ image_alt }}</figcaption></figure>
+
+									{%- endcapture -%}
+
+								{%- endif -%}
+
+							{%- when mark_needles -%}
+
+								{%- comment -%}
+								
+								Mark filter
+
+								That's it.
+								
+								{%- endcomment -%}
+
+								{%- capture content_replace -%}
+
+									<mark>{{ fragment }}</mark>
+
+								{%- endcapture -%}
+
+							{%- when wiki_needles -%}
+
+								{%- comment -%}
+								
+								Wiki filter
+
+								Assume note IDs are first 12 digits
+								Keep remaining text for link
+								Get referenced note url and title
+								
+								{%- endcomment -%}
+
+								{%- assign uid = fragment | slice: 0, 12 -%}
+								{%- assign phrase = fragment | replace_first: uid, '' | lstrip -%}
+								{%- assign docs = site.documents | where: "uid", uid -%}
+
+								{%- comment -%} Replace only if we're sure {%- endcomment -%}
+								{%- if docs.size == 1 -%}
+
+									{%- assign doc = docs.first -%}
+									{%- capture content_replace -%}
+
+										<a href="{{ doc.url | relative_url }}" class="doc-link" title="{{ doc.title }}">{{ phrase | default: doc.title }}</a>
+
+									{%- endcapture -%}
+
+								{%- endif -%}
+
+							{%- endcase -%}
+
+							{%- comment -%}
+							And replace. 
+							Use replace instead of concatenation so that we continue to iterate over same block with all needles
+							{%- endcomment -%}
+							{%- assign filtered_block = filtered_block | replace: content_find, content_replace -%}
+
+						{%- endif -%}
+						
+						{%- assign previous_parts = previous_parts | push: part -%}
+
+					{%- endfor -%}
+
+				{%- endfor -%}
+
+			{%- endif -%}
+
+			{%- comment -%} Assemble content blocks {%- endcomment -%}
+			{%- assign filtered_blocks = filtered_blocks | push: filtered_block -%}
+
+		{%- endfor -%}
+
+		{%- comment -%} Reassemble with empty lines again {%- endcomment -%}
+		{%- assign content = filtered_blocks | join: block_boundary -%}
+
+	{%- endif -%}
+
+{%- endif -%}
+
+{{ content }}

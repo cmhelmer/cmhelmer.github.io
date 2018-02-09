@@ -1,0 +1,33 @@
+{%- comment -%}
+
+Include site search
+
+{%- endcomment -%}
+
+<aside id="search" class="site-search site-aside">
+	<h1 class="aside-title"><label for="q" form="google-search">Search</label></h1>
+	<div class="aside-content">
+		<form action="https://google.com/search" target="_blank" type="GET" id="google-search">
+			<input type="search" name="q" id="q">
+			<input type="hidden" name="as_sitesearch" value="{{ site.url }}">
+			<button type="submit"><svg class="icon icon-search" width="32" height="32"><use xlink:href="#icon-search"></use></svg></button>
+		</form>
+		<script>
+			var s=document.querySelector("#search"),
+			    f=s.querySelector("form"),
+			    i=f.querySelector("input[type=search]");
+			// Focus input
+			s.setAttribute('tabindex',0);
+			s.addEventListener("focus",function(e) {
+				i.focus();
+			});
+			// Help iOS Safari and Chrome? (enter key doesn't submit form when target="_blank"?)
+			f.addEventListener("keypress",function(e) {
+				if (e.keyCode == 13) {
+					this.submit();
+				}
+			});
+		</script>
+		<p><small class="-dim -right">(Opens in Google Search)</small></p>
+	</div>
+</aside>

@@ -1,0 +1,294 @@
+/*! Some thanks to HTML5 Boilerplate (v6.0.1 | MIT License | https://html5boilerplate.com/) */
+
+// Base paragraph and character styles, mostly for rendered Markdown elements
+
+:root {
+	@include font-body;
+	@include font-size-fluid( $font-sizes );
+	line-height: $interval;
+	color: $color-a;
+	background-color: $color-b;
+
+	// hyphens: auto;
+	// word-wrap: break-word;
+	hanging-punctuation: first last allow-end;
+	// -moz-osx-font-smoothing: grayscale;  // if animations
+	// -webkit-font-smoothing: antialiased; // if animations
+	scroll-behavior: smooth;
+}
+
+/*
+body {
+	background-image:
+		radial-gradient(circle, $color-c ( $border-width / 2 ), transparent 0%);
+	background-origin: content-box;
+	background-size: $gap $gap;
+}
+*/
+
+body, p, h1, h2, h3, h4, h5, h6, ol, ul, dl, blockquote, figure, pre, hr {
+    margin: 0;
+    padding: 0;
+}
+
+a,
+button {
+	@include box-span( transparent, inherit, true ); // apply here, not on hover, to avoid triggering layout because of rounding errors
+	box-decoration-break: clone; // pad wrapped lines
+	text-decoration-skip: ink;
+	text-decoration-skip-ink: auto;
+	&:hover,
+	&:focus,
+	&:active {
+		text-decoration: none;
+		outline: 0; // careful to make it accessible
+		color: $color-b;
+		background-color: $color-a;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+}
+
+h4, h5, h6 {
+	font-weight: inherit;
+}
+
+blockquote {
+	@include box-block;
+}
+
+blockquote blockquote {
+	margin-left: $gap;
+	padding: 0; // initial
+	border-radius: 0; // initial
+	background-color: transparent; // initial
+}
+
+code {
+	@include font-fixed;
+}
+
+:not(pre) > code {
+	@include box-span( $color-d );
+	padding: ( .0625rem / $font-size-small ) ( .3125rem / $font-size-small ); // tweak because of @include font-small
+	word-wrap: break-word; // also overflow-wrap; necessary because there is no way within markdown-rendered `code` to break lines with `<wbr>` or `&#8203;` (zero-width space)
+}
+
+pre {
+	@include box-block( $color-d );
+	@include scrolling-hints( $color-d );
+	padding-top: ( $gap / 2 ); // override
+	padding-bottom: ( $gap / 2 ); // override
+	tab-size: 4;
+	word-wrap: normal;
+	word-break: normal;
+	// white-space: pre-wrap; // Shame...
+}
+
+ol {
+	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
+	// @supports (font-variant-numeric: lining-nums tabular-nums) {
+	//	font-feature-settings: normal;
+	//	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
+	// }
+	li {
+		font-feature-settings: "onum" 1, "pnum" 1; // old-style numbers
+		// @supports (font-variant-numeric: oldstyle-nums proportional-nums) {
+		//	// font-feature-settings: normal; // inherited
+		//	font-variant-numeric: lining-nums proportional-nums; // OpenType features "onum", "pnum"
+		// }
+	}
+}
+
+ul > li {
+	display: block; // remove list-style
+	&::before {
+		content: "▪︎"; // small black square
+		float: left;
+		margin-left: -1.125em;
+	}
+	> ul > li::before {
+		content: "▫︎"; // small hollow square
+	}
+	> ul > li > ul li::before {
+		content: "⁃"; // hyphen bullet
+	}
+}
+
+nav li,
+footer li {
+	margin-left: 0;
+	&::before {
+		display: none;
+	}
+}
+
+li,
+dd {
+	margin-left: $gap;
+}
+
+dt {
+	font-weight: bolder;
+}
+
+dd::before {
+	content: "—";
+	float: left;
+	margin-left: (-$gap);
+}
+
+audio, img, svg, video, figure, table {
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+audio, img, svg, video {
+	vertical-align: top;
+}
+
+img {
+	height: auto;
+}
+
+svg {
+	fill: currentcolor;
+}
+
+video {
+	@include box( #000 );
+}
+
+figure {
+	width: fit-content;
+	img {
+		border-radius: $border-radius;
+	}
+}
+
+figcaption {
+	@include font-small;
+}
+
+figcaption,
+caption {
+	font-style: italic;
+	em,
+	cite {
+		font-style: normal; // invert
+	}
+}
+
+caption {
+	caption-side: bottom;
+}
+
+table {
+	@include font-small( 1 );
+	table-layout: fixed;
+	border-collapse: collapse;
+	font-feature-settings: "lnum" 1, "tnum" 1; // lining and tabular numbers
+	// @supports (font-variant-numeric: lining-nums tabular-nums) {
+	//	font-feature-settings: normal;
+	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
+	// }
+}
+
+th, td {
+	padding: ( ( $gap - 1rem ) / 2 ) ( $gap / 2 );
+	text-align: left;
+	vertical-align: top;
+}
+
+th {
+	border-bottom: $border-width solid;
+}
+
+mark {
+	@include box-span( rgba( #ffee00, .8 ) ); // yellow
+}
+
+// https://alistapart.com/article/web-typography-numerals
+sub {
+	font-feature-settings: "subs" 1; // subscript
+	// @supports (font-variant-position: sub) {
+	//	font-feature-settings: normal;
+	//	font-variant-position: sub; // OpenType features "subs"
+	// }
+	// @supports (font-variant-position: sub) or (font-feature-settings: "subs" 1) {
+	//	vertical-align: baseline;
+	//	font-size: inherit;
+	// }
+}
+
+sup {
+	font-feature-settings: "sups" 1; // superscript
+	// @supports (font-variant-position: super) {
+	//	font-feature-settings: normal;
+	//	font-variant-position: super; // OpenType features "sups"
+	// }
+	// @supports (font-variant-position: super) or (font-feature-settings: "sups" 1) {
+	//	vertical-align: baseline;
+	//	font-size: inherit;
+	// }
+}
+
+// Feature queries (@supports) makes Jekyll Sass compiler choke...
+// When fixed, remove rule below and uncomment @supports above
+sub,
+sup {
+	vertical-align: baseline;
+	font-size: inherit;
+}
+
+address {
+	white-space: pre-wrap;
+}
+
+small {
+	@include font-small;
+}
+
+abbr[title] {
+	-webkit-text-decoration: underline rgba(0,0,0,.25); // Not picked up by prefixfree.js
+	text-decoration: underline rgba(0,0,0,.25); // Chrome, Edge, IE, Opera, Safari
+// 	letter-spacing: .0625em;
+}
+
+hr {
+	position: relative;
+	height: $gap;
+	border: 0 none;
+	padding: 0;
+	&::after {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
+	}
+}
+
+button,
+input {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	min-height: 1.5em;
+	border-radius: $border-radius;
+	border: 0 none;
+}
+
+input {
+	padding: 0 .25em;
+}
+
+button {
+	margin: 0; // override box-span
+	cursor: pointer;
+	> * { // such as svg
+		pointer-events: none;
+	}
+}

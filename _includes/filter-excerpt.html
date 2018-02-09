@@ -1,0 +1,18 @@
+{%- comment -%}
+
+Filter excerpt
+Roll our own excerpt in order to use custom content filter
+- Pass in unrendered content
+- Capture this include and use "strip" filter to remove whitespace.
+
+{%- endcomment -%}
+
+{%- assign excerpt = include.excerpt | markdownify | strip_html | strip -%}
+
+{%- comment -%} Trim to first string after separator {%- endcomment -%}
+{%- assign excerpt = excerpt | split: site.excerpt_separator | first -%}
+
+{%- comment -%} Filter as content {%- endcomment -%}
+{%- capture excerpt -%}{%- include filter-content.html content=excerpt -%}{%- endcapture -%}
+
+{{ excerpt | strip_html | normalize_whitespace | truncate: 140 }}

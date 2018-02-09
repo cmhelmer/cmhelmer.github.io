@@ -1,0 +1,142 @@
+// Includes (properties which belong together)
+
+@mixin font-size-fluid( $font-sizes ) {
+	$font-size-min: map-get( $font-sizes, "font-size-min" );
+	$font-size-max: map-get( $font-sizes, "font-size-max" );
+	$width-min:     map-get( $font-sizes, "width-min" );
+	$width-max:     map-get( $font-sizes, "width-max" );
+
+	font-size: $font-size-min; // fallback
+
+	@media screen and (min-width: $width-min) {
+		font-size: ( ( $font-size-max + $font-size-min ) / 2 ); // fallback (average)
+
+		// https://www.smashingmagazine.com/2016/05/fluid-typography/
+		font-size: calc(#{$font-size-min} + #{strip-unit($font-size-max) - strip-unit($font-size-min)} * (100vw - #{$width-min}) / #{strip-unit($width-max) - strip-unit($width-min)});
+	}
+
+	@media screen and (min-width: $width-max) {
+		font-size: $font-size-max; // cap
+	}
+}
+
+// Maintain vertical rhythm
+@mixin font-size( $factor: 1, $line-height: $interval ) {
+	font-size: $factor * 1em;
+	line-height: ( $line-height / $factor );
+}
+
+// Small font size
+@mixin font-small( $line-height: $interval ) {
+	@include font-size( $font-size-small, $line-height );
+}
+
+// Font treatment for body
+@mixin font-body {
+	font-family: $font-body;
+	font-kerning: normal;
+	font-feature-settings: "onum" 1, "pnum" 1; // old-style, proportional numbers
+	// @supports (font-variant-numeric: oldstyle-nums) {
+	//	font-feature-settings: normal;
+	//	font-variant-numeric: oldstyle-nums proportional-nums; // OpenType feature "onum", "pnum"
+	// }
+	// text-rendering: optimizeLegibility;
+}
+
+// Font treatment for headings
+@mixin font-display {
+	font-family: "Source Serif", "Source Serif Pro", $font-body;
+	font-weight: 600;   // semibold
+	font-style: normal; // forced, "Source Serif Pro" has no italics (yet)
+}
+
+// Font treatment for site title (logo)
+@mixin font-title {
+	font-family: "Source Serif", "Source Serif Pro", $font-body;
+	font-weight: 900;
+	// font-kerning: none;
+	word-spacing: -.125em;
+	letter-spacing: -.015625em;
+}
+
+// Font treatment for fixed-width
+@mixin font-fixed {
+	font-family: "Source Code", "Source Code Pro", monospace;
+	@include font-small;
+	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
+	// @supports (font-variant-numeric: lining-nums tabular-nums) {
+	//	font-feature-settings: normal;
+	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
+	// }
+	hanging-punctuation: none;
+	hyphens: none;
+}
+
+// Small-caps
+@mixin font-smcp {
+	font-family: $font-body; // must have OpenType features
+	font-feature-settings: 'smcp' 1, 'c2sc' 1, 'lnum' 1; // small-caps, capitals-to-small-caps, lining numbers
+	// @supports (font-variant-caps: all-small-caps) and (font-variant-numeric: lining-nums) {
+	//	font-feature-settings: normal;
+	//	font-variant-caps: all-small-caps; // OpenType features "c2sc", "smcp"
+	//	font-variant-numeric: lining-nums; // OpenType feature "lnum"
+	// }
+	text-transform: uppercase; // fallback
+	letter-spacing: .0625em;
+	font-weight: normal; // only regular weight webfont has small-caps (via Font Squirrel)
+}
+
+// Consistent box styles
+@mixin box( $bg-color: $color-c, $color: inherit ) {
+	border-radius: $border-radius;
+	background-color: $bg-color;
+	color: $color;
+}
+
+// Span-level boxes (code, mark, etc.)
+@mixin box-span( $bg-color: $color-c, $color: inherit, $fix-margin: false ) {
+	@include box( $bg-color, $color );
+//	padding: .0625rem .3125rem;
+	padding-left: .25rem;
+	padding-right: .25rem;
+	@if $fix-margin {
+// 		margin: -.0625rem -.3125rem;
+		margin-left: -.25rem;
+		margin-right: -.25rem;
+	}
+	@else {
+		margin: 0;
+	}
+	box-decoration-break: clone; // pad wrapped lines
+}
+
+// Block-level boxes (blockquote, pre, etc.)
+@mixin box-block( $bg-color: $color-c, $color: inherit ) {
+	@include box( $bg-color, $color );
+	display: block;
+	padding: $gap;
+}
+
+@mixin dim( $color: $color-a ) {
+	color: rgba( $color, .55 );
+}
+
+// Scrolling hints (horizontal)
+@mixin scrolling-hints( $color: $color-b ) {
+	overflow-x: auto;
+	overflow-y: hidden; // prevent vertical overflow-scrolling; side-effects?
+	background-image:
+		linear-gradient( to right, $color 30%, rgba( $color, 0 ) ),
+		radial-gradient( at left, rgba( $color-a, .15 ), rgba( $color-a, 0 ) 70% ),
+		linear-gradient( to left, $color 30%, rgba( $color, 0 ) ),
+		radial-gradient( at right, rgba( $color-a, .15 ), rgba( $color-a, 0 ) 70% );
+	background-repeat: no-repeat;
+	background-size: ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%, ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%;
+	background-position: left, left, right, right;
+	background-attachment: local, scroll, local, scroll;
+}
+
+// Remove length unit
+@function strip-unit( $number ) {
+	@return $number / ( $number * 0 + 1 );
+}

@@ -1,0 +1,102 @@
+---
+# cmhelmer.com
+# Jekyll will transform files with front matter
+# Add titles to show in "Pages" menu
+# Set order to change "Pages" menu order
+title:	Home
+layout:	default
+permalink:	/
+order:	0
+---
+
+{%- assign limit = 5 -%}
+
+{%- comment -%} Use site.documents in place of site.posts to avoid unrendered content {%- endcomment -%}
+{%- assign site_posts = site.documents | where: "collection", "posts" -%}
+{%- if site_posts.size > 0 -%}
+	{%- for post in site_posts limit: limit -%}
+		{%- include article-post.html post=post -%}
+	{%- endfor -%}
+	{%- if site_posts.size > limit -%}
+		{%- comment -%} NOTE: Manually set url to an archives page if there is one. {%- endcomment -%}
+		<div class="more"><a href="{{ "/posts/" | relative_url }}" rel="archives">Read more…</a></div>
+	{%- endif -%}
+{%- endif -%}
+
+{%- comment -%}
+
+{%- assign documents = site.documents | where: "uid", true | sort: "uid" | reverse -%}
+{%- assign home_docs = "" | split: "," -%}
+
+<article class="home-doc main-doc" role="document">
+	<div class="doc-content">
+
+		{%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
+		{%- if latest_docs.size > 0 -%}
+		<section>
+			<h2 class="section-title">Latest Notes</h1>
+
+			{%- assign limited_latest_docs = "" | split: "," -%}
+			{%- for doc in latest_docs -%}
+				{%- unless home_docs contains doc -%}
+					{%- assign limited_latest_docs = limited_latest_docs | push: doc -%}
+					{%- assign home_docs = home_docs | push: doc -%}
+				{%- endunless -%}
+				{%- if limited_latest_docs.size >= limit -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endfor -%}
+
+			{%- include doc-list.html docs=limited_latest_docs -%}
+
+<!-- <p><a href="{{ "/contents" | relative_url }}" rel="archives">See more…</a></p> -->
+
+		</section>
+		{%- endif -%}
+
+		{%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
+		{%- if featured_docs.size > 0 -%}
+		<section>
+			<h2 class="section-title">Featured Notes</h1>
+
+			{%- assign limited_featured_docs = "" | split: "," -%}
+			{%- for doc in featured_docs -%}
+				{%- unless home_docs contains doc -%}
+					{%- assign limited_featured_docs = limited_featured_docs | push: doc -%}
+					{%- assign home_docs = home_docs | push: doc -%}
+				{%- endunless -%}
+				{%- if limited_featured_docs.size >= limit -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endfor -%}
+
+			{%- include doc-list.html docs=limited_featured_docs -%}
+
+		</section>
+		{%- endif -%}
+
+		{%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
+		{%- if updated_docs.size > 0 -%}
+		<section>
+			<h2 class="section-title">Updated</h1>
+
+			{%- assign limited_updated_docs = "" | split: "," -%}
+			{%- for doc in updated_docs -%}
+				{%- unless home_docs contains doc -%}
+					{%- assign limited_updated_docs = limited_updated_docs | push: doc -%}
+					{%- assign home_docs = home_docs | push: doc -%}
+				{%- endunless -%}
+				{%- if limited_updated_docs.size >= limit -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endfor -%}
+
+			{%- include doc-list.html docs=limited_updated_docs -%}
+
+		</section>
+		{%- endif -%}
+
+	</div>
+</article>
+
+{%- endcomment -%}

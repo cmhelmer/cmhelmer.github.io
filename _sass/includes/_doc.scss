@@ -1,0 +1,161 @@
+.main-doc {
+	width: 100%; // for flexbox
+}
+
+.doc-header,
+.doc-content,
+.doc-footer {
+	padding: ( $gap / 2 );         // fallback for calc
+	padding: calc(#{$gutter} / 2); // split with body
+}
+
+.doc-meta {
+	max-width: $measure;
+	margin-left: auto;
+	margin-right: auto;
+	+ .doc-meta {
+		margin-top: $gap;
+	}
+}
+
+.doc-index {
+	display: flex;
+	flex-wrap: wrap;
+	max-width: none; // override
+	border-top: $border-width $border-style;
+	.doc-collection {
+		display: inline-block; // fallback for flexbox
+		width: 50%;
+	}
+	.doc-id {
+		text-align: right;
+		display: inline-block; // fallback for flexbox
+		width: 50%;
+	}
+}
+
+.doc-image {
+	max-width: none; // override
+	width: 100%;
+	> img {
+		width: 100%;
+		border-radius: ( $border-radius * 2 );
+	}
+}
+
+.doc-title {
+	@include font-size( 1.5 );
+	max-width: ( $measure * 1.5 );
+	.doc-meta + & {
+		margin-top: $gap; // fallback for calc
+		margin-top: $gutter;
+	}
+	.title {}
+	.title-separator {}
+	.subtitle {
+		font-weight: normal; // only in variable font
+	}
+}
+
+.doc-author,
+.doc-updated {
+	@include dim;
+}
+
+.doc-content {
+	// tomfoolery, no doubt, but gives as much flexibility as possible
+	> * {
+		max-width: $measure;
+		margin-left: auto;
+		margin-right: auto;
+		display: block; // necessary in case of child inline elements like images
+	}
+	audio,
+	video {
+		width: 100%; // looks
+	}
+	h1 {
+		@include font-size( 1.25 );
+	}
+	h2 {
+		@include font-size( 1.125 );
+	}
+	h3 {
+		@include font-size( 1.0625 );
+	}
+	* + *,
+	li + li > p,
+	dd + dd > p {
+		margin-top: $gap;
+	}
+	* + li,
+	* + dd,
+	dt + dt,
+	figcaption {
+		margin-top: 0; // override, unless there are child <p> (above)
+	}
+	> .highlighter-rouge {
+		max-width: ( $measure + ( $gap * 2 ) );
+	}
+}
+
+pre + .output,
+.highlighter-rouge + .output {
+	border: $border-width dotted; // match color of pre?
+	position: relative;
+	// Downward arrow
+	&::before {
+		position: absolute;
+		content: '';
+		width: ( $gap / 3 );
+		height: ( $gap / 3 );
+		left: 50%;
+		bottom: 100%;
+		transform: translateX(-50%) rotate(45deg);
+		transform-origin: center;
+		border: inherit;
+		border-top: 0;
+		border-left: 0;
+// 		border-radius: $border-radius;
+	}
+	&::after {
+		position: absolute;
+		content: '';
+		left: 50%;
+		bottom: 100%;
+		transform: translateX(-50%); // absolute center
+		height: ( $gap + $border-width );
+		border-left: inherit;
+	}
+}
+
+// Footnotes (like <hr>)
+.footnotes {
+	@include font-small;
+	position: relative;
+	padding-top: ( $gap * 2 );
+	&::before {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		text-align: center;
+		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
+	}
+}
+
+.doc-footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	max-width: $measure;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: $gap; // fallback for calc
+	margin-top: calc(#{$gutter} / 2); // in place of padding-top
+	padding-top: $gap; // fallback for calc
+	padding-top: $gutter;
+	border-top: $border-width $border-style;
+	.doc-meta {
+		margin: 0; // override
+	}
+}

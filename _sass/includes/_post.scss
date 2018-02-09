@@ -1,0 +1,79 @@
+.layout-post {
+	.site-main {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.main-aside {
+		min-width: ( $measure / 2 );
+	}
+}
+
+.post-doc {
+	margin-top: $gap;
+	margin-bottom: $gap;
+	.doc-header {
+		padding-bottom: 0; // override
+	}
+	.doc-content {
+		padding-top: $gap; // override
+	}
+}
+
+.post-list {
+	list-style: none;
+	.post-item {
+		margin-left: 0; // override
+	}
+}
+
+.post-list,
+.pagination-aside {
+	a {
+		display: flex;
+		text-decoration: none; // defer to child
+		&:hover,
+		&:focus,
+		&:active {
+			.post-date {
+				color: inherit;
+			}
+			.doc-preview {
+				text-decoration: none;
+			}
+		}
+	}
+	.post-date {
+		@include dim;
+	}
+	.post-date,
+	.doc-preview {
+		display: inline-block; // fallback for flexbox
+		vertical-align: top;   // fallback for flexbox
+		white-space: nowrap;   // required for text-overflow
+	}
+	.doc-preview {
+		margin-top: 0; // override * + *
+		margin-left: ( $gap / 2 );
+		text-decoration: underline;
+		text-overflow: ellipsis;
+		white-space: nowrap; // required for text-overflow
+		overflow: hidden; // required for text-overflow
+		hanging-punctuation: none; // because of hidden overflow
+	}
+}
+
+.post-date {
+	@include font-smcp;
+	.doc-header & {
+		color: $color-1;
+	}
+	a {
+		text-decoration: none;
+	}
+}
+
+.pagination-aside {
+	max-width: none;
+	flex: 1 1 ( $measure / 2 );
+// 	font-size: $font-size-small * 1rem; // no need to @include font-small to maintain vertical rhythm
+}

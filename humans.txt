@@ -1,0 +1,13 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    C. M. Helmer -- @cm_helmer
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Sass, Normalize.css, H5BP, PrefixFree.js
+    Adobe Source Sans, Source Code, Source Serif, Icomoon
+    Jekyll, GitHub Pages, Cloudflare

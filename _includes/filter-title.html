@@ -1,0 +1,114 @@
+{%- comment -%}
+
+Filter title
+- Pass in title
+- Capture this include and use "strip" filter to remove whitespace.
+
+{%- endcomment -%}
+
+{%- assign title = include.title -%}
+
+{%- comment -%}
+Convert to smart quotes
+{%- endcomment -%}
+
+{%- assign title = title | smartify -%}
+
+{%- comment -%}
+Avoid typographical orphans and widows
+{%- endcomment -%}
+
+{%- assign orphans = 3 -%}
+{%- assign widows = 3 -%}
+
+{%- if title contains " " -%}
+
+	{%- assign title_parts = title | split: " " -%}
+	{%- assign new_title = title_parts | first -%}
+
+	{%- for part in title_parts offset: 1 -%}
+
+		{%- comment -%} Replace space with non-breaking space {%- endcomment -%}
+
+		{%- assign replacement = " " -%}
+		{%- assign last_character = title_parts[forloop.index0] | split: "" | last -%}
+
+		{%- if forloop.index < orphans or forloop.rindex < widows -%}
+
+			{%- comment -%} Don't replace if preceded by punctuation break {%- endcomment -%}
+			{%- unless last_character == ":" or last_character == "." or last_character == "!" or last_character == "?" -%}
+				{%- assign replacement = "&nbsp;" -%}
+			{%- endunless -%}
+
+		{%- endif -%}
+		{%- assign new_title = new_title | append: replacement | append: part -%}
+
+	{%- endfor -%}
+
+	{%- assign title = new_title -%}
+
+{%- endif -%}
+
+{%- comment -%}
+Make subtitle (split on other punctuation besides colon?)
+{%- endcomment -%}
+
+{%- assign title_separator = ": " -%}
+
+{%- if title contains title_separator -%}
+
+	{%- assign title_parts = title | split: title_separator -%}
+	{%- assign previous_parts = "" | split: "," | push: title_parts.first -%}
+	{%- assign remaining_parts = title_parts | shift -%}
+	{%- assign subtitle = "" -%}
+
+	{%- for part in title_parts offset: 1 -%}
+
+		{%- comment -%} Ignore if colon is nested within quotes {%- endcomment -%}
+	
+		{%- assign previous_content = previous_parts | join: '' -%}
+
+		{%- if previous_content contains '‘' or previous_content contains '“' -%}
+
+			{%- assign quotes_opened_one = previous_content | split: '‘' | shift | size -%}
+			{%- assign quotes_opened_two = previous_content | split: '“' | shift | size -%}
+			
+			{%- assign quotes_closed_one = previous_content | split: '’' | shift | size -%}
+			{%- assign quotes_closed_two = previous_content | split: '”' | shift | size -%}
+
+			{%- comment -%}
+			Check if string ends with quotes to get accurate count
+			No array item is added by Liquid split filter for string-final match
+			{%- endcomment -%}
+
+			{%- assign last_character = previous_content | split: '' | last -%}
+			{%- if last_character == '’' -%}
+				{%- assign quotes_closed_one = quotes_closed_one | plus: 1 -%}
+			{%- elsif last_character == "”" -%}
+				{%- assign quotes_closed_two = quotes_closed_two | plus: 1 -%}
+			{%- endif -%}
+
+			{%- unless (quotes_opened_one <= quotes_closed_one) and (quotes_opened_two <= quotes_closed_two) -%}
+				{%- assign previous_parts = previous_parts | push: part -%}
+				{%- assign remaining_parts = remaining_parts | shift -%}
+				{%- continue -%}
+			{%- endunless -%}
+
+		{%- endif -%}
+
+		{%- assign title = previous_parts | join: title_separator -%}
+		{%- assign subtitle = remaining_parts | join: title_separator -%}
+		{%- break -%}
+
+	{%- endfor -%}
+
+	{%- if subtitle != empty -%}
+		{%- assign subtitle = subtitle | prepend: '<span class="subtitle">' | append: '</span>' -%}
+		{%- assign title = title | prepend: '<span class="title">' | append: '</span>' -%}
+		{%- assign title = title | append: '<span class="title-separator">' | append: title_separator | append: '</span>' -%}
+		{%- assign title = title | append: subtitle -%}
+	{%- endif -%}
+
+{%- endif -%}
+
+{{ title }}

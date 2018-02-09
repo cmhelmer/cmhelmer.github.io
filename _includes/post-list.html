@@ -1,0 +1,28 @@
+{%- comment -%}
+
+Include post/blog list
+Builds out list with date and excerpt
+- Pass in documents
+
+{%- endcomment -%}
+
+{%- assign posts = include.posts -%}
+
+{%- if posts.size > 0 -%}
+<ol class="post-list">
+
+	{%- for post in posts -%}
+
+	{%- capture post_preview -%}{%- include filter-excerpt.html excerpt=post.content -%}{%- endcapture -%}
+
+	<li class="post-item posts-collection">
+		<a href="{{ post.url | relative_url }}" rel="bookmark">
+			<span class="post-date">{{ post.date | date: site.date_format }}</span>
+			<span class="doc-preview">{{ post_preview | strip }}</span>
+		</a>
+	</li>
+
+	{%- endfor -%}
+
+</ol>
+{%- endif -%}

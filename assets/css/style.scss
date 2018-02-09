@@ -1,0 +1,41 @@
+---
+# Name:	From the Field Desk of C. M. Helmer
+# Author:	C. M. Helmer
+# URL:	cmhelmer.com
+# Email:	desk@cmhelmer.com
+
+# Notes:	Mobile-first, content-first. Mobile-first means it was designed for 320px wide devices first, then enhanced for device widths up to 1280px (configurable). Content-first means the ideal reading situation was designed first (font-size, line-height, line-length, white-space), then built out. For example, `box-sizing` is kept at default `content-box` and not changed site-wide to `border-box` in order for content to dictate sizes; box sizes are also set relative to font-size.)
+---
+
+// Sass configuration
+@import "variables";
+
+// Sass mixins and functions
+@import "directives";
+
+// Self-hosted webfonts
+@import "fonts";
+
+// Custom reset
+@import "reset";
+
+// Markdown elements
+@import "base";
+
+// Jekyll layouts and includes
+@import "includes/header";
+@import "includes/splash";
+@import "includes/doc";         // doc layout (main-article)
+@import "includes/post";        // post layout and blog include
+@import "includes/asides";      // asides (main-aside)
+@import "includes/collections"; // collections page and colors
+// @import "includes/attachments"; // attachments layout
+@import "includes/contents";    // contents layout and doc-list include
+@import "includes/tags";        // tags layout and doc-tags include
+@import "includes/footer";      // site-footer and site-aside
+
+// Utility classes; cascade last
+@import "utility";
+
+// Print; import to avoid extra http request; cascade last
+@import "print";

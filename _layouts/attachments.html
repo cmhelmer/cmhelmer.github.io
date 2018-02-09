@@ -1,0 +1,39 @@
+---
+# Attachments layout
+layout: default
+---
+
+{%- comment -%}
+
+Builds a gallery (list) of site static files
+Only shows files with metadata "attachment" set to true (static files are assumed hidden)
+
+- Keep in this list of static files will be large
+- Consider adding thumbnails for images
+- Static files have "collection" metadata... may required file to be located in subdirectory of collection directory...
+
+{%- endcomment -%}
+
+{%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
+
+<article id="{{ page.collection | default: 'site' }}-attachments" class="{{ page.collection | default: 'site' }}-collection attachments-doc main-doc" role="document"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
+
+		{{ content }}
+
+		{%- comment -%} Get list of static files, sort by reverse modified-date order {%- endcomment -%}
+
+		{%- if page.collection -%}
+		{%- assign files = site.static_files | where: "collection", page.collection -%}
+		{%- else -%}
+		{%- assign files = site.static_files -%}
+		{%- endif -%}
+		{%- assign attachments = files | where_exp: "file", "file.attachment == true" | sort: "modified_time" | reverse -%}
+
+		{%- include file-list.html files=attachments -%}
+
+	</div>
+</article>

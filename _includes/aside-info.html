@@ -1,0 +1,26 @@
+{%- comment -%}
+
+Include site info
+
+{%- endcomment -%}
+
+<aside id="info" class="site-info site-aside">
+	<h1 class="aside-title">Info</h1>
+	<div class="aside-content">
+		<p>{{ site.description }} See <a href="{{ "/about" | relative_url }}" rel="author">About</a>.</p>
+		<ul>
+			{%- if site.author.email -%}
+			<li><a href="mailto:{{ site.author.email }}" title="Email"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>{{ site.author.email }}</a></li>
+			{%- endif -%}
+			{%- if site.twitter -%}
+			<li><a href="https://twitter.com/{{ site.twitter.username }}" title="Twitter"><svg class="icon icon-twitter" width="32" height="32"><use xlink:href="#icon-twitter"></use></svg>@{{ site.twitter.username }}</a></li>
+			{%- endif -%}
+			{%- if site.github -%}
+			<li><a href="https://github.com/{{ site.github }}" title="GitHub"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>{{ site.github }}</a></li>
+			{%- endif -%}
+			{%- if site.feed.first -%}
+			<li><a href="{{ site.feed.first.url | absolute_url }}" title="Feed"><svg class="icon icon-feed" width="32" height="32"><use xlink:href="#icon-feed"></use></svg>feed</a></li>
+			{%- endif -%}
+		</ul>
+	</div>
+</aside>

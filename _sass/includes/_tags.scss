@@ -1,0 +1,49 @@
+.tag-list {
+	list-style: none;
+	.doc-content & {
+		column-width: ( $measure / 4 ); // to taste
+		column-gap: $gap;
+		max-width: ( $measure * 1.5 );
+		padding-bottom: $gap; // fallback for calc
+		padding-bottom: $gutter;
+		border-bottom: $border-width $border-style;
+	}
+}
+
+.tag-item {
+	margin-left: 0; // override
+	.doc-tags & {
+		display: inline-block;
+		margin-right: .25rem;
+	}
+	.doc-content & {
+		display: block;
+	}
+}
+
+.tag-details {
+	.doc-list {
+		margin-top: 0; // override
+	}
+	&:not(:target) .doc-list {
+		display: none;
+	}
+}
+
+.tag-summary {
+	font-weight: normal; // override $font-display
+}
+
+.tag,
+[rel="tag"],
+[href*="/tags#"] { // not fool-proof; should probably add absolute url
+	@include box-span( $color-1, $color-b );
+	padding-top: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small
+	padding-bottom: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small
+	font-size: $font-size-small * 1em;
+	white-space: nowrap;
+	text-decoration: none;
+	& + & {
+		margin-left: 0;
+	}
+}

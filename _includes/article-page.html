@@ -1,0 +1,17 @@
+{%- comment -%}
+
+Include page article
+- Pass in page
+
+{%- endcomment -%}
+
+<article id="page-{{ page.slug }}" class="page-doc main-doc" role="document">
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
+
+		{{ content }}
+
+	</div>
+</article>

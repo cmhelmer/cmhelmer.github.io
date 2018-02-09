@@ -1,0 +1,13 @@
+.splash {
+	display: block;
+	width: 100%;
+	// height: #{ 100vw - $gutter * 56.25 }; // 16:9 ratio of width ((100vw - padding) * 56.25)
+	margin-bottom: -#{$gap}; // fallback for calc
+	margin-bottom: calc(#{$gutter} * -1); // pull up content to taste
+	border-radius: ( $border-radius * 2 ) ( $border-radius * 2 ) 0 0;
+	fill: $color-b;
+}
+
+.splash-1 { fill: #85b1cc; }
+.splash-2 { fill: #adc8d3; }
+.splash-3 { fill: #c8d8d7; }

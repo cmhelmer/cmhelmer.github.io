@@ -1,0 +1,36 @@
+---
+# Collections
+# List collections which are set to output in config, and which have an index (landing page)
+# Exclude hard-coded 'posts'
+# Order by config value in collection, "order" (items with no order sorted last)
+# This page also shows an alternate way to render a page, with explicit title and layout metadata.
+title:	Collections
+layout:	page
+permalink:	/collections
+order:	3
+---
+
+<ul class="collection-list">
+	{%- assign collections = site.collections | where_exp: "collection", "collection.label != 'posts'" | where: "output", true | sort: "order", "last" -%}
+
+	{%- for collection in collections -%}
+
+	{%- assign index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
+
+	{%- if index.url.size > 0 -%}
+
+	{%- comment -%} Make pretty url {%- endcomment -%}
+	{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
+	{%- capture preview -%}{%- include filter-excerpt.html excerpt=index.content -%}{%- endcapture -%}
+
+	<li class="{{ collection.label }}-collection collection-item"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+		<a href="{{ url | relative_url }}">
+			<span class="collection-name">{{ collection.title | default: collection.label }}</span>
+			<span class="collection-preview">{{ preview }}</span>
+		</a>
+	</li>
+
+	{%- endif -%}
+
+	{%- endfor -%}
+</ul>

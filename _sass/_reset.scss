@@ -1,0 +1,104 @@
+/*! Some thanks to normalize.css. */
+
+// Reduced to useful elements like those put out by kramdown Markdown renderer and other elements (like forms) used in templates or raw in Markdown
+
+html {
+	-ms-text-size-adjust: 100%; // IE on Windows Phone
+	-webkit-text-size-adjust: 100%; // iOS
+}
+
+hr {
+	box-sizing: content-box; // Firefox
+	overflow: visible; // Edge, IE
+}
+
+a {
+	background-color: transparent; // IE 10
+}
+
+abbr[title] {
+	border-bottom: none; // Chrome 57-, Firefox 39-
+	text-decoration: underline; // Chrome, Edge, IE, Opera, Safari
+	text-decoration: underline dotted inherit; // Chrome, Edge, IE, Opera, Safari
+}
+
+strong {
+	font-weight: inherit; // Safari 6 with next rule
+}
+
+strong {
+	font-weight: bolder; // Chrome, Edge, Safari
+}
+
+audio,
+video {
+  display: inline-block; // IE 9-
+}
+
+audio:not([controls]) {
+	display: none; // iOS 4–7
+	height: 0; // iOS 4–7
+}
+
+img {
+	border-style: none; // IE 10-
+}
+
+svg:not(:root) {
+	overflow: hidden; // IE
+}
+
+button,
+input {
+	margin: 0; // Firefox, Safari
+	overflow: visible; // IE, Edge
+	text-transform: none; // IE, Edge
+}
+
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+	-webkit-appearance: button; // Android 4, Safari
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+	border-style: none; // Firefox
+	padding: 0; // Firefox
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+	outline: 1px dotted ButtonText; // Firefox (restore focus styles unset by previous rule)
+}
+
+[type="search"] {
+	-webkit-appearance: textfield; // Chrome, Safari
+	outline-offset: -2px; // Safari
+	background-image: -webkit-linear-gradient(transparent, transparent); // iOS Safari [CMH]
+}
+
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+	// -webkit-appearance: none; // Chrome and Safari on macOS
+}
+
+/*! Some thanks to H5BP */
+// Remove text-shadow in selection highlight:
+// https://twitter.com/miketaylr/status/12228805301
+// Vendor-prefixed and regular ::selection selectors cannot be combined
+// https://stackoverflow.com/a/16982510/7133471
+::-moz-selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+::selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}

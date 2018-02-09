@@ -1,0 +1,68 @@
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: calc(100vh - #{$gutter}); // eww
+	max-width: $width-max;
+	margin: 0 auto;
+	padding: ( $gap / 2 );         // fallback for calc
+	padding: calc(#{$gutter} / 2); // split with children for more flexibility
+}
+
+.site-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	padding: ( $gap / 2 );         // fallback for calc
+	padding: calc(#{$gutter} / 2); // split with body
+	a {
+		text-decoration: none;
+	}
+}
+
+.site-title {
+	margin-right: $gap;
+	a {
+		display: inline-block;
+		text-align: center;
+	}
+	span {
+		display: block;
+		white-space: nowrap;
+		&:first-child {
+			@include font-smcp;
+			transform: translateX(.125em); // tweak
+		}
+		&:last-child {
+			@include font-title;
+			font-size: 2rem;
+			line-height: 1;
+		}
+	}
+}
+
+.site-nav {
+	margin-top: $gap;
+	margin-left: auto; // for flexbox
+}
+
+.nav-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.nav-item {
+	display: inline-block; // fallback for flexbox
+	& + & {
+		margin-left: $gap; // fallback for calc
+		margin-left: $gutter;
+	}
+	a {
+		display: block;
+	}
+}
+
+.site-main {
+	margin-bottom: ( $gap * 2 ); // fallback for calc
+	margin-bottom: calc(#{$gutter} + $gap); // in place of .site-footer margin-top
+}
