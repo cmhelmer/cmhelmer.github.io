@@ -36,7 +36,7 @@
 
 .tag,
 [rel="tag"],
-[href*="/tags#"] { // not fool-proof; should probably add absolute url
+[href*="/tags/#"] { // not fool-proof; should probably add absolute url
 	@include box-span( $color-1, $color-b );
 	padding-top: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small
 	padding-bottom: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small

@@ -1,0 +1,51 @@
+---
+# Scripture tags layout
+layout: default
+---
+
+{%- comment -%}
+
+Build a tag archive for the list of tags in _data/scripture.json.
+
+{%- endcomment -%}
+
+<article id="scripture-tags" class="tags-doc main-doc" role="document">
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
+
+		{{ content }}
+
+		{%- comment -%} Get list of unique tags for site {%- endcomment -%}
+
+		{%- assign tags = site.documents | map: "tags" | uniq -%}
+
+		{%- comment -%}
+		Subset list of tags to those in data set
+		Loop through data set instead of tags to maintain its order
+		{%- endcomment -%}
+
+		{%- assign sub_tags = "" | split: "," -%}
+		{%- for tag in site.data.scripture -%}
+			{%- if tags contains tag -%}
+				{%- assign sub_tags = sub_tags | push: tag -%}
+			{%- endif -%}
+		{%- endfor -%}
+
+		{%- include list-tags.html my_tags=sub_tags -%}
+
+		{%- comment -%} Get tagged documents and display in sections {%- endcomment -%}
+
+		{%- for tag in my_tags -%}
+		<section id="{{ tag | slugify }}" class="tag-details">
+			<h2 class="tag-summary"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></h2>
+		
+			{%- assign tagged_docs = site.documents | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
+			{%- include list-notes.html my_docs=tagged_docs -%}
+		
+		</section>
+		{%- endfor -%}
+
+	</div>
+</article>

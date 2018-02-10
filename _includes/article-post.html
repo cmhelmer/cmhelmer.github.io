@@ -19,8 +19,9 @@ Include post/blog article
 	</header>
 	<div class="doc-content">
 
-		{%- capture doc_content -%}{%- include filter-content.html my_content=my_doc.content -%}{%- endcapture -%}
-		{{ doc_content | strip }}
+		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_content=my_doc.content -%}{%- endcapture -%}
+		{{ my_content | strip }}
 
 	</div>
 </article>

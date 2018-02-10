@@ -11,10 +11,10 @@ Doesn't display tags which only match one document (this one)
 {%- assign useful_tags = "" | split: "," -%}
 
 {%- for tag in my_tags -%}
-{%- assign docs = site.documents | where_exp: "doc", "doc.tags contains tag" -%}
-{%- if docs.size > 1 -%}
-{%- assign useful_tags = useful_tags | push: tag -%}
-{%- endif -%}
+	{%- assign docs = site.documents | where_exp: "doc", "doc.tags contains tag" -%}
+	{%- if docs.size > 1 -%}
+		{%- assign useful_tags = useful_tags | push: tag -%}
+	{%- endif -%}
 {%- endfor -%}
 {%- assign useful_tags = useful_tags | uniq | sort_natural -%}
 
@@ -22,11 +22,7 @@ Doesn't display tags which only match one document (this one)
 <aside class="doc-tags main-aside" role="complementary">
 	<h1 class="aside-title">More On…</h1>
 	<div class="aside-content">
-		<ol class="tag-list">
-			{%- for tag in useful_tags -%}
-			<li class="tag-item"><a href="/tags#{{ tag | slugify }}" rel="tag">{{ tag }}</a></li>
-			{%- endfor -%}
-		</ol>
+		{%- include list-tags.html my_tags=useful_tags -%}
 	</div>
 </aside>
 {%- endif -%}

@@ -5,7 +5,7 @@ Feed layout
 Generates feed for site or current collection
 Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
-Ignores any passed in content
+Ignore any passed in content
 
 {%- endcomment -%}
 
@@ -53,17 +53,18 @@ Ignores any passed in content
 
   {%- for doc in docs limit: 10 -%}
 
-  {%- comment -%} Pretty titles: title by default, fall back to date for posts, ID for notes {%- endcomment -%}
-  {%- if doc.title == empty and doc.date -%}
-  {%- assign doc_title = doc.date | date: site.date_format -%}
-  {%- else -%}
-  {%- assign doc_title = doc.title | smartify | strip_html | normalize_whitespace -%}
-  {%- endif -%}
+  {%- assign doc_uid = doc.uid | strip -%}
 
+  {%- comment -%} Pretty titles: title by default, fall back to date for posts, ID for notes {%- endcomment -%}
+  {%- assign doc_title = doc.title | smartify | strip_html | normalize_whitespace | strip -%}
+  {%- if doc_title == doc_uid -%}
+  {%- assign doc_title = doc.date | date: site.date_format -%}
+  {%- endif -%}
+  
   {%- if doc.date -%}
   {%- assign doc_date = doc.date -%}
   {%- else -%}
-  {%- capture doc_date -%}{%- include uid-to-datetime.html my_uid=doc.uid -%}{%- endcapture -%}
+  {%- capture doc_date -%}{%- include uid-to-datetime.html my_uid=doc_uid -%}{%- endcapture -%}
   {%- endif -%}
 
   {%- comment -%} Get featured image (consider adding this as enclosure if we can parse `type`) {%- endcomment -%}
@@ -91,8 +92,10 @@ Ignores any passed in content
     	{%- endif -%}
     	{%- endif -%}
 
-    	{%- capture doc_content -%}{%- include filter-content.html my_content=doc.content -%}{%- endcapture -%}
-    	{{ doc_content | strip | xml_escape }}
+		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+		{{ my_content | strip | xml_escape }}
+
     </content>
 
     {%- assign doc_author = doc.author | default: doc.authors.first | default: site.author -%}
