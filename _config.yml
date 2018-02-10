@@ -1,15 +1,13 @@
 title: From the Field Desk of C. M. Helmer
 description: "Personal website re: missiology, technology, bibliology."
-author:
-  name: C. M. Helmer
-  email: desk@cmhelmer.com
+author: C. M. Helmer
+
+email: desk@cmhelmer.com
+micro_blog: cmhelmer
+twitter: cm_helmer
+github: cmhelmer
 
 url: https://cmhelmer.com
-
-twitter:
-  username: cm_helmer
-
-github: cmhelmer
 
 # analytics: UA-XXXXX-Y
 
@@ -21,7 +19,7 @@ timezone: Asia/Kolkata
 
 date_format: "%b %-d, %Y"
 
-permalink: /:collection/:slug
+title_separator: "▪︎"
 
 excerpt_separator: "
 
@@ -31,6 +29,8 @@ content_filters:
 - wiki
 - mark
 - figure
+
+permalink: /:collection/:slug
 
 include: ["_pages","_data"]
 
@@ -65,23 +65,23 @@ defaults:
 - scope:
     path: "_notes"
   values:
-    layout: doc
+    layout: note
 - scope:
     path: "_ctbp"
   values:
-    layout: doc
+    layout: note
 - scope:
     path: "_lifted"
   values:
-    layout: doc
+    layout: note
 - scope:
     path: "_nepali"
   values:
-    layout: doc
+    layout: note
 - scope:
     path: "_crossroads"
   values:
-    layout: doc
+    layout: note
 # Jekyll 3.7
 # - scope:
 #     path: "*/index.html"
@@ -136,6 +136,7 @@ plugins:
 # - jekyll-optional-front-matter
 
 # Prose.io
+# https://github.com/prose/prose/wiki/Prose-Configuration
 prose:
   siteurl: "https://cmhelmer.com"
   media: "media"

@@ -26,14 +26,12 @@ Only shows files with metadata "attachment" set to true (static files are assume
 
 		{%- comment -%} Get list of static files, sort by reverse modified-date order {%- endcomment -%}
 
+		{%- assign attachments = site.static_files | where_exp: "file", "file.attachment == true" | sort: "modified_time" | reverse -%}
 		{%- if page.collection -%}
-		{%- assign files = site.static_files | where: "collection", page.collection -%}
-		{%- else -%}
-		{%- assign files = site.static_files -%}
+		{%- assign attachments = attachments | where: "collection", page.collection -%}
 		{%- endif -%}
-		{%- assign attachments = files | where_exp: "file", "file.attachment == true" | sort: "modified_time" | reverse -%}
 
-		{%- include file-list.html files=attachments -%}
+		{%- include list-files.html my_files=attachments -%}
 
 	</div>
 </article>

@@ -29,8 +29,8 @@ Builds a table of contents (list) for site documents or the current collection
 
 		{%- if page.collection == "posts" -%}
 
-		{%- assign posts = site.documents | where: "collection", "posts" -%}
-		{%- include post-list.html posts=posts -%}
+		{%- assign docs = site.documents | where: "collection", "posts" -%}
+		{%- include list-posts.html my_docs=docs -%}
 
 		{%- else -%}
 
@@ -45,7 +45,7 @@ Builds a table of contents (list) for site documents or the current collection
 		{%- endif -%}
 
 		{%- assign docs = docs | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
-		{%- include doc-list.html docs=docs -%}
+		{%- include list-notes.html my_docs=docs -%}
 
 		{%- endif -%}
 

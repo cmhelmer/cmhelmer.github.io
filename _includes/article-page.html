@@ -5,13 +5,18 @@ Include page article
 
 {%- endcomment -%}
 
-<article id="page-{{ page.slug }}" class="page-doc main-doc" role="document">
+{%- assign my_doc = include.my_doc -%}
+
+<article id="page-{{ my_doc.title | slugify }}" class="page-doc main-doc" role="document">
 	<header class="doc-header">
-		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+		<h1 class="doc-title doc-meta">{{ my_doc.title }}</h1>
 	</header>
 	<div class="doc-content">
 
-		{{ content }}
+		{%- comment -%} Render content for pages {%- endcomment -%}
+		{%- assign doc_content = my_doc.content | markdownify -%}
+		{%- capture doc_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+		{{ doc_content | strip }}
 
 	</div>
 </article>

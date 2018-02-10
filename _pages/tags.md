@@ -2,7 +2,9 @@
 # Site Tags
 layout:	tags
 permalink:	/tags
-order:	7
+menu:
+  label:	Tags
+  order:	7
 ---
 
-# Tags
+# Site Tags

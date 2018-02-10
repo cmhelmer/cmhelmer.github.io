@@ -70,10 +70,6 @@
 		margin-right: auto;
 		display: block; // necessary in case of child inline elements like images
 	}
-	audio,
-	video {
-		width: 100%; // looks
-	}
 	h1 {
 		@include font-size( 1.25 );
 	}
@@ -82,6 +78,14 @@
 	}
 	h3 {
 		@include font-size( 1.0625 );
+	}
+	audio,
+	video {
+		width: 100%; // looks
+	}
+	figure,
+	table {
+		max-width: ( $measure * 1.5 );
 	}
 	* + *,
 	li + li > p,

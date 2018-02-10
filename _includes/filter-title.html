@@ -6,13 +6,13 @@ Filter title
 
 {%- endcomment -%}
 
-{%- assign title = include.title -%}
+{%- assign my_title = include.my_title -%}
 
 {%- comment -%}
 Convert to smart quotes
 {%- endcomment -%}
 
-{%- assign title = title | smartify -%}
+{%- assign my_title = my_title | smartify -%}
 
 {%- comment -%}
 Avoid typographical orphans and widows
@@ -21,9 +21,9 @@ Avoid typographical orphans and widows
 {%- assign orphans = 3 -%}
 {%- assign widows = 3 -%}
 
-{%- if title contains " " -%}
+{%- if my_title contains " " -%}
 
-	{%- assign title_parts = title | split: " " -%}
+	{%- assign title_parts = my_title | split: " " -%}
 	{%- assign new_title = title_parts | first -%}
 
 	{%- for part in title_parts offset: 1 -%}
@@ -45,7 +45,7 @@ Avoid typographical orphans and widows
 
 	{%- endfor -%}
 
-	{%- assign title = new_title -%}
+	{%- assign my_title = new_title -%}
 
 {%- endif -%}
 
@@ -53,11 +53,11 @@ Avoid typographical orphans and widows
 Make subtitle (split on other punctuation besides colon?)
 {%- endcomment -%}
 
-{%- assign title_separator = ": " -%}
+{%- assign subtitle_demarcator = ": " -%}
 
-{%- if title contains title_separator -%}
+{%- if my_title contains subtitle_demarcator -%}
 
-	{%- assign title_parts = title | split: title_separator -%}
+	{%- assign title_parts = my_title | split: subtitle_demarcator -%}
 	{%- assign previous_parts = "" | split: "," | push: title_parts.first -%}
 	{%- assign remaining_parts = title_parts | shift -%}
 	{%- assign subtitle = "" -%}
@@ -96,19 +96,19 @@ Make subtitle (split on other punctuation besides colon?)
 
 		{%- endif -%}
 
-		{%- assign title = previous_parts | join: title_separator -%}
-		{%- assign subtitle = remaining_parts | join: title_separator -%}
+		{%- assign my_title = previous_parts | join: subtitle_demarcator -%}
+		{%- assign subtitle = remaining_parts | join: subtitle_demarcator -%}
 		{%- break -%}
 
 	{%- endfor -%}
 
 	{%- if subtitle != empty -%}
 		{%- assign subtitle = subtitle | prepend: '<span class="subtitle">' | append: '</span>' -%}
-		{%- assign title = title | prepend: '<span class="title">' | append: '</span>' -%}
-		{%- assign title = title | append: '<span class="title-separator">' | append: title_separator | append: '</span>' -%}
-		{%- assign title = title | append: subtitle -%}
+		{%- assign my_title = my_title | prepend: '<span class="title">' | append: '</span>' -%}
+		{%- assign my_title = my_title | append: '<span class="title-separator">' | append: subtitle_demarcator | append: '</span>' -%}
+		{%- assign my_title = my_title | append: subtitle -%}
 	{%- endif -%}
 
 {%- endif -%}
 
-{{ title }}
+{{ my_title }}

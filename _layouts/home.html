@@ -1,11 +1,9 @@
 ---
-# cmhelmer.com
-# Jekyll will transform files with front matter
-# Set order to show in "Pages" menu
+# Home layout
 layout:	default
-permalink:	/
-order:	0
 ---
+
+{{ content }}
 
 {%- assign limit = 5 -%}
 
@@ -13,15 +11,15 @@ order:	0
 {%- assign site_posts = site.documents | where: "collection", "posts" -%}
 {%- if site_posts.size > 0 -%}
 	{%- for post in site_posts limit: limit -%}
-		{%- include article-post.html post=post -%}
+		{%- include article-post.html my_doc=post -%}
 	{%- endfor -%}
 	{%- if site_posts.size > limit -%}
 		{%- comment -%} NOTE: Manually set url to an archives page if there is one. {%- endcomment -%}
-		<div class="more"><a href="{{ "/posts/" | relative_url }}" rel="archives">Read more…</a></div>
+		<div class="more"><a href="{{ "/posts/" | relative_url }}" rel="archives">More blog posts…</a></div>
 	{%- endif -%}
 {%- endif -%}
 
-{%- assign documents = site.documents | where: "uid", true | sort: "uid" | reverse -%}
+{%- assign documents = site.documents | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
 {%- assign home_docs = "" | split: "," -%}
 
 <article class="home-doc main-doc" role="document">
@@ -43,9 +41,9 @@ order:	0
 				{%- endif -%}
 			{%- endfor -%}
 
-			{%- include doc-list.html docs=limited_latest_docs -%}
+			{%- include list-notes.html my_docs=limited_latest_docs -%}
 
-			<!-- <p><a href="{{ "/contents" | relative_url }}" rel="archives">See more…</a></p> -->
+			<div class="more"><a href="{{ "/contents" | relative_url }}" rel="archives">More notes…</a></div>
 
 		</section>
 		{%- endif -%}
@@ -66,7 +64,7 @@ order:	0
 				{%- endif -%}
 			{%- endfor -%}
 
-			{%- include doc-list.html docs=limited_featured_docs -%}
+			{%- include list-notes.html my_docs=limited_featured_docs -%}
 
 		</section>
 		{%- endif -%}
@@ -89,7 +87,7 @@ order:	0
 				{%- endif -%}
 			{%- endfor -%}
 
-			{%- include doc-list.html docs=limited_updated_docs -%}
+			{%- include list-notes.html my_docs=limited_updated_docs -%}
 
 		</section>
 		{%- endif -%}

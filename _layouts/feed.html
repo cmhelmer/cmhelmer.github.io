@@ -33,8 +33,8 @@ Ignores any passed in content
   {%- if site.author -%}
   <author>
     <name>{{ site.author.name | default: site.author | xml_escape }}</name>
-    {%- if site.author.email -%}
-    <email>{{ site.author.email | xml_escape }}</email>
+    {%- if site.author.email or site.email -%}
+    <email>{{ site.author.email | default: site.email | xml_escape }}</email>
     {%- endif -%}
     {%- if site.author.uri -%}
     <uri>{{ site.author.uri | xml_escape }}</uri>
@@ -63,7 +63,7 @@ Ignores any passed in content
   {%- if doc.date -%}
   {%- assign doc_date = doc.date -%}
   {%- else -%}
-  {%- capture doc_date -%}{%- include uid-to-datetime.html uid=doc.uid -%}{%- endcapture -%}
+  {%- capture doc_date -%}{%- include uid-to-datetime.html my_uid=doc.uid -%}{%- endcapture -%}
   {%- endif -%}
 
   {%- comment -%} Get featured image (consider adding this as enclosure if we can parse `type`) {%- endcomment -%}
@@ -91,15 +91,14 @@ Ignores any passed in content
     	{%- endif -%}
     	{%- endif -%}
 
-    	{%- capture doc_content -%}{%- include filter-content.html content=doc.content -%}{%- endcapture -%}
+    	{%- capture doc_content -%}{%- include filter-content.html my_content=doc.content -%}{%- endcapture -%}
     	{{ doc_content | strip | xml_escape }}
     </content>
 
     {%- assign doc_author = doc.author | default: doc.authors.first | default: site.author -%}
-    {%- assign doc_author = site.data.authors[doc_author] | default: doc_author -%}
-    {%- assign doc_author_email = doc_author.email | default: nil -%}
-    {%- assign doc_author_uri = doc_author.uri | default: nil -%}
     {%- assign doc_author_name = doc_author.name | default: doc_author -%}
+    {%- assign doc_author_email = doc_author.email | default: site.email -%}
+    {%- assign doc_author_uri = doc_author.uri | default: nil -%}
     <author>
       <name>{{ doc_author_name | default: '' | xml_escape }}</name>
       {%- if doc_author_email != empty -%}
@@ -122,7 +121,7 @@ Ignores any passed in content
     <category term="{{ tag | xml_escape }}" />
     {%- endfor -%}
 
-	{%- capture doc_excerpt -%}{%- include filter-excerpt.html excerpt=doc.content -%}{%- endcapture -%}
+	{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_excerpt=doc.content -%}{%- endcapture -%}
     <summary type="html">{{ doc_excerpt | xml_escape }}</summary>
 
     {%- if doc_image != empty -%}

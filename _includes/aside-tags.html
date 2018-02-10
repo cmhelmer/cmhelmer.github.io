@@ -6,11 +6,11 @@ Doesn't display tags which only match one document (this one)
 
 {%- endcomment -%}
 
-{%- assign tags = include.tags -%}
+{%- assign my_tags = include.my_tags -%}
 
 {%- assign useful_tags = "" | split: "," -%}
 
-{%- for tag in tags -%}
+{%- for tag in my_tags -%}
 {%- assign docs = site.documents | where_exp: "doc", "doc.tags contains tag" -%}
 {%- if docs.size > 1 -%}
 {%- assign useful_tags = useful_tags | push: tag -%}

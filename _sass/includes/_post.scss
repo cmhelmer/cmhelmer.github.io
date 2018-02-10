@@ -34,7 +34,7 @@
 		&:hover,
 		&:focus,
 		&:active {
-			.post-date {
+			.doc-date {
 				color: inherit;
 			}
 			.doc-preview {
@@ -42,10 +42,10 @@
 			}
 		}
 	}
-	.post-date {
+	.doc-date {
 		@include dim;
 	}
-	.post-date,
+	.doc-date,
 	.doc-preview {
 		display: inline-block; // fallback for flexbox
 		vertical-align: top;   // fallback for flexbox
@@ -62,7 +62,7 @@
 	}
 }
 
-.post-date {
+.doc-date {
 	@include font-smcp;
 	.doc-header & {
 		color: $color-1;

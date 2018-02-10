@@ -17,12 +17,12 @@ TODO:
 
 {%- endcomment -%}
 
-{%- assign uid = include.uid -%}
+{%- assign my_uid = include.my_uid -%}
 
-{%- assign date_year   = uid | slice:  0, 4 -%}
-{%- assign date_month  = uid | slice:  4, 2 -%}
-{%- assign date_day    = uid | slice:  6, 2 -%}
-{%- assign date_hour   = uid | slice:  8, 2 -%}
-{%- assign date_minute = uid | slice: 10, 2 -%}
+{%- assign date_year   = my_uid | slice:  0, 4 -%}
+{%- assign date_month  = my_uid | slice:  4, 2 -%}
+{%- assign date_day    = my_uid | slice:  6, 2 -%}
+{%- assign date_hour   = my_uid | slice:  8, 2 -%}
+{%- assign date_minute = my_uid | slice: 10, 2 -%}
 
 {{ date_year }}-{{ date_month }}-{{ date_day }} {{ date_hour }}:{{ date_minute }}

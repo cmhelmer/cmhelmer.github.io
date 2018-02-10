@@ -1,7 +1,8 @@
 ---
 layout:	attachments
 permalink:	/media/
-# order:	5
+# menu:
+#  order:	5
 ---
 
 # Attachments

@@ -5,7 +5,9 @@
 collection:	posts
 layout:	contents
 permalink:	/posts/
-order:	2
+menu:
+  label:	Blog
+  order:	2
 ---
 
 # Micro Blog

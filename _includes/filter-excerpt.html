@@ -7,12 +7,12 @@ Roll our own excerpt in order to use custom content filter
 
 {%- endcomment -%}
 
-{%- assign excerpt = include.excerpt | markdownify | strip_html | strip -%}
+{%- assign my_excerpt = include.my_excerpt | markdownify | strip_html | strip -%}
 
 {%- comment -%} Trim to first string after separator {%- endcomment -%}
-{%- assign excerpt = excerpt | split: site.excerpt_separator | first -%}
+{%- assign my_excerpt = my_excerpt | split: site.excerpt_separator | first -%}
 
 {%- comment -%} Filter as content {%- endcomment -%}
-{%- capture excerpt -%}{%- include filter-content.html content=excerpt -%}{%- endcapture -%}
+{%- capture my_excerpt -%}{%- include filter-content.html my_content=my_excerpt -%}{%- endcapture -%}
 
-{{ excerpt | strip_html | normalize_whitespace | truncate: 140 }}
+{{ my_excerpt | strip_html | normalize_whitespace | truncate: 140 }}

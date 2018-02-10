@@ -2,7 +2,9 @@
 # Site Contents
 layout:	contents
 permalink:	/contents
-order:	6
+menu:
+  label:	Contents
+  order:	6
 ---
 
-# Contents
+# Site Contents

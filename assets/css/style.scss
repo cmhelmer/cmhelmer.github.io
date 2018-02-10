@@ -25,12 +25,12 @@
 // Jekyll layouts and includes
 @import "includes/header";
 @import "includes/splash";
-@import "includes/doc";         // doc layout (main-article)
+@import "includes/note";        // note layout (main-article)
 @import "includes/post";        // post layout and blog include
 @import "includes/asides";      // asides (main-aside)
 @import "includes/collections"; // collections page and colors
 // @import "includes/attachments"; // attachments layout
-@import "includes/contents";    // contents layout and doc-list include
+@import "includes/contents";    // contents layout and list-notes include
 @import "includes/tags";        // tags layout and doc-tags include
 @import "includes/footer";      // site-footer and site-aside
 

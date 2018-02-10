@@ -6,24 +6,24 @@ Builds out list with title (or excerpt) and ID (not date)
 
 {%- endcomment -%}
 
-{%- assign docs = include.docs -%}
+{%- assign my_docs = include.my_docs -%}
 
-{%- if docs.size > 0 -%}
+{%- if my_docs.size > 0 -%}
 <ol class="doc-list">
 
-	{%- for doc in docs -%}
+	{%- for doc in my_docs -%}
 
 	{%- assign doc_title = doc.title | strip -%}
 	{%- assign doc_uid = doc.uid | strip -%}
 
 	{%- if doc_title != doc_uid -%}
 
-	{%- capture doc_preview -%}{%- include filter-title.html title=doc_title -%}{%- endcapture -%}
+	{%- capture doc_preview -%}{%- include filter-title.html my_title=doc_title -%}{%- endcapture -%}
 	{%- assign preview_class = "doc-name" -%}
 
 	{%- else -%}
 
-	{%- capture doc_preview -%}{%- include filter-excerpt.html excerpt=doc.content -%}{%- endcapture -%}
+	{%- capture doc_preview -%}{%- include filter-excerpt.html my_excerpt=doc.content -%}{%- endcapture -%}
 	{%- assign preview_class = "doc-excerpt" -%}
 
 	{%- endif -%}

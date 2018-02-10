@@ -5,16 +5,16 @@ Include list of docs which link back to this page
 
 {%- endcomment -%}
 
-{%- assign uid = include.uid -%}
+{%- assign my_uid = include.my_uid -%}
 
-{%- assign docs = site.documents | where_exp: "doc", "doc.uid != uid" | where_exp: "doc", "doc.content contains uid" | sort: "uid", "first" | reverse -%}
+{%- assign docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.content contains my_uid" | sort: "uid", "first" | reverse -%}
 
 {%- if docs.size > 0 -%}
 <aside class="doc-links main-aside" role="complementary">
 	<h1 class="aside-title">What Links Here…</h1>
 	<div class="aside-content">
 
-		{%- include doc-list.html docs=docs -%}
+		{%- include list-notes.html my_docs=docs -%}
 
 	</div>
 </aside>

@@ -1,36 +1,49 @@
 ---
 # Collections
 # List collections which are set to output in config, and which have an index (landing page)
-# Exclude hard-coded 'posts'
-# Order by config value in collection, "order" (items with no order sorted last)
-# This page also shows an alternate way to render a page, with explicit title and layout metadata.
+# Exclude hard-coded 'posts' collection
+# Sort by config value "order"
+# This page also shows an alternate way to render a unique page with default layout.
 title:	Collections
-layout:	page
+layout:	default
 permalink:	/collections
-order:	3
+menu:
+  order:	3
 ---
 
-<ul class="collection-list">
-	{%- assign collections = site.collections | where_exp: "collection", "collection.label != 'posts'" | where: "output", true | sort: "order", "last" -%}
+<article id="page-{{ page.title | slugify }}" class="collections-doc main-doc" role="document">
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
 
-	{%- for collection in collections -%}
+		<ul class="collection-list">
+			{%- assign collections = site.collections | where_exp: "collection", "collection.label != 'posts'" | where: "output", true | sort: "order", "last" -%}
+		
+			{%- for collection in collections -%}
+		
+			{%- assign index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
+		
+			{%- if index.url.size > 0 -%}
+		
+			{%- comment -%} Make pretty url {%- endcomment -%}
+			{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
+			
+			{%- comment -%} Render content for pages if not using {{ content }} {%- endcomment -%}
+			{%- assign index_content = index.content | markdownify -%}
+			{%- capture index_excerpt -%}{%- include filter-excerpt.html my_excerpt=index_content -%}{%- endcapture -%}
+		
+			<li class="{{ collection.label }}-collection collection-item"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+				<a href="{{ url | relative_url }}">
+					<span class="collection-name">{{ collection.title | default: collection.label }}</span>
+					<span class="collection-preview">{{ index_excerpt | strip }}</span>
+				</a>
+			</li>
+		
+			{%- endif -%}
+		
+			{%- endfor -%}
+		</ul>
 
-	{%- assign index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
-
-	{%- if index.url.size > 0 -%}
-
-	{%- comment -%} Make pretty url {%- endcomment -%}
-	{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
-	{%- capture preview -%}{%- include filter-excerpt.html excerpt=index.content -%}{%- endcapture -%}
-
-	<li class="{{ collection.label }}-collection collection-item"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
-		<a href="{{ url | relative_url }}">
-			<span class="collection-name">{{ collection.title | default: collection.label }}</span>
-			<span class="collection-preview">{{ preview }}</span>
-		</a>
-	</li>
-
-	{%- endif -%}
-
-	{%- endfor -%}
-</ul>
+	</div>
+</article>

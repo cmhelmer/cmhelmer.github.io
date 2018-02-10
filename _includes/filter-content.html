@@ -32,7 +32,7 @@ TODO:
 	
 {%- endcomment -%}
 
-{%- assign content = include.content -%}
+{%- assign my_content = include.my_content -%}
 
 {%- assign figure_needles = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
 {%- assign mark_needles   = '::...::' | split: '...' -%}
@@ -56,7 +56,7 @@ TODO:
 	{%- comment -%} Basic check for match in content {%- endcomment -%}
 	{%- assign content_needles = '' | split: ',' -%}
 	{%- for needle in site_needles -%}
-		{%- if content contains needle.first -%}
+		{%- if my_content contains needle.first -%}
 			{%- assign content_needles = content_needles | push: needle -%}
 		{%- endif -%}
 	{%- endfor -%}
@@ -67,7 +67,7 @@ TODO:
 		{%- assign block_boundary = "
 
 " -%}
-		{%- assign content_blocks = content | split: block_boundary -%}
+		{%- assign content_blocks = my_content | split: block_boundary -%}
 		{%- assign filtered_blocks = '' | split: ',' -%}
 
 		{%- comment -%} Walk through blocks to make it more robust and avoid accidental inline elements spanning blocks {%- endcomment -%}
@@ -260,10 +260,10 @@ TODO:
 		{%- endfor -%}
 
 		{%- comment -%} Reassemble with empty lines again {%- endcomment -%}
-		{%- assign content = filtered_blocks | join: block_boundary -%}
+		{%- assign my_content = filtered_blocks | join: block_boundary -%}
 
 	{%- endif -%}
 
 {%- endif -%}
 
-{{ content }}
+{{ my_content }}

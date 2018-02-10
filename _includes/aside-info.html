@@ -9,11 +9,11 @@ Include site info
 	<div class="aside-content">
 		<p>{{ site.description }} See <a href="{{ "/about" | relative_url }}" rel="author">About</a>.</p>
 		<ul>
-			{%- if site.author.email -%}
-			<li><a href="mailto:{{ site.author.email }}" title="Email"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>{{ site.author.email }}</a></li>
+			{%- if site.author.email or site.email -%}
+			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>{{ site.author.email | default: site.email }}</a></li>
 			{%- endif -%}
 			{%- if site.twitter -%}
-			<li><a href="https://twitter.com/{{ site.twitter.username }}" title="Twitter"><svg class="icon icon-twitter" width="32" height="32"><use xlink:href="#icon-twitter"></use></svg>@{{ site.twitter.username }}</a></li>
+			<li><a href="https://twitter.com/{{ site.twitter.username | default: site.twitter }}" title="Twitter"><svg class="icon icon-twitter" width="32" height="32"><use xlink:href="#icon-twitter"></use></svg>@{{ site.twitter.username | default: site.twitter }}</a></li>
 			{%- endif -%}
 			{%- if site.github -%}
 			<li><a href="https://github.com/{{ site.github }}" title="GitHub"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>{{ site.github }}</a></li>

@@ -44,7 +44,7 @@ To link to a tag from elsewhere, use https://cmhelmer.com/tags#<tag>
 			<h2 class="tag-summary"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></h2>
 
 			{%- assign tagged_docs = documents | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
-			{%- include doc-list.html docs=tagged_docs -%}
+			{%- include list-notes.html my_docs=tagged_docs -%}
 
 		</section>
 		{%- endfor -%}

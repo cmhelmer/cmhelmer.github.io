@@ -3,16 +3,16 @@
 layout:	default
 ---
 
-{%- include article-post.html post=page -%}
+{%- include article-post.html my_doc=page -%}
 
 {%- if post.previous -%}
 {%- assign previous_content = post.previous.content | markdownify -%}
-{%- capture previous_preview -%}{%- include filter-excerpt.html excerpt=previous_content -%}{%- endcapture -%}
+{%- capture previous_preview -%}{%- include filter-excerpt.html my_excerpt=previous_content -%}{%- endcapture -%}
 <aside class="pagination-aside prev-aside main-aside">
 	<h1 class="aside-title">Previous</h1>
 	<div class="aside-content">
 		<a href="{{ post.previous.url | relative_url }}" rel="prev">
-			<span class="post-date">{{ post.previous.date | date: site.date_format }}</span>
+			<span class="doc-date">{{ post.previous.date | date: site.date_format }}</span>
 			<span class="doc-preview">{{ previous_preview | strip }}</span>
 		</a>
 	</div>
@@ -21,12 +21,12 @@ layout:	default
 
 {%- if post.next -%}
 {%- assign next_content = post.next.content | markdownify -%}
-{%- capture next_preview -%}{%- include filter-excerpt.html excerpt=next_content -%}{%- endcapture -%}
+{%- capture next_preview -%}{%- include filter-excerpt.html my_excerpt=next_content -%}{%- endcapture -%}
 <aside class="pagination-aside next-aside main-aside">
 	<h1 class="aside-title">Next</h1>
 	<div class="aside-content">
 		<a href="{{ post.next.url | relative_url }}" rel="next">
-			<span class="post-date">{{ post.next.date | date: site.date_format }}</span>
+			<span class="doc-date">{{ post.next.date | date: site.date_format }}</span>
 			<span class="doc-preview">{{ next_preview | strip }}</span>
 		</a>
 	</div>
