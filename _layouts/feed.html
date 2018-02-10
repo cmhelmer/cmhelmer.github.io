@@ -57,7 +57,7 @@ Ignore any passed in content
 
   {%- comment -%} Pretty titles: title by default, fall back to date for posts, ID for notes {%- endcomment -%}
   {%- assign doc_title = doc.title | smartify | strip_html | normalize_whitespace | strip -%}
-  {%- if doc_title == doc_uid -%}
+  {%- if doc_title == doc_uid and doc.date -%}
   {%- assign doc_title = doc.date | date: site.date_format -%}
   {%- endif -%}
   
@@ -107,7 +107,7 @@ Ignore any passed in content
       {%- if doc_author_email != empty -%}
       <email>{{ doc_author_email | xml_escape }}</email>
       {%- endif -%}
-      {%- if doc_author_uri != empty -%}
+      {%- if doc_author_uri -%}
       <uri>{{ doc_author_uri | xml_escape }}</uri>
       {%- endif -%}
     </author>
