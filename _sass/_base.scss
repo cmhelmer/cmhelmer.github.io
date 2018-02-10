@@ -261,7 +261,7 @@ abbr[title] {
 hr {
 	position: relative;
 	height: $gap;
-	border: 0 none;
+	border: 0;
 	padding: 0;
 	&::after {
 		position: absolute;
@@ -278,7 +278,7 @@ input {
 	line-height: inherit;
 	min-height: 1.5em;
 	border-radius: $border-radius;
-	border: 0 none;
+	border: 0;
 }
 
 input {
