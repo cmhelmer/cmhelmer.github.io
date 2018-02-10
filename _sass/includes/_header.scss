@@ -64,5 +64,5 @@ body {
 
 .site-main {
 	margin-bottom: ( $gap * 2 ); // fallback for calc
-	margin-bottom: calc(#{$gutter} + $gap); // in place of .site-footer margin-top
+	margin-bottom: calc(#{$gutter} + #{$gap}); // in place of .site-footer margin-top
 }
