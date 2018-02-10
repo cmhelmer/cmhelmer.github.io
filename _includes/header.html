@@ -7,8 +7,17 @@ Include site header
 <!doctype html>
 <html lang="{{ page.lang | default: site.lang | default: 'en' }}">
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
+	<meta name="format-detection" content="telephone=no">
+	<meta name="skype_toolbar" content="skype_toolbar_parser_compatible">
 
+	{%- comment -%}
 	{%- include header-meta.html -%}
+	{%- endcomment -%}
 
 	<link rel="stylesheet" href="{{ "/assets/css/style.css" | absolute_url }}?{{ site.time | date: '%s%N' }}">
 	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.time | date: '%s%N' }}" async></script>
@@ -21,6 +30,7 @@ Include site header
 	{%- endfor -%}
 	{%- endif -%}
 
+	{%- seo -%}
 	<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script><![endif]-->
 </head>
 
