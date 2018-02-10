@@ -5,9 +5,9 @@ Include site search
 {%- endcomment -%}
 
 <aside id="search" class="site-search site-aside">
-	<h1 class="aside-title"><label for="q" form="google-search">Search</label></h1>
+	<h3 class="aside-title">Search</h3>
 	<div class="aside-content">
-		<form action="https://google.com/search" target="_blank" type="GET" id="google-search">
+		<form action="https://google.com/search" target="_blank" method="GET">
 			<input type="search" name="q" id="q">
 			<input type="hidden" name="as_sitesearch" value="{{ site.url }}">
 			<button type="submit"><svg class="icon icon-search" width="32" height="32"><use xlink:href="#icon-search"></use></svg></button>

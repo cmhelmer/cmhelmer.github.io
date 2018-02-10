@@ -15,7 +15,7 @@ layout:	default
 	{%- endfor -%}
 	{%- if site_posts.size > limit -%}
 		{%- comment -%} NOTE: Manually set url to an archives page if there is one. {%- endcomment -%}
-		<div class="more"><a href="{{ "/posts/" | relative_url }}" rel="archives">More blog posts…</a></div>
+		<div class="more"><a href="{{ "/posts/" | relative_url }}">More blog posts…</a></div>
 	{%- endif -%}
 {%- endif -%}
 
@@ -28,7 +28,7 @@ layout:	default
 		{%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
 		{%- if latest_docs.size > 0 -%}
 		<section>
-			<h2 class="section-title">Latest Notes</h1>
+			<h2 class="section-title">Latest Notes</h2>
 
 			{%- assign limited_latest_docs = "" | split: "," -%}
 			{%- for doc in latest_docs -%}
@@ -43,7 +43,7 @@ layout:	default
 
 			{%- include list-notes.html my_docs=limited_latest_docs -%}
 
-			<div class="more"><a href="{{ "/contents" | relative_url }}" rel="archives">More notes…</a></div>
+			<div class="more"><a href="{{ "/contents" | relative_url }}">More notes…</a></div>
 
 		</section>
 		{%- endif -%}
@@ -51,7 +51,7 @@ layout:	default
 		{%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
 		{%- if featured_docs.size > 0 -%}
 		<section>
-			<h2 class="section-title">Featured Notes</h1>
+			<h2 class="section-title">Featured Notes</h2>
 
 			{%- assign limited_featured_docs = "" | split: "," -%}
 			{%- for doc in featured_docs -%}
@@ -74,7 +74,7 @@ layout:	default
 		{%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
 		{%- if updated_docs.size > 0 -%}
 		<section>
-			<h2 class="section-title">Updated</h1>
+			<h2 class="section-title">Updated</h2>
 
 			{%- assign limited_updated_docs = "" | split: "," -%}
 			{%- for doc in updated_docs -%}
