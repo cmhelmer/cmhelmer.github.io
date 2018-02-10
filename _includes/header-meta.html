@@ -4,14 +4,6 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- endcomment -%}
 
-<meta charset="utf-8">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
-<meta name="format-detection" content="telephone=no">
-<meta name="skype_toolbar" content="skype_toolbar_parser_compatible">
-
 <meta name="creator" content="{{ page.author | default: site.author.name }}">
 <meta name="revised" content="{{ page.updated | page.date | date_to_xmlschema }}">
 <meta name="designer" content="C. M. Helmer">
