@@ -15,17 +15,19 @@
 			}
 		}
 	}
-	.doc-preview {
-		text-decoration: underline;
-	}
 	.doc-preview,
-	.doc-id {
+	.doc-reference {
+		margin-top: 0; // override * + *
 		display: inline-block; // fallback for flexbox
 		vertical-align: top;   // fallback for flexbox
 	}
-	.doc-id {
-		margin-top: 0; // override * + *
+	.doc-reference {
 		margin-left: .1875rem;
+	}
+	.doc-date {
+// 		min-width: 6rem;
+		text-align: right;
+		white-space: nowrap;
 	}
 	.doc-preview {
 		position: relative; // for pseudo-content
@@ -34,6 +36,7 @@
 		overflow: hidden; // required for text-overflow
 		hanging-punctuation: none; // because of hidden overflow
 		width: 100%; // required for text-overflow to work properly with flex
+		text-decoration: underline;
 		&::after {
 			position: absolute; // avoid triggering text-overflow unnecessarily
 			font-family: $font-body; // override .doc-title

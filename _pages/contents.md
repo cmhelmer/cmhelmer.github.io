@@ -1,7 +1,7 @@
 ---
 # Site Contents
 layout:	contents
-permalink:	/contents
+permalink:	/contents/
 menu:
   label:	Contents
   order:	6

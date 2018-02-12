@@ -1,6 +1,7 @@
 // Collection colors (can override color in config, which is added inline in html)
 
 .doc-index,
+.doc-date, // TEMP... this one doesn't belong
 .doc-id {
 	color: $color-1; // fallback for custom properties
 	color: var(--collection-color, $color-1);

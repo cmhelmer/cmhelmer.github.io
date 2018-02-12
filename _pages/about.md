@@ -1,5 +1,5 @@
 ---
-permalink:	/about
+permalink:	/about/
 menu:
   order:	1
 ---
@@ -8,7 +8,7 @@ menu:
 
 C. M. Helmer works abroad as a web developer, student and Christian missionary.
 
-Personal writings on past websites are on this site as <a href="/collections" class="doc-name">Collections</a>.
+Personal writings on past websites are on this site as <a href="/collections/" class="doc-name">Collections</a>.
 
 ----
 

@@ -230,7 +230,7 @@ TODO:
 									{%- assign my_doc = my_docs.first -%}
 									{%- capture content_replace -%}
 
-										<a href="{{ my_doc.url | relative_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
+										<a href="{{ my_doc.url | absolute_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
 
 									{%- endcapture -%}
 

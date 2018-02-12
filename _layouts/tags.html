@@ -15,7 +15,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
@@ -37,7 +37,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 		Loop through data set instead of tags to maintain its order
 		{%- endcomment -%}
 
-		{% if page.data %}
+		{%- if page.data -%}
 			{%- assign data_set = site.data[page.data] -%}
 			{%- if data_set.size != empty -%}
 				{%- assign tags_subset = "" | split: "," -%}
@@ -51,8 +51,9 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 		{%- endif -%}
 
 		{%- comment -%}
-		CUSTOM...
+		TEMP...
 		Exclude list of Scripture tags in data set
+		{%- endcomment -%}
 
 		{%- assign sub_tags = "" | split: "," -%}
 		{%- for tag in tags -%}
@@ -61,7 +62,6 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			{%- endunless -%}
 			{%- assign tags = sub_tags -%}
 		{%- endfor -%}
-		{%- endcomment -%}
 
 		{%- include list-tags.html my_tags=tags -%}
 
@@ -72,7 +72,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			<h2 class="tag-summary"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></h2>
 		
 			{%- assign tagged_docs = docs | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
-			{%- include list-notes.html my_docs=tagged_docs -%}
+			{%- include list-docs.html my_docs=tagged_docs -%}
 		
 		</section>
 		{%- endfor -%}

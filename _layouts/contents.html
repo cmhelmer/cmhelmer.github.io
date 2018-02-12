@@ -11,7 +11,7 @@ Builds a table of contents (list) for site documents or the current collection
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
@@ -28,26 +28,17 @@ Builds a table of contents (list) for site documents or the current collection
 		{%- endcomment -%}
 
 		{%- if page.collection == "posts" -%}
-
-		{%- assign docs = site.documents | where: "collection", "posts" | reverse -%}
-		{%- include list-posts.html my_docs=docs -%}
-
+			{%- assign docs = site.documents | where: "collection", "posts" | reverse -%}
 		{%- else -%}
-
-		{%- if page.collection -%}
-
-		{%- assign docs = site.documents | where: "collection", page.collection -%}
-
-		{%- else -%}
-
-		{%- assign docs = site.documents | where_exp: "doc", "doc.collection != 'posts'" -%}
-
+			{%- if page.collection -%}
+				{%- assign docs = site.documents | where: "collection", page.collection -%}
+			{%- else -%}
+				{%- assign docs = site.documents | where_exp: "doc", "doc.collection != 'posts'" -%}
+			{%- endif -%}
+			{%- assign docs = docs | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
 		{%- endif -%}
 
-		{%- assign docs = docs | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
-		{%- include list-notes.html my_docs=docs -%}
-
-		{%- endif -%}
+		{%- include list-docs.html my_docs=docs -%}
 
 	</div>
 </article>

@@ -7,9 +7,11 @@ Include page article
 
 {%- assign my_doc = include.my_doc -%}
 
+{%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc advanced=true -%}{%- endcapture -%}
+
 <article id="page-{{ my_doc.title | slugify }}" class="page-doc main-doc" role="document">
 	<header class="doc-header">
-		<h1 class="doc-title doc-meta">{{ my_doc.title }}</h1>
+		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
 	</header>
 	<div class="doc-content">
 

@@ -7,14 +7,16 @@ Include list of docs which link back to this page
 
 {%- assign my_uid = include.my_uid -%}
 
-{%- assign docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.content contains my_uid" | sort: "uid", "first" | reverse -%}
+{%- comment -%} Exclude posts (until it is resolved how to mix posts/notes in one list) {%- endcomment -%}
 
-{%- if docs.size > 0 -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.collection != 'posts'" | where_exp: "doc", "doc.content contains my_uid" | sort: "uid", "first" | reverse -%}
+
+{%- if my_docs.size > 0 -%}
 <aside class="doc-links main-aside" role="complementary">
 	<h2 class="aside-title">What Links Here…</h2>
 	<div class="aside-content">
 
-		{%- include list-notes.html my_docs=docs -%}
+		{%- include list-docs.html my_docs=my_docs -%}
 
 	</div>
 </aside>

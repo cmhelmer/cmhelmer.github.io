@@ -13,10 +13,10 @@ Include document article
 {%- assign doc_title = my_doc.title | strip -%}
 {%- assign doc_image = my_doc.image.path | default: my_doc.image -%}
 {%- assign doc_author = my_doc.author | default: my_doc.authors.first | default: site.author -%}
-{%- assign doc_author_name = doc_author.name | default: doc_author | default: '' -%}
+{%- assign doc_author_name = doc_author.name | default: doc_author -%}
 {%- assign doc_author_email = doc_author.email | default: site.email -%}
 
-<article id="note-{{ doc_uid }}" class="{{ my_doc.collection }}-collection main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="note-{{ doc_uid }}" class="{{ my_doc.collection }}-collection main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
 
 	<header class="doc-header">
 
@@ -26,8 +26,8 @@ Include document article
 			<div class="doc-collection">{{ site.collections[my_doc.collection].title | default: my_doc.collection }}</div>
 			{%- endif -%}
 
-			{%- capture doc_datetime -%}{%- include uid-to-datetime.html my_uid=doc_uid -%}{%- endcapture -%}
-			<div class="doc-id"><time datetime="{{ doc_datetime | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
+			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
+			<div class="doc-id"><time datetime="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
 
 		</div>
 
@@ -38,10 +38,12 @@ Include document article
 		<figure class="doc-image doc-meta"><img src="{{ doc_image }}" alt="">{%- if my_doc.image.description -%}<figcaption>{{ my_doc.image.description }}</figcaption>{%- endif -%}</figure>
 		{%- endif -%}
 
-		{%- if doc_title != doc_uid -%}
-		{%- capture doc_title -%}{%- include filter-title.html my_title=doc_title -%}{%- endcapture -%}
+		{%- comment -%} Don't display title if none explicitly set {%- endcomment -%}
+		{%- assign doc_title_slugifed = doc_title | slugify -%}
+		{%- unless doc_title_slugifed == my_doc.slug -%}
+		{%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc advanced=true -%}{%- endcapture -%}
 		<h1 class="doc-title doc-meta">{{ doc_title | strip }}</h1>
-		{%- endif -%}
+		{%- endunless -%}
 		
 		<div class="doc-byline doc-meta">
 

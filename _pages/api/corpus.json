@@ -1,0 +1,29 @@
+---
+# Search index
+# Intended for use with Lunr.js
+# Set permalink in order to output file for API
+permalink:	/data/corpus.json
+---
+
+{%- comment -%} Get all documents {%- endcomment -%}
+{%- assign docs = site.documents -%}
+
+{%- capture index -%}
+
+[
+
+	{%- for doc in docs -%}
+
+		{"title": {{- doc.title | jsonify -}},"content": {{- doc.content | jsonify -}},"tags": {{- doc.tags | array_to_sentence_string | jsonify -}},"url": {{- doc.url | jsonify -}}}
+
+		{%- unless forloop.last -%}
+			,
+		{%- endunless -%}
+
+	{%- endfor -%}
+
+]
+
+{%- endcapture -%}
+
+{{ index | strip_newlines | normalize_whitespace | strip }}

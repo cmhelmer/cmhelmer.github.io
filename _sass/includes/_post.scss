@@ -19,17 +19,6 @@
 	}
 }
 
-.post-list {
-	list-style: none;
-	.post-item {
-		margin-left: 0; // override
-	}
-	.doc-date {
-		min-width: 6rem;
-	}
-}
-
-.post-list,
 .pagination-aside {
 	a {
 		display: flex;
@@ -37,31 +26,10 @@
 		&:hover,
 		&:focus,
 		&:active {
-			.doc-date {
-				color: inherit;
-			}
 			.doc-preview {
 				text-decoration: none;
 			}
 		}
-	}
-	.doc-date {
-		@include dim;
-	}
-	.doc-date,
-	.doc-preview {
-		display: inline-block; // fallback for flexbox
-		vertical-align: top;   // fallback for flexbox
-		white-space: nowrap;   // required for text-overflow
-	}
-	.doc-preview {
-		margin-top: 0; // override * + *
-		margin-left: ( $gap / 2 );
-		text-decoration: underline;
-		text-overflow: ellipsis;
-		white-space: nowrap; // required for text-overflow
-		overflow: hidden; // required for text-overflow
-		hanging-punctuation: none; // because of hidden overflow
 	}
 }
 

@@ -28,7 +28,7 @@ Include list of site pages
 				{%- if html_page.url == page.url -%}
 				<span class="doc-name -current">{{ menu_label }}</span>
 				{%- else -%}
-				<a href="{{ html_page.url | relative_url }}" class="doc-name" rel="bookmark">{{ menu_label }}</a>
+				<a href="{{ html_page.url | absolute_url }}" class="doc-name" rel="bookmark">{{ menu_label }}</a>
 				{%- endif -%}
 			</li>
 
@@ -42,7 +42,7 @@ Include list of site pages
 
 		Collections
 
-		Include collections with output and an index, and exclude hard-coded 'posts'
+		Include collections with output and an index, and exclude hard-coded "posts"
 
 	{%- endcomment -%}
 
@@ -58,7 +58,7 @@ Include list of site pages
 
 			{%- comment -%} Make pretty url {%- endcomment -%}
 			{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
-			<li><a href="{{ url | relative_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
+			<li><a href="{{ url | absolute_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
 
 			{%- endif -%}
 

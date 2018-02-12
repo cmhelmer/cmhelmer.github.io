@@ -10,14 +10,14 @@ Include tag list
 {%- if my_tags.size > 0 -%}
 
 {%- comment -%} Determine if this is individual document or tags list {%- endcomment -%}
-{% assign is_doc = false %}
+{%- assign is_doc = false -%}
 {%- if page.layout == "page" or page.layout == "post" or page.layout == "note" -%}
 {%- assign is_doc = true -%}
 {%- endif -%}
 
 <ol class="tag-list">
 	{%- for tag in my_tags -%}
-	<li class="tag-item"><a href="{%- if is_doc -%}/tags/{%- endif -%}#{{ tag | slugify }}" class="tag"{%- if is_doc -%}{{" "}}rel="tag"{%- endif -%}>{{ tag }}</a></li>
+	<li class="tag-item"><a href="{%- if is_doc -%}/tags/{%- endif -%}#{{ tag | slugify }}" class="tag"{%- if is_doc -%}{{ " " }}rel="tag"{%- endif -%}>{{ tag }}</a></li>
 	{%- endfor -%}
 </ol>
 

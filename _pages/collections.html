@@ -1,12 +1,12 @@
 ---
 # Collections
 # List collections which are set to output in config, and which have an index (landing page)
-# Exclude hard-coded 'posts' collection
+# Exclude hard-coded "posts" collection
 # Sort by config value "order"
 # This page also shows an alternate way to render a unique page with default layout.
 title:	Collections
 layout:	default
-permalink:	/collections
+permalink:	/collections/
 menu:
   order:	3
 ---
@@ -31,10 +31,10 @@ menu:
 			
 			{%- comment -%} Render content for pages if not using {{ content }} {%- endcomment -%}
 			{%- assign index_content = index.content | markdownify -%}
-			{%- capture index_excerpt -%}{%- include filter-excerpt.html my_excerpt=index_content -%}{%- endcapture -%}
+			{%- capture index_excerpt -%}{%- include filter-excerpt.html my_content=index_content -%}{%- endcapture -%}
 		
-			<li class="{{ collection.label }}-collection collection-item"{%- if collection.color -%}{{" "}}style="--collection-color:{{ collection.color }}"{%- endif -%}>
-				<a href="{{ url | relative_url }}">
+			<li class="{{ collection.label }}-collection collection-item"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+				<a href="{{ url | absolute_url }}">
 					<span class="collection-name">{{ collection.title | default: collection.label }}</span>
 					<span class="collection-preview">{{ index_excerpt | strip }}</span>
 				</a>

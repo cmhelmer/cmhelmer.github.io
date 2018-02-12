@@ -14,10 +14,10 @@ Builds out list with media preview
 	{%- for file in my_files -%}
 
 	<li class="file-item">
-		<a href="{{ file.path | relative_url }}">
+		<a href="{{ file.path | absolute_url }}">
 			{%- case file.extname -%}
 			{%- when ".jpg" or ".jpeg" or ".png" or ".gif" or ".pdf" -%}
-			<img src="{{ file.path | relative_url }}" alt="{{ file.name | escape }}">
+			<img src="{{ file.path | absolute_url }}" alt="{{ file.name | escape }}">
 			{%- endcase -%}
 		</a>
 	</li>

@@ -8,9 +8,8 @@ Include post/blog article
 {%- assign my_doc = include.my_doc -%}
 
 {%- capture doc_date -%}<time datetime="{{ my_doc.date | date_to_xmlschema }}">{{ my_doc.date | date: site.date_format }}</time>{%- endcapture -%}
-
 {%- if page.url != my_doc.url -%}
-{%- capture doc_date -%}<a href="{{ my_doc.url | relative_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
+{%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
 
 <article id="post-{{ my_doc.slug }}" class="post-doc main-doc" role="document">

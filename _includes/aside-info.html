@@ -7,7 +7,7 @@ Include site info
 <aside id="info" class="site-info site-aside">
 	<h3 class="aside-title">Info</h3>
 	<div class="aside-content">
-		<p>{{ site.description }} See <a href="{{ "/about" | relative_url }}" rel="author">About</a>.</p>
+		<p>{{ site.description }} See <a href="{{ "/about/" | absolute_url }}" rel="author">About</a>.</p>
 		<ul>
 			{%- if site.author.email or site.email -%}
 			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>Email</a></li>
