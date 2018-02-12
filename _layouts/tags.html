@@ -48,7 +48,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 				{%- endfor -%}
 				{%- assign tags = tags_subset -%}
 			{%- endif -%}
-		{%- endif -%}
+		{%- else -%}
 
 		{%- comment -%}
 		TEMP...
@@ -62,6 +62,8 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			{%- endunless -%}
 			{%- assign tags = sub_tags -%}
 		{%- endfor -%}
+
+		{%- endif -%}
 
 		{%- include list-tags.html my_tags=tags -%}
 
