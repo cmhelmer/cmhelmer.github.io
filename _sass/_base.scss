@@ -207,6 +207,12 @@ th {
 	border-bottom: $border-width solid;
 }
 
+iframe {
+	border: $border-width $border-style;
+	border-radius: $border-radius;
+	overflow: hidden;
+}
+
 mark {
 	@include box-span( rgba( #ffee00, .8 ) ); // yellow
 }

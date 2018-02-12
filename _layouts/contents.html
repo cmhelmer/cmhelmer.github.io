@@ -29,7 +29,7 @@ Builds a table of contents (list) for site documents or the current collection
 
 		{%- if page.collection == "posts" -%}
 
-		{%- assign docs = site.documents | where: "collection", "posts" -%}
+		{%- assign docs = site.documents | where: "collection", "posts" | reverse -%}
 		{%- include list-posts.html my_docs=docs -%}
 
 		{%- else -%}

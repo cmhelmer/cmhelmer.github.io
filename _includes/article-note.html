@@ -42,14 +42,25 @@ Include document article
 		{%- capture doc_title -%}{%- include filter-title.html my_title=doc_title -%}{%- endcapture -%}
 		<h1 class="doc-title doc-meta">{{ doc_title | strip }}</h1>
 		{%- endif -%}
+		
+		<div class="doc-byline doc-meta">
 
-		{%- if doc_author_name != site.author and doc_author_name != site.author.name -%}
-		<p class="doc-author doc-meta">By {{ doc_author_name }}</p>
-		{%- endif -%}
+			{%- if doc_author_name != site.author and doc_author_name != site.author.name -%}
+			<div class="doc-author">By {{ doc_author_name }}</div>
+			{%- endif -%}
+	
+			{%- comment -%}
+			Reading time based on 200 words per minute
+			Add 1 min. to time to make it more accurate and to avoid 0 ("divided_by" filter is integer division)
+			{%- endcomment -%}
+			{%- assign doc_readtime = my_doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
+			<div class="doc-readtime">{{ doc_readtime }} min. read</div>
 
-		{%- if my_doc.updated -%}
-		<p class="doc-updated doc-meta">Updated <time datetime="{{ my_doc.updated | date_to_xmlschema }}">{{ my_doc.updated | date: site.date_format }}</time></p>
-		{%- endif -%}
+			{%- if my_doc.updated -%}
+			<div class="doc-updated">Updated <time datetime="{{ my_doc.updated | date_to_xmlschema }}">{{ my_doc.updated | date: site.date_format }}</time></div>
+			{%- endif -%}
+	
+		</div>
 		
 		{%- if my_doc.location and site.google_static_maps -%}
 		{%- comment -%} No check of location; Google parses addresses and coordinates {%- endcomment -%}

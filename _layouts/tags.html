@@ -5,7 +5,7 @@ layout: default
 
 {%- comment -%}
 
-Build a tag archive for the site or a collection (site.tags does not include tags from collections), with links to documents.
+Build a tag archive for the site or a collection (site.tags does not include tags from collections), with links to documents. The set of tags can be subset based on passed in reference to data file (i.e. page metadata "data: scripture" will use the data "site.data.scripture" in "_data/scripture.json").
 
 Tags are treated as case-insensitive for the purpose of urls (all downcase), so use them accordingly. Tags are also run through the "slugify" filter. Watch out for similar tags which contain non-alphanumeric characters (hashtags are stripped, for example, so #tag = tag). If this is a problem, look at Jekyll's other (non-default) options for the "slugify" filter (https://jekyllrb.com/docs/templates/).
 
@@ -31,6 +31,37 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			{%- assign docs = site.documents -%}
 		{%- endif -%}
 		{%- assign tags = docs | map: "tags" | uniq | sort_natural -%}
+
+		{%- comment -%}
+		Subset list of tags to those in data set
+		Loop through data set instead of tags to maintain its order
+		{%- endcomment -%}
+
+		{% if page.data %}
+			{%- assign data_set = site.data[page.data] -%}
+			{%- if data_set.size != empty -%}
+				{%- assign tags_subset = "" | split: "," -%}
+				{%- for tag in data_set -%}
+					{%- if tags contains tag -%}
+						{%- assign tags_subset = tags_subset | push: tag -%}
+					{%- endif -%}
+				{%- endfor -%}
+				{%- assign tags = tags_subset -%}
+			{%- endif -%}
+		{%- endif -%}
+
+		{%- comment -%}
+		CUSTOM...
+		Exclude list of Scripture tags in data set
+
+		{%- assign sub_tags = "" | split: "," -%}
+		{%- for tag in tags -%}
+			{%- unless site.data.scripture contains tag -%}
+				{%- assign sub_tags = sub_tags | push: tag -%}
+			{%- endunless -%}
+			{%- assign tags = sub_tags -%}
+		{%- endfor -%}
+		{%- endcomment -%}
 
 		{%- include list-tags.html my_tags=tags -%}
 

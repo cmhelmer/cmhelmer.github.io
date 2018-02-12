@@ -1,6 +1,5 @@
 ---
 # Site data tags for Prose.io
-# Set permalink in order to output file for API (and include _data in config)
 # Return callback with json data
 permalink:	/data/prose/tags.jsonp
 ---

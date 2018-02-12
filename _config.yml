@@ -3,7 +3,7 @@ description: "Personal website re: missiology, technology, bibliology."
 author: C. M. Helmer
 
 email: desk@cmhelmer.com
-micro_blog: cmhelmer
+microblog: cmhelmer
 twitter: cm_helmer
 github: cmhelmer
 
@@ -32,7 +32,7 @@ content_filters:
 
 permalink: /:collection/:slug
 
-include: ["_pages","_data"]
+include: ["_pages"]
 
 collections:
   notes:

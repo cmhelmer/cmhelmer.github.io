@@ -8,13 +8,13 @@ layout:	default
 {%- assign limit = 5 -%}
 
 {%- comment -%} Use site.documents in place of site.posts to avoid unrendered content {%- endcomment -%}
-{%- assign site_posts = site.documents | where: "collection", "posts" -%}
+{%- assign site_posts = site.documents | where: "collection", "posts" | reverse -%}
 {%- if site_posts.size > 0 -%}
 	{%- for post in site_posts limit: limit -%}
 		{%- include article-post.html my_doc=post -%}
 	{%- endfor -%}
 	{%- if site_posts.size > limit -%}
-		{%- comment -%} NOTE: Manually set url to an archives page if there is one. {%- endcomment -%}
+		{%- comment -%} NOTE: Manually set url to an archives page if there is one {%- endcomment -%}
 		<div class="more"><a href="{{ "/posts/" | relative_url }}">More blog posts…</a></div>
 	{%- endif -%}
 {%- endif -%}

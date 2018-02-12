@@ -14,15 +14,15 @@ Include site header
 	{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
 	<meta name="format-detection" content="telephone=no">
 	<meta name="skype_toolbar" content="skype_toolbar_parser_compatible">
+	<link rel="author" href="humans.txt">
 
 	{%- comment -%}
 	{%- include header-meta.html -%}
 	{%- endcomment -%}
 
 	<link rel="stylesheet" href="{{ "/assets/css/style.css" | absolute_url }}?{{ site.time | date: '%s%N' }}">
-	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.time | date: '%s%N' }}" async></script>
+	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.time | date: '%s%N' }}" defer></script>
 	<script src="{{ "/assets/js/prefixfree.min.js" | absolute_url }}" async></script>
-	<link rel="author" href="humans.txt">
 
 	{%- if site.feed -%}
 	{%- for feed in site.feed -%}

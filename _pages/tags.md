@@ -1,10 +1,9 @@
 ---
-# Site Tags
 layout:	tags
 permalink:	/tags/
 menu:
-  label:	Tags
+  label:	Subject Index
   order:	7
 ---
 
-# Site Tags
+# Subject Index

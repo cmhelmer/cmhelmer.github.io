@@ -46,6 +46,7 @@
 .doc-title {
 	@include font-size( 1.5 );
 	max-width: ( $measure * 1.5 );
+// 	text-align: center;
 	.doc-meta + & {
 		margin-top: $gap; // fallback for calc
 		margin-top: $gutter;
@@ -57,18 +58,23 @@
 	}
 }
 
-.doc-author,
-.doc-updated {
+.doc-byline {
+	@include font-small;
 	@include dim;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
 
 .doc-content {
+	display: flex;
+	flex-direction: column;
 	// tomfoolery, no doubt, but gives as much flexibility as possible
 	> * {
 		max-width: $measure;
-		margin-left: auto;
-		margin-right: auto;
-		display: block; // necessary in case of child inline elements like images
+		width: 100%;
+		margin-left: auto; // fallback for flexbox
+		margin-right: auto; // fallback for flexbox
 	}
 	h1 {
 		@include font-size( 1.25 );
@@ -79,12 +85,12 @@
 	h3 {
 		@include font-size( 1.0625 );
 	}
-	audio,
-	video {
-		width: 100%; // looks
-	}
 	figure,
 	table {
+		max-width: ( $measure * 1.5 );
+		width: auto;
+	}
+	iframe {
 		max-width: ( $measure * 1.5 );
 	}
 	* + *,

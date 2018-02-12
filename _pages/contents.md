@@ -7,4 +7,4 @@ menu:
   order:	6
 ---
 
-# Site Contents
+# Site Index
