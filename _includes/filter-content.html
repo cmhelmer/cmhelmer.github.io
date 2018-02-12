@@ -220,17 +220,17 @@ TODO:
 								
 								{%- endcomment -%}
 
-								{%- assign uid = fragment | slice: 0, 12 -%}
-								{%- assign phrase = fragment | replace_first: uid, '' | lstrip -%}
-								{%- assign docs = site.documents | where: "uid", uid -%}
+								{%- assign my_uid = fragment | slice: 0, 12 -%}
+								{%- assign my_phrase = fragment | replace_first: my_uid, '' | lstrip -%}
+								{%- assign my_docs = site.documents | where: "uid", my_uid -%}
 
-								{%- comment -%} Replace only if we're sure {%- endcomment -%}
-								{%- if docs.size == 1 -%}
+								{%- comment -%} Replace if we're sure we matched one {%- endcomment -%}
+								{%- if my_docs.size == 1 -%}
 
-									{%- assign doc = docs.first -%}
+									{%- assign my_doc = my_docs.first -%}
 									{%- capture content_replace -%}
 
-										<a href="{{ doc.url | relative_url }}" class="doc-link" title="{{ doc.title }}">{{ phrase | default: doc.title }}</a>
+										<a href="{{ my_doc.url | relative_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
 
 									{%- endcapture -%}
 

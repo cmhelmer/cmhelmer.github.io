@@ -42,16 +42,22 @@ Ignore any passed in content
   </author>
   {%- endif -%}
 
-  {%- comment -%} Get list of docs by ID; reverse to show recent first {%- endcomment -%}
+  {%- comment -%} Get list of docs; sort by ID, unless posts {%- endcomment -%}
 
   {%- if page.collection -%}
-  {%- assign documents = site.documents | where: "collection", page.collection -%}
+	  {%- assign my_docs = site.documents | where: "collection", page.collection -%}
   {%- else -%}
-  {%- assign documents = site.documents -%}
+	  {%- assign my_docs = site.documents -%}
   {%- endif -%}
-  {%- assign docs = documents | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
 
-  {%- for doc in docs limit: 10 -%}
+  {%- unless page.collection == "posts" -%}
+	  {%- assign my_docs = my_docs | where_exp: "doc", "doc.uid" | sort: "uid", "first" -%}
+  {%- endunless -%}
+
+  {%- comment -%} Reverse to show recent first {%- endcomment -%}
+  {%- assign my_docs = my_docs | reverse -%}
+
+  {%- for doc in my_docs limit: 10 -%}
 
   {%- assign doc_uid = doc.uid | strip -%}
 
@@ -92,8 +98,7 @@ Ignore any passed in content
     	{%- endif -%}
     	{%- endif -%}
 
-		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
-		{%- capture my_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_content=doc.content -%}{%- endcapture -%}
 		{{ my_content | strip | xml_escape }}
 
     </content>
