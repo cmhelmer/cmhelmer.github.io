@@ -1,10 +1,9 @@
 ---
 layout:	tags
-permalink:	/scripture/
+permalink:	/tags/scripture/
 data:	scripture
-menu:
-  label:	Scripture Index
-  order:	8
 ---
 
-# Scripture Index
+# Scripture Tags
+
+See also [all tags](/tags/).

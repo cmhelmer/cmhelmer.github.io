@@ -14,8 +14,9 @@
 .collection-item a,
 .layout-tags .main-doc .doc-content > p,
 .layout-contents .main-doc .doc-content > p {
-	background-color: $color-1; // fallback for custom properties
-	@include box-block( var(--collection-color, $color-1), $color-b );
+// 	background-color: $color-1; // fallback for custom properties
+// 	@include box-block( var(--collection-color, $color-1), $color-b );
+	@include box-block;
 }
 
 .collection-list {

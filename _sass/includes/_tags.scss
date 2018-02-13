@@ -1,9 +1,8 @@
 .tag-list {
 	list-style: none;
 	.doc-content & {
-		column-width: ( $measure / 4 ); // to taste
+		column-width: 7.5rem; // fit 2 columns @320px (and account for vw rounding errors on padding)
 		column-gap: $gap;
-		max-width: ( $measure * 1.5 );
 		padding-bottom: $gap; // fallback for calc
 		padding-bottom: $gutter;
 		border-bottom: $border-width $border-style;

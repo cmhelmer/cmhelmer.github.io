@@ -2,8 +2,10 @@
 layout:	tags
 permalink:	/tags/
 menu:
-  label:	Subject Index
+  label:	Tags
   order:	7
 ---
 
-# Subject Index
+# Tags
+
+See also [Scripture tags](/tags/scripture/).
