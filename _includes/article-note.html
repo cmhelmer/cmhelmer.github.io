@@ -89,8 +89,8 @@ Include document article
 		{%- endif -%}
 
 		{%- comment -%} Link to GitHub history {%- endcomment -%}
-		{%- if site.github -%}
-		<div class="doc-history doc-meta"><a href="https://github.com/{{ site.github }}/{{ site.github }}.github.io/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>History</a></div>
+		{%- if site.author.github -%}
+		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>History</a></div>
 		{%- endif -%}
 
 	</div>

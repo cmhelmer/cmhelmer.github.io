@@ -1,11 +1,11 @@
 title: From the Field Desk of C. M. Helmer
 description: "Personal website of C. M. Helmer re: missiology, technology, bibliology."
-author: C. M. Helmer
-
-email: desk@cmhelmer.com
-microblog: cmhlmr
-twitter: cmhlmr
-github: cmhlmr
+author:
+  name: C. M. Helmer
+  email: desk@cmhelmer.com
+  github: cmhlmr
+  twitter: cmhlmr
+  microblog: cmhlmr
 
 url: https://cmhelmer.com
 
