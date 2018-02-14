@@ -6,7 +6,7 @@ layout:	default
 {%- include article-post.html my_doc=page -%}
 
 {%- if post.previous -%}
-{%- capture previous_preview -%}{%- include filter-excerpt.html my_content=post.previous.content -%}{%- endcapture -%}
+{%- capture previous_preview -%}{%- include filter-excerpt.html my_doc=post.previous -%}{%- endcapture -%}
 <aside class="pagination-aside prev-aside main-aside">
 	<h1 class="aside-title">Previous</h1>
 	<div class="aside-content">
@@ -19,7 +19,7 @@ layout:	default
 {%- endif -%}
 
 {%- if post.next -%}
-{%- capture next_preview -%}{%- include filter-excerpt.html my_content=post.next.content -%}{%- endcapture -%}
+{%- capture next_preview -%}{%- include filter-excerpt.html my_doc=post.next -%}{%- endcapture -%}
 <aside class="pagination-aside next-aside main-aside">
 	<h1 class="aside-title">Next</h1>
 	<div class="aside-content">

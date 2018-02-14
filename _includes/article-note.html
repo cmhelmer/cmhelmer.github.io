@@ -23,7 +23,7 @@ Include document article
 		<div class="doc-index doc-meta">
 
 			{%- if my_doc.collection != "posts" -%}
-			<div class="doc-collection">{{ site.collections[my_doc.collection].title | default: my_doc.collection }}</div>
+			<div class="doc-collection">{{ site.collections | where: 'label', my_doc.collection | map: 'title' | first | default: my_doc.collection }}</div>
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
@@ -41,7 +41,7 @@ Include document article
 		{%- comment -%} Don't display title if none explicitly set {%- endcomment -%}
 		{%- assign doc_title_slugifed = doc_title | slugify -%}
 		{%- unless doc_title_slugifed == my_doc.slug -%}
-		{%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc advanced=true -%}{%- endcapture -%}
+		{%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc -%}{%- endcapture -%}
 		<h1 class="doc-title doc-meta">{{ doc_title | strip }}</h1>
 		{%- endunless -%}
 		

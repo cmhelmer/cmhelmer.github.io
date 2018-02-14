@@ -19,20 +19,6 @@
 	}
 }
 
-.pagination-aside {
-	a {
-		display: flex;
-		text-decoration: none; // defer to child
-		&:hover,
-		&:focus,
-		&:active {
-			.doc-preview {
-				text-decoration: none;
-			}
-		}
-	}
-}
-
 .doc-date {
 	@include font-smcp;
 	.doc-header & {
@@ -47,4 +33,15 @@
 	max-width: none;
 	flex: 1 1 ( $measure / 2 );
 // 	font-size: $font-size-small * 1rem; // no need to @include font-small to maintain vertical rhythm
+	a {
+		display: flex;
+		text-decoration: none; // defer to child
+		&:hover,
+		&:focus,
+		&:active {
+			.doc-preview {
+				text-decoration: none;
+			}
+		}
+	}
 }

@@ -14,6 +14,8 @@ Include site header
 	<link rel="stylesheet" href="{{ "/assets/css/style.css" | absolute_url }}?{{ site.github.build_revision }}">
 	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.github.build_revision }}" defer></script>
 	<script src="{{ "/assets/js/prefixfree.min.js" | absolute_url }}" async></script>
+	<script src="{{ "/assets/js/dialog-polyfill.js" | absolute_url }}" async></script>
+	<script src="{{ "/assets/js/lunr.js" | absolute_url }}" async></script>
 
 	{%- include header-meta.html -%}
 
@@ -45,7 +47,7 @@ Include site header
 	<nav class="site-nav">
 		<ul class="nav-list">
 			<li class="nav-item"><a href="#info" class="aside-link">Info</a></li>
-			<li class="nav-item"><a href="#pages" class="aside-link">Pages</a></li>
+			<li class="nav-item"><a href="#browse" class="aside-link">Browse</a></li>
 			<li class="nav-item"><a href="#search" class="aside-link">Search</a></li>
 		</ul>
 	</nav>

@@ -1,6 +1,6 @@
 ---
 # Posts/Blog Contents
-# Jekyll does not pages inside _posts
+# Jekyll does not like pages inside _posts
 # So set collection here in metadata
 collection:	posts
 layout:	contents

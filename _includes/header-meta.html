@@ -1,5 +1,8 @@
 {%- comment -%}
 
+Include header meta
+Necessary if filters are used (title, date, content, excerpt)
+
 Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- endcomment -%}
@@ -24,10 +27,8 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- if page.content -%}
 	{%- capture meta_description -%}
-		{%- if page.excerpt -%}
-			{{ page.excerpt }}
-		{%- elsif page.content -%}
-			{%- include filter-excerpt.html my_content=page.content -%}
+		{%- if page.content != empty or page.description -%}
+			{%- include filter-excerpt.html my_doc=page -%}
 		{%- else -%}
 			{{ site.description }}
 		{%- endif -%}
@@ -39,14 +40,14 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 {%- endunless -%}
 
 {%- if page.tags -%}
-<meta name="keywords" content="{{ page.tags | join: ',' }}">
+<meta name="keywords" content="{{ page.tags | join: ', ' | escape }}">
 {%- endif -%}
 
 {%- if page.collection -%}
-<meta name="collection" content="{{ page.collection }}">
+<meta name="collection" content="{{ site.collections | where: 'label', page.collection | map: 'title' | first | default: page.collection | escape }}">
 {%- endif -%}
 
-<meta name="author" content="{{ page.author.name | default: page.author | default: page.authors.first.name | default: page.authors.first | default: site.author.name | default: site.author }}">
+<meta name="author" content="{{ page.author.name | default: page.author | default: page.authors.first.name | default: page.authors.first | default: site.author.name | default: site.author | escape }}">
 
 {%- if page.date and page.date != site.time -%}
 <meta property="og:type" content="article">
@@ -71,45 +72,28 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <link rel="next" href="{{ page.next.url | absolute_url }}">
 {%- endif -%}
 
-
-{%- if site.facebook -%}
-{%- if site.facebook.admins -%}
-<meta property="fb:admins" content="{{ site.facebook.admins }}">
+{%- if site.author.facebook -%}
+{%- if site.author.facebook.admins -%}
+<meta property="fb:admins" content="{{ site.author.facebook.admins }}">
 {%- endif -%}
 
-{%- if site.facebook.publisher -%}
-<meta property="article:publisher" content="{{ site.facebook.publisher }}">
+{%- if site.author.facebook.publisher -%}
+<meta property="article:publisher" content="{{ site.author.facebook.publisher }}">
 {%- endif -%}
 
-{%- if site.facebook.app_id -%}
-<meta property="fb:app_id" content="{{ site.facebook.app_id }}">
-{%- endif -%}
-{%- endif -%}
-
-{%- if site.webmaster_verifications -%}
-{%- if site.webmaster_verifications.google -%}
-<meta name="google-site-verification" content="{{ site.webmaster_verifications.google }}">
-{%- endif -%}
-
-{%- if site.webmaster_verifications.bing -%}
-<meta name="msvalidate.01" content="{{ site.webmaster_verifications.bing }}">
-{%- endif -%}
-
-{%- if site.webmaster_verifications.alexa -%}
-<meta name="alexaVerifyID" content="{{ site.webmaster_verifications.alexa }}">
-{%- endif -%}
-
-{%- if site.webmaster_verifications.yandex -%}
-<meta name="yandex-verification" content="{{ site.webmaster_verifications.yandex }}">
-{%- endif -%}
-
-{%- if site.webmaster_verifications.baidu -%}
-<meta name="baidu-site-verification" content="{{ site.webmaster_verifications.baidu }}">
+{%- if site.author.facebook.app_id -%}
+<meta property="fb:app_id" content="{{ site.author.facebook.app_id }}">
 {%- endif -%}
 {%- endif -%}
 
 {%- if site.author.microblog -%}
 <link href="https://micro.blog/{{ site.author.microblog }}" rel="me">
+{%- endif -%}
+
+{%- if site.verifications -%}
+{%- for verification in site.verifications -%}
+<meta name="{{ verification.name | escape }}" content="{{ verification.content | escape }}">
+{%- endfor -%}
 {%- endif -%}
 
 <meta name="generator" content="Jekyll v{{ jekyll.version }}">

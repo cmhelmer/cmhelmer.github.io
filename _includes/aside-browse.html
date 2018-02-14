@@ -1,0 +1,78 @@
+{%- comment -%}
+
+Include lists of site pages, collections, archives
+
+{%- endcomment -%}
+
+<aside id="browse" class="site-browse site-aside">
+
+	<h3 class="aside-title">Browse</h3>
+
+	{%- comment -%}
+
+	Pages with "menu" metadata
+	Use "menu.label" or default to page title
+	Use "menu.order" or sort last
+
+	{%- endcomment -%}
+	
+	{%- assign html_pages = site.html_pages | where_exp: "page", "page.menu" | sort: "menu.order", "last" -%}
+
+	{%- if html_pages.size > 0 -%}
+	<section class="browse-pages aside-section">
+		<h4 class="aside-title">Pages</h4>
+		<div class="aside-content">
+			<ul>
+				{%- for html_page in html_pages -%}
+	
+				{%- assign menu_label = html_page.menu.label | default: html_page.title -%}
+	
+				<li>
+					{%- if html_page.url == page.url -%}
+					<span class="doc-name -current">{{ menu_label }}</span>
+					{%- else -%}
+					<a href="{{ html_page.url | absolute_url }}" class="doc-name" rel="bookmark">{{ menu_label }}</a>
+					{%- endif -%}
+				</li>
+	
+				{%- endfor -%}
+			</ul>
+		</div>
+	</section>
+	{%- endif -%}
+
+	{%- comment -%}
+
+		Collections
+
+		Include collections with output and an index, and exclude hard-coded "posts"
+
+	{%- endcomment -%}
+
+	{%- assign collections = site.collections | where_exp: "collection", "collection.label != 'posts'" | where: "output", true | sort: "order", "last" -%}
+
+	{%- if collections.size > 0 -%}
+	<section class="browse-collections aside-section">
+		<h4 class="aside-title">Collections</h4>
+		<div class="aside-content">
+			<ul>
+				{%- for collection in collections -%}
+	
+				{%- assign index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
+	
+				{%- if index.url.size > 0 -%}
+	
+				{%- comment -%} Make pretty url {%- endcomment -%}
+				{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
+
+				<li><a href="{{ url | absolute_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
+	
+				{%- endif -%}
+	
+				{%- endfor -%}
+			</ul>
+		</div>
+	</section>
+	{%- endif -%}
+
+</aside>

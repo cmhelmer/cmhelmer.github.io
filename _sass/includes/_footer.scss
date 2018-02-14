@@ -6,17 +6,27 @@
 	border-radius:  0 0 ( $border-radius * 2 ) ( $border-radius * 2 );
 	background-color: $color-c;
 	font-size: $font-size-small * 1rem; // no need to @include font-small to maintain vertical rhythm
+	.site-aside {
+		flex: 1 1 ( $measure / 3 );
+		display: inline-block; // fallback for flexbox
+		vertical-align: top;   // fallback for flexbox
+		padding: $gap;
+		border-top: $border-width $border-style;
+	}
 }
 
 .site-aside {
-	flex: 1 1 ( $measure / 3 );
-	display: inline-block; // fallback for flexbox
-	vertical-align: top;   // fallback for flexbox
-	border-top: $border-width $border-style;
-	padding: $gap;
-	.aside-title + .aside-content,
-	.aside-content + .aside-title {
+	> * + *,
+	.aside-section > * + * {
 		margin-top: $gap;
+	}
+}
+
+.site-browse {
+	column-width: 7.5rem;
+	column-gap: $gap;
+	> .aside-title {
+		column-span: all;
 	}
 }
 
@@ -30,5 +40,8 @@
 	button {
 		height: 1.5em;
 		margin-top: 0; // override * + *
+	}
+	.icon-search {
+		margin-right: 0;
 	}
 }

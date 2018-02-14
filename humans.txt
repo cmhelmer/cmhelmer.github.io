@@ -8,7 +8,8 @@
 # TECHNOLOGY COLOPHON
 
     HTML5, CSS3,
-    Normalize.css, H5BP, Sass, PrefixFree.js,
+    Normalize.css, H5BP, Sass
+    PrefixFree.js, Lunr.js
     Adobe Source Sans, Source Code, Source Serif,
     fontTools, IcoMoon,
     Jekyll, GitHub Pages, Cloudflare

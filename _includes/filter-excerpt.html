@@ -2,17 +2,29 @@
 
 Filter excerpt
 Roll our own excerpt in order to use custom content filter
+Prefer description set in metadata (not excerpt, which is set by Jekyll and not useful to us)
 - Pass in unrendered content
 - Capture this include and use "strip" filter to remove whitespace.
 
 {%- endcomment -%}
 
-{%- assign my_content = include.my_content | markdownify | strip_html | strip -%}
+{%- assign my_doc = include.my_doc -%}
 
-{%- comment -%} Trim to first string after separator {%- endcomment -%}
-{%- assign my_content = my_content | split: site.excerpt_separator | first -%}
+{%- if my_doc.description -%}
 
-{%- comment -%} Filter as content {%- endcomment -%}
-{%- capture my_excerpt -%}{%- include filter-content.html my_content=my_content -%}{%- endcapture -%}
+	{% assign my_excerpt = my_doc.description %}
 
-{{ my_excerpt | strip_html | normalize_whitespace | truncate: site.excerpt_length | default: 140 }}
+{%- else -%}
+
+	{%- assign my_content = my_doc.content | markdownify | strip_html | strip -%}
+	
+	{%- comment -%} Trim to first string after separator {%- endcomment -%}
+	{%- assign my_content = my_content | split: site.excerpt_separator | first -%}
+	
+	{%- comment -%} Filter as content {%- endcomment -%}
+	{%- capture my_excerpt -%}{%- include filter-content.html my_content=my_content -%}{%- endcapture -%}
+
+{%- endif -%}
+
+{% assign excerpt_length = site.excerpt_length | default: 140 %}
+{{ my_excerpt | strip_html | normalize_whitespace | truncate: excerpt_length }}

@@ -20,6 +20,7 @@ Besides my domain name, computer and time, the site has no costs. Thanks to the 
 - [H5BP](https://html5boilerplate.com)
 - [Sass](http://sass-lang.com)
 - [PrefixFree.js](https://leaverou.github.io/prefixfree/)
+- [Lunr.js](https://lunrjs.com)
 - Adobe fonts [Source Sans](https://adobe-fonts.github.io/source-sans-pro/), [Source Serif](https://adobe-fonts.github.io/source-serif-pro/) and [Source Code](https://adobe-fonts.github.io/source-code-pro/)
 - [fontTools](https://github.com/fonttools/fonttools)
 - [IcoMoon](https://icomoon.io)

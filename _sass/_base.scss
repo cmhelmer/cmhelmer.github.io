@@ -140,7 +140,7 @@ dd::before {
 	margin-left: (-$gap);
 }
 
-audio, img, svg, video, figure, table {
+audio, img, svg, video, figure, table, iframe {
 	max-width: 100%;
 	margin-left: auto;
 	margin-right: auto;
@@ -208,6 +208,7 @@ th {
 }
 
 iframe {
+	display: block;
 	border: $border-width $border-style;
 	border-radius: $border-radius;
 	overflow: hidden;
@@ -285,6 +286,11 @@ input {
 	min-height: 1.5em;
 	border-radius: $border-radius;
 	border: 0;
+	font-feature-settings: "lnum" 1; // lining numbers
+	// @supports (font-variant-numeric: lining-nums) {
+	//	font-feature-settings: normal;
+	//	font-variant-numeric: lining-nums; // OpenType features "lnum"
+	// }
 }
 
 input {

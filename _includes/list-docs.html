@@ -4,6 +4,8 @@ Include document list
 Builds out list with preview (title or excerpt) and reference (ID or date if post)
 - Pass in documents
 
+Note: mimic this include in script.js search results
+
 {%- endcomment -%}
 
 {%- assign my_docs = include.my_docs -%}
@@ -16,6 +18,12 @@ Builds out list with preview (title or excerpt) and reference (ID or date if pos
 	{%- assign doc_title = doc.title | strip -%}
 	{%- assign doc_title_slugified = doc_title | slugify -%}
 
+	{%- comment -%}
+	
+	TEMP... what's wrong with the (slugified) title equal to slug? This is expected when not using UID in the permalink or filename, even if title explicitly set ... 
+	
+	{%- endcomment -%}
+
 	{%- if doc_title_slugified != doc.slug -%}
 
 	{%- capture doc_preview -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
@@ -23,7 +31,7 @@ Builds out list with preview (title or excerpt) and reference (ID or date if pos
 
 	{%- else -%}
 
-	{%- capture doc_preview -%}{%- include filter-excerpt.html my_content=doc.content -%}{%- endcapture -%}
+	{%- capture doc_preview -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
 	{%- assign preview_class = "doc-excerpt" -%}
 
 	{%- endif -%}

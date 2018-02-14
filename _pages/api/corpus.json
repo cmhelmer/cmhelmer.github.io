@@ -1,6 +1,6 @@
 ---
 # Search index
-# Intended for use with Lunr.js
+# Intended as pre-built index for Lunr.js
 # Set permalink in order to output file for API
 permalink:	/data/corpus.json
 ---
@@ -14,12 +14,60 @@ permalink:	/data/corpus.json
 
 	{%- for doc in docs -%}
 
-		{"title": {{- doc.title | jsonify -}},"content": {{- doc.content | jsonify -}},"tags": {{- doc.tags | array_to_sentence_string | jsonify -}},"url": {{- doc.url | jsonify -}}}
+		{%- comment -%}
+
+		Build data for Lunr, matching fields added to lunr function in script.js
+
+		Use loop index as unique reference (pass as string)
+		Avoid sending entire doc because that will balloon size of json file 10×
+		Render content then strip it bare
+		Format date for display
+		Custom value "description" in place of excerpt
+		Pass tags as "tag" so that searching can be done naturally on that field (i.e. "tag: love")
+		
+		This notation, {{-""-}}, eats up white-space while maintaining readability
+
+		{%- endcomment -%}
+
+		{%- assign doc_uid = doc.uid | strip -%}
+
+		{%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip | smartify -%}
+
+		{%- assign doc_date = doc.date | date: site.date_format -%}
+
+		{%- assign doc_author = doc.author.name | default: doc.author -%}
+
+		{%- assign doc_content = doc.content | markdownify | newline_to_br | replace: "<br />", " " | strip_html | strip_newlines | normalize_whitespace -%}
+		
+		{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_excerpt = doc_excerpt | strip -%}
+
+		{%- assign doc_collection = doc.collection -%}
+		
+		{%- assign doc_tags = doc.tags | join: ", " -%}
+
+		{
+			{{-""-}}
+			"uid": {{- doc_uid | jsonify | append: "," -}}
+			"title": {{- doc_title | jsonify | append: "," -}}
+			"date": {{- doc_date | jsonify | append: "," -}}
+			"content": {{- doc_content | jsonify | append: "," -}}
+			"excerpt": {{- doc_excerpt | jsonify | append: "," -}}
+			"collection": {{- doc_collection | jsonify | append: "," -}}
+			"tag": {{- doc_tags | jsonify | append: "," -}}
+			"url": {{- doc.url | jsonify -}}
+			{%- comment -%}
+			"author": {{- doc_author | jsonify | append: "," -}}
+			"category": {{- doc.category | jsonify | append: "," -}}
+			{%- endcomment -%}
+			{{-""-}}
+		}
+		{{-""-}}
 
 		{%- unless forloop.last -%}
 			,
 		{%- endunless -%}
-
+	
 	{%- endfor -%}
 
 ]

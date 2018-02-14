@@ -67,12 +67,9 @@
 }
 
 .doc-content {
-	display: flex;
-	flex-direction: column;
 	// tomfoolery, no doubt, but gives as much flexibility as possible
 	> * {
 		max-width: $measure;
-		width: 100%;
 		margin-left: auto; // fallback for flexbox
 		margin-right: auto; // fallback for flexbox
 	}
@@ -92,6 +89,7 @@
 	}
 	iframe {
 		max-width: ( $measure * 1.5 );
+		width: 100%;
 	}
 	* + *,
 	li + li > p,
@@ -164,8 +162,11 @@ pre + .output,
 	margin-top: calc(#{$gutter} / 2); // in place of padding-top
 	padding-top: $gap; // fallback for calc
 	padding-top: $gutter;
-	border-top: $border-width $border-style;
+	border-top: $border-width $border-style $color-c;
 	.doc-meta {
 		margin: 0; // override
+		a {
+			white-space: nowrap;
+		}
 	}
 }

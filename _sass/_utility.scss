@@ -202,7 +202,6 @@ a[href$=".svn"] {}
 .-dim {
 	@include dim;
 }
-
 .-left {
 	float: left;
 }
@@ -225,6 +224,7 @@ a[href$=".svn"] {}
 // H5BP
 .reader {
 	position: absolute;
+	z-index: 10000;
 	top: 0;
 	left: 0;
 	width: 1px;
@@ -240,8 +240,8 @@ a[href$=".svn"] {}
 	&:focus {
 		width: auto;
 		height: auto;
-		margin: $gap; // fallback for calc
-		margin: $gutter;
+		margin: ($gap / 2); // fallback for calc
+		margin: calc(#{$gutter} / 2);
 		clip: auto;
 		clip-path: none;
 		overflow: visible;

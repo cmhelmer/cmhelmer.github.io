@@ -124,7 +124,7 @@ Ignore any passed in content
     <category term="{{ tag | xml_escape }}" />
     {%- endfor -%}
 
-	{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_content=doc.content -%}{%- endcapture -%}
+	{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
     <summary type="html">{{ doc_excerpt | xml_escape }}</summary>
 
     {%- if doc_image != empty -%}
