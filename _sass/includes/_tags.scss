@@ -1,3 +1,7 @@
+.layout-tags .main-doc .doc-content > p {
+	@include box-block;
+}
+
 .tag-list {
 	list-style: none;
 	.doc-content & {

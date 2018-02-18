@@ -27,7 +27,7 @@ Include document article
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
-			<div class="doc-id"><time datetime="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
+			<div class="doc-id"><time datetime="{{ doc_date | strip | date_to_xmlschema }}" title="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
 
 		</div>
 
@@ -47,16 +47,27 @@ Include document article
 		
 		<div class="doc-byline doc-meta">
 
-			{%- if doc_author_name != site.author and doc_author_name != site.author.name -%}
+			{%- comment -%} Even if single author site, output author for scrapers {%- endcomment -%}
 			<div class="doc-author">By {{ doc_author_name }}</div>
-			{%- endif -%}
 	
 			{%- comment -%}
-			Reading time based on 200 words per minute
+			Reading time
+			Based on 200 words per minute
+			Display if greater than 1 minute
 			Add 1 min. to time to make it more accurate and to avoid 0 ("divided_by" filter is integer division)
 			{%- endcomment -%}
+
+{% capture words %}
+  {{ content | number_of_words | minus: 180 }}
+{% endcapture %}
+{% unless words contains "-" %}
+  {{ words | plus: 180 | divided_by: 180 | append: " minutes to read" }}
+{% endunless %}
+
 			{%- assign doc_readtime = my_doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
+			{% if doc_readtime > 1 %}
 			<div class="doc-readtime">{{ doc_readtime }} min. read</div>
+			{%- endif -%}
 
 			{%- if my_doc.updated -%}
 			<div class="doc-updated">Updated <time datetime="{{ my_doc.updated | date_to_xmlschema }}">{{ my_doc.updated | date: site.date_format }}</time></div>

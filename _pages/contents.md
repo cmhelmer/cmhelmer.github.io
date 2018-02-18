@@ -4,7 +4,7 @@ layout:	contents
 permalink:	/contents/
 menu:
   label:	Contents
-  order:	6
+  order:	3
 ---
 
 # Site Index

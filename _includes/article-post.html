@@ -12,7 +12,7 @@ Include post/blog article
 {%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
 
-<article id="post-{{ my_doc.slug }}" class="post-doc main-doc" role="document">
+<article id="post-{{ my_doc.slug }}" class="post-doc main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="doc-header">
 		<div class="doc-date doc-meta">{{ doc_date }}</div>
 	</header>

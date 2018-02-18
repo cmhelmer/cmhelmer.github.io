@@ -15,7 +15,7 @@
 		text-decoration: underline;
 	}
 
-	a[href]:after {
+	article a[href]:after {
 		content: " (" attr(href) ")";
 	}
 

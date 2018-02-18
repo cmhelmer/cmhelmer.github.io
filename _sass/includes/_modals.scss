@@ -1,17 +1,16 @@
 dialog {
-// 	display: flex;
 	position: absolute;
 	display: block;
 	left: ($gap / 2);
 	right: ($gap / 2);
 	max-width: $measure;
 	min-width: 15.5rem; // 100% @320px ((320 - left - right - padding) / 1rem)
-	width: min-content; // default: fit-content;
+	width: auto; // fallback for fit-content
+	width: fit-content;
 	height: fit-content;
 	margin: auto;
 	margin-bottom: $gap;
-	padding: $gap; // fallback for calc
-	padding: $gutter;
+	padding: $gap;
 	border: 0;
 	border-radius: ( $border-radius * 2 );
 	background: $color-b;
@@ -19,14 +18,28 @@ dialog {
 	box-shadow: 0 0 $gutter $color-c;
 }
 
-.search-modal {
-	width: auto; // override (so it doesn't jump around)
+.site-modal {
+	width: auto;
+	padding: $gutter;
+	.site-browse {
+		column-count: 2;
+		column-gap: $gap;
+		> .aside-title {
+			column-span: all;
+		}
+	}
+	li {
+		margin-left: 0;
+		&::before {
+			display: none;
+		}
+	}
 }
 
 .results-count {
 	float: right;
 }
-.results-display {
+.results-list {
 	margin-top: $gutter;
 }
 
@@ -41,7 +54,7 @@ dialog + .backdrop {
 	left: 0;
 	right: 0;
 	bottom: -100%; // for momentum scroll
-	background: transparent;
+	background: $color-c;
 }
 
 ._dialog_overlay {

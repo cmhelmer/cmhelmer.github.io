@@ -47,7 +47,7 @@
 @mixin font-display {
 	font-family: "Source Serif", "Source Serif Pro", $font-body;
 	font-weight: 600;   // semibold
-	font-style: normal; // forced, "Source Serif Pro" has no italics (yet)
+	font-style: normal; // force, "Source Serif Pro" has no italics (yet)
 }
 
 // Font treatment for site title (logo)

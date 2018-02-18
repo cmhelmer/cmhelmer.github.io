@@ -16,6 +16,7 @@ $color-3: #1d9bf6;               // accent: outline, splash (blue)
 // Fonts (include @font-face in fonts.scss)
 // Body font here as default; see "directives" partial for more
 $font-body:  "Source Sans", "Source Sans Extended", "Source Sans Pro", sans-serif;
+// $font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; // someday: system-ui
 $font-sizes: (
 	"font-size-min": 16px,
 	"font-size-max": 20px,

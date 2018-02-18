@@ -20,10 +20,10 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 	{{- site.title -}}
 {%- endcapture -%}
 <title>{{ meta_title | strip_html | strip }}</title>
-<meta property="og:site_name" content="{{ site.title }}">
 {%- if page_title -%}
 <meta property="og:title" content="{{ page_title | strip | escape }}">
 {%- endif -%}
+<meta property="og:site_name" content="{{ site.title }}">
 
 {%- if page.content -%}
 	{%- capture meta_description -%}
@@ -39,15 +39,14 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <meta property="og:description" content="{{ meta_description | strip | escape }}">
 {%- endunless -%}
 
-{%- if page.tags -%}
-<meta name="keywords" content="{{ page.tags | join: ', ' | escape }}">
-{%- endif -%}
-
-{%- if page.collection -%}
-<meta name="collection" content="{{ site.collections | where: 'label', page.collection | map: 'title' | first | default: page.collection | escape }}">
+{%- if page.url or site.url -%}
+<link rel="canonical" href="{{ page.url | site.url | absolute_url }}">
+<meta property="og:url" content="{{ page.url | site.url | absolute_url }}">
 {%- endif -%}
 
 <meta name="author" content="{{ page.author.name | default: page.author | default: page.authors.first.name | default: page.authors.first | default: site.author.name | default: site.author | escape }}">
+
+<meta property="og:locale" content="{{ page.lang | default: site.lang | default: 'en' | replace:'-','_' }}">
 
 {%- if page.date and page.date != site.time -%}
 <meta property="og:type" content="article">
@@ -56,20 +55,46 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- if page.updated -%}
 <meta name="revised" content="{{ page.updated | date_to_xmlschema }}">
+<meta name="og:updated_time" content="{{ page.updated | date_to_xmlschema }}">
 {%- endif -%}
 
-<meta property="og:locale" content="{{ page.lang | default: site.lang | default: 'en' | replace:'-','_' }}">
-
-{%- if site.url -%}
-<link rel="canonical" href="{{ page.url | site.url | absolute_url }}">
-<meta property="og:url" content="{{ page.url | site.url | absolute_url }}">
+{%- if page.tags -%}
+<meta name="keywords" content="{{ page.tags | join: ', ' | escape }}">
 {%- endif -%}
 
-{%- if page.previous -%}
-<link rel="prev" href="{{ page.previous.url | absolute_url }}">
+{%- if page.collection -%}
+<meta name="collection" content="{{ site.collections | where: 'label', page.collection | map: 'title' | first | default: page.collection | escape }}">
 {%- endif -%}
-{%- if page.next -%}
-<link rel="next" href="{{ page.next.url | absolute_url }}">
+
+{%- if page.image -%}
+<meta property="og:image" content="{{ page.image.path | default: page.image }}">
+{%- if page.image.width -%}
+<meta property="og:image:width" content="{{ page.image.width }}">
+{%- endif -%}
+{%- if page.image.height -%}
+<meta property="og:image:height" content="{{ page.image.height }}">
+{%- endif -%}
+{%- endif -%}
+
+{%- if page.audio -%}
+<meta property="og:image" content="{{ page.audio.path | default: page.audio }}">
+{%- endif -%}
+
+{%- if page.video -%}
+<meta property="og:image" content="{{ page.video.path | default: page.video }}">
+{%- endif -%}
+
+{%- if page.author.twitter or page.authors.first.twitter or site.author.twitter -%}
+<meta name="twitter:site" content="@{{ site.author.twitter | replace:"@","" }}">
+<meta name="twitter:creator" content="@{{ page.author.twitter | default: page.authors.first.twitter | default: site.author.twitter | replace:"@","" }}">
+{%- endif -%}
+{%- if page.image -%}
+<meta name="twitter:card" content="summary_large_image">
+{%- if page.image.description -%}
+<meta name="twitter:image:alt" content="{{ page.image.description }}">
+{%- endif -%}
+{%- else -%}
+<meta name="twitter:card" content="summary">
 {%- endif -%}
 
 {%- if site.author.facebook -%}
@@ -90,6 +115,13 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <link href="https://micro.blog/{{ site.author.microblog }}" rel="me">
 {%- endif -%}
 
+{%- if page.previous -%}
+<link rel="prev" href="{{ page.previous.url | absolute_url }}">
+{%- endif -%}
+{%- if page.next -%}
+<link rel="next" href="{{ page.next.url | absolute_url }}">
+{%- endif -%}
+
 {%- if site.verifications -%}
 {%- for verification in site.verifications -%}
 <meta name="{{ verification.name | escape }}" content="{{ verification.content | escape }}">
@@ -102,34 +134,28 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- comment -%}
 
-{%- if seo_tag.image -%}
-<meta property="og:image" content="{{ seo_tag.image.path }}">
-{%- if seo_tag.image.height -%}
-<meta property="og:image:height" content="{{ seo_tag.image.height }}">
-{%- endif -%}
-{%- if seo_tag.image.width -%}
-<meta property="og:image:width" content="{{ seo_tag.image.width }}">
-{%- endif -%}
-{%- endif -%}
+See https://search.google.com/structured-data/testing-tool
+- author
+- datePublished
+- headline
+- image
+- publisher
+- dateModified
+- mainEntityOfPage
 
-
-{%- if site.author.twitter -%}
-{%- if seo_tag.image -%}
-<meta name="twitter:card" content="summary_large_image">
-{%- else -%}
-<meta name="twitter:card" content="summary">
-{%- endif -%}
-
-<meta name="twitter:site" content="@{{ site.author.twitter | replace:"@","" }}">
-
-{%- if seo_tag.author.twitter -%}
-<meta name="twitter:creator" content="@{{ seo_tag.author.twitter }}">
-{%- endif -%}
-{%- endif -%}
-
-
+{%- if page -%}
 <script type="application/ld+json">
-{{ seo_tag.json_ld | jsonify }}
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page_title }}
+  {%- if page.image -%}
+  "image": [
+    {{ page.image.page | default: page.image }}
+  ]
+  {%- endif -%}
+}
 </script>
+{%- endif -%}
 
 {%- endcomment -%}

@@ -36,6 +36,9 @@ permalink: /:collection/:slug
 
 include: ["_pages"]
 
+# Jekyll v3.7
+# collections_dir: _collections
+
 collections:
   notes:
     title: "Notes"
@@ -84,7 +87,7 @@ defaults:
     path: "_crossroads"
   values:
     layout: note
-# Jekyll 3.7
+# Jekyll v3.7
 # - scope:
 #     path: "*/index.html"
 #   values:

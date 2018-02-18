@@ -18,10 +18,31 @@
 	}
 }
 
+.doc-collection {
+	@include font-smcp;
+}
+
+.doc-id {
+	// Would make this smcp but Source Sans Pro (unlike Source Serif Pro) doesn't have tnum for smcp
+	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
+	// @supports (font-variant-numeric: lining-nums tabular-nums) {
+	//	font-feature-settings: normal;
+	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
+	// }
+// 	letter-spacing: .03125em;
+	color: $color-1;
+	a:hover &,
+	a:focus &,
+	a:active & {
+		color: inherit;
+	}
+}
+
 .doc-index {
 	display: flex;
 	flex-wrap: wrap;
 	max-width: none; // override
+	color: $color-1;
 	border-top: $border-width $border-style;
 	.doc-collection {
 		display: inline-block; // fallback for flexbox
@@ -64,6 +85,9 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+	.doc-author {
+		display: none; // hide on single-author site but keep in html for scrapers
+	}
 }
 
 .doc-content {

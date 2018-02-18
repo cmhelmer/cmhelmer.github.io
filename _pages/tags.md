@@ -3,7 +3,7 @@ layout:	tags
 permalink:	/tags/
 menu:
   label:	Tags
-  order:	7
+  order:	4
 ---
 
 # Tags

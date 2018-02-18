@@ -1,24 +1,12 @@
 .doc-name,
-.doc-title,
-.collection-name {
+.doc-title {
 	@include font-display;
 }
 
 .doc-collection,
-.section-title,
 .aside-title,
 .aside-link {
 	@include font-smcp;
-}
-
-.doc-id {
-	// Would make this smcp but Source Sans Pro (unlike Source Serif Pro) doesn't have tnum for smcp
-	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
-	// @supports (font-variant-numeric: lining-nums tabular-nums) {
-	//	font-feature-settings: normal;
-	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
-	// }
-// 	letter-spacing: .03125em;
 }
 
 .icon {

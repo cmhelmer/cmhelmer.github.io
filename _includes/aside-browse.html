@@ -6,7 +6,9 @@ Include lists of site pages, collections, archives
 
 <aside id="browse" class="site-browse site-aside">
 
+	{%- comment -%}
 	<h3 class="aside-title">Browse</h3>
+	{%- endcomment -%}
 
 	{%- comment -%}
 
@@ -20,7 +22,7 @@ Include lists of site pages, collections, archives
 
 	{%- if html_pages.size > 0 -%}
 	<section class="browse-pages aside-section">
-		<h4 class="aside-title">Pages</h4>
+		<h4 class="aside-title">Browse Pages</h4>
 		<div class="aside-content">
 			<ul>
 				{%- for html_page in html_pages -%}

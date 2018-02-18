@@ -1,3 +1,7 @@
+.layout-contents .main-doc .doc-content > p {
+	@include box-block;
+}
+
 .doc-list {
 	list-style: none;
 	.doc-item {

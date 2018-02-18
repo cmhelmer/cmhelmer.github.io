@@ -22,77 +22,77 @@ layout:	default
 {%- assign documents = site.documents | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
 {%- assign home_docs = "" | split: "," -%}
 
-<article class="home-doc main-doc" role="document">
-	<div class="doc-content">
+{%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
+{%- if latest_docs.size > 0 -%}
+<aside class="latest-notes main-aside" role="complementary">
+	<h2 class="aside-title">Latest Notes</h2>
+	<div class="aside-content">
 
-		{%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
-		{%- if latest_docs.size > 0 -%}
-		<section>
-			<h2 class="section-title">Latest Notes</h2>
+		{%- assign limited_latest_docs = "" | split: "," -%}
+		{%- for doc in latest_docs -%}
+			{%- unless home_docs contains doc -%}
+				{%- assign limited_latest_docs = limited_latest_docs | push: doc -%}
+				{%- assign home_docs = home_docs | push: doc -%}
+			{%- endunless -%}
+			{%- if limited_latest_docs.size >= limit -%}
+				{%- break -%}
+			{%- endif -%}
+		{%- endfor -%}
 
-			{%- assign limited_latest_docs = "" | split: "," -%}
-			{%- for doc in latest_docs -%}
-				{%- unless home_docs contains doc -%}
-					{%- assign limited_latest_docs = limited_latest_docs | push: doc -%}
-					{%- assign home_docs = home_docs | push: doc -%}
-				{%- endunless -%}
-				{%- if limited_latest_docs.size >= limit -%}
-					{%- break -%}
-				{%- endif -%}
-			{%- endfor -%}
+		{%- include list-docs.html my_docs=limited_latest_docs -%}
 
-			{%- include list-docs.html my_docs=limited_latest_docs -%}
-
-			<div class="more"><a href="{{ "/contents/" | absolute_url }}">More notes…</a></div>
-
-		</section>
-		{%- endif -%}
-
-		{%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
-		{%- if featured_docs.size > 0 -%}
-		<section>
-			<h2 class="section-title">Featured Notes</h2>
-
-			{%- assign limited_featured_docs = "" | split: "," -%}
-			{%- for doc in featured_docs -%}
-				{%- unless home_docs contains doc -%}
-					{%- assign limited_featured_docs = limited_featured_docs | push: doc -%}
-					{%- assign home_docs = home_docs | push: doc -%}
-				{%- endunless -%}
-				{%- if limited_featured_docs.size >= limit -%}
-					{%- break -%}
-				{%- endif -%}
-			{%- endfor -%}
-
-			{%- include list-docs.html my_docs=limited_featured_docs -%}
-
-		</section>
-		{%- endif -%}
-
-		{%- comment -%}
-
-		{%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
-		{%- if updated_docs.size > 0 -%}
-		<section>
-			<h2 class="section-title">Updated</h2>
-
-			{%- assign limited_updated_docs = "" | split: "," -%}
-			{%- for doc in updated_docs -%}
-				{%- unless home_docs contains doc -%}
-					{%- assign limited_updated_docs = limited_updated_docs | push: doc -%}
-					{%- assign home_docs = home_docs | push: doc -%}
-				{%- endunless -%}
-				{%- if limited_updated_docs.size >= limit -%}
-					{%- break -%}
-				{%- endif -%}
-			{%- endfor -%}
-
-			{%- include list-docs.html my_docs=limited_updated_docs -%}
-
-		</section>
-		{%- endif -%}
-
-		{%- endcomment -%}
+		<div class="more"><a href="{{ "/contents/" | absolute_url }}">More notes…</a></div>
 
 	</div>
-</article>
+</aside>
+{%- endif -%}
+
+{%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
+{%- if featured_docs.size > 0 -%}
+<aside class="featured-notes main-aside" role="complementary">
+	<h2 class="aside-title">Featured Notes</h2>
+	<div class="aside-content">
+
+		{%- assign limited_featured_docs = "" | split: "," -%}
+		{%- for doc in featured_docs -%}
+			{%- unless home_docs contains doc -%}
+				{%- assign limited_featured_docs = limited_featured_docs | push: doc -%}
+				{%- assign home_docs = home_docs | push: doc -%}
+			{%- endunless -%}
+			{%- if limited_featured_docs.size >= limit -%}
+				{%- break -%}
+			{%- endif -%}
+		{%- endfor -%}
+
+		{%- include list-docs.html my_docs=limited_featured_docs -%}
+
+	</div>
+</aside>
+{%- endif -%}
+
+{%- comment -%}
+
+{%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
+{%- if updated_docs.size > 0 -%}
+<aside class="updated-notes main-aside" role="complementary">
+	<h2 class="aside-title">Updated Notes</h2>
+	<div class="aside-content">
+
+		{%- assign limited_updated_docs = "" | split: "," -%}
+		{%- for doc in updated_docs -%}
+			{%- unless home_docs contains doc -%}
+				{%- assign limited_updated_docs = limited_updated_docs | push: doc -%}
+				{%- assign home_docs = home_docs | push: doc -%}
+			{%- endunless -%}
+			{%- if limited_updated_docs.size >= limit -%}
+				{%- break -%}
+			{%- endif -%}
+		{%- endfor -%}
+	
+		{%- include list-docs.html my_docs=limited_updated_docs -%}
+	
+	</div>
+</aside>
+{%- endif -%}
+
+{%- endcomment -%}

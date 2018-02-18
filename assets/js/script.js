@@ -1,5 +1,8 @@
 // TODO: Cut the mustard somewhere...
 // Current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279
+	// This is all a bit hacky...
+	// Extend for other modals
+	// Fix search results to use custom query
 
 window.onload = function () {
 	"use strict";
@@ -15,17 +18,18 @@ window.onload = function () {
 
 	// Set up display elements (mimic list-docs.html include)
 	var searchContent = searchAside.querySelector(".aside-content"), // to place results
-   	    searchTitle   = searchAside.querySelector(".aside-title"),   // to place results
-	    searchDiv     = document.createElement("div"),
+   	    searchTitle   = searchAside.querySelector(".aside-title"),   // to place results count
 	    resultsList   = document.createElement("ol"),
 	    resultsCount  = document.createElement("span");
 
-	searchDiv.classList.add("results-display");
+	// Set up results count display
 	resultsCount.classList.add("results-count");
-	resultsList.classList.add("doc-list");
 	searchTitle.appendChild(resultsCount);
-	searchDiv.appendChild(resultsList);
-	searchContent.appendChild(searchDiv);
+
+	// Set up results display
+	resultsList.classList.add("doc-list");
+	resultsList.classList.add("results-list");
+	searchContent.appendChild(resultsList);
 
 	// Get Lunr data
 	// Try to initialize Lunr with session cache first
@@ -271,7 +275,7 @@ window.onload = function () {
 	function openModal(modal) {
 		modal.showModal();
 		modal.addEventListener("click", function(e) {
-			if (e.target === this) {
+			if (e.target === this || e.target === this.querySelector("aside")) {
 				closeModal(modal);
 			}
 		});
@@ -289,10 +293,5 @@ window.onload = function () {
 	searchAside.addEventListener("focus", function() {
 		searchInput.focus();
 	});
-
-
-	// This is all a bit hacky...
-	// Extend for other modals
-	// Fix search results to use custom query
 
 };

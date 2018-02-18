@@ -16,17 +16,11 @@
 }
 
 .site-aside {
-	> * + *,
-	.aside-section > * + * {
+	* + * {
 		margin-top: $gap;
 	}
-}
-
-.site-browse {
-	column-width: 7.5rem;
-	column-gap: $gap;
-	> .aside-title {
-		column-span: all;
+	* + li {
+		margin-top: 0;
 	}
 }
 
