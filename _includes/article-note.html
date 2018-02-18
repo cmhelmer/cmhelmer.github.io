@@ -57,13 +57,6 @@ Include document article
 			Add 1 min. to time to make it more accurate and to avoid 0 ("divided_by" filter is integer division)
 			{%- endcomment -%}
 
-{% capture words %}
-  {{ content | number_of_words | minus: 180 }}
-{% endcapture %}
-{% unless words contains "-" %}
-  {{ words | plus: 180 | divided_by: 180 | append: " minutes to read" }}
-{% endunless %}
-
 			{%- assign doc_readtime = my_doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
 			{% if doc_readtime > 1 %}
 			<div class="doc-readtime">{{ doc_readtime }} min. read</div>
