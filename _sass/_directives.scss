@@ -151,7 +151,7 @@
 
 // Font treatment for site title (logo)
 @mixin font-title {
-	font-family: "Source Serif", "Source Serif Pro", $font-body;
+	font-family: "Source Serif Title", "Source Serif Pro", $font-body;
 	font-weight: 900;
 	// font-kerning: none;
 	word-spacing: -.125em;

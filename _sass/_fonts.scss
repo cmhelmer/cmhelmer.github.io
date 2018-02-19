@@ -6,13 +6,13 @@
 // - OpenType features enabled (not all are available in all fonts): "smcp","c2sc","unic","cpsp","case","ital","ordn","lnum","onum","pnum","tnum","subs","sups","calt","liga","ccmp","kern","mark","mkmk","opbd","lfbd","rtbd"
 
 // Display / Title fonts
-// Black weight font is subset to "C. M. Helmer"
 
+// Black weight font is subset to "C. M. Helmer"
 @font-face {
-	font-family: "Source Serif";
+	font-family: "Source Serif Title";
 	src: local("Source Serif Pro Black"),
 	     local("SourceSerifPro-Black"),
-	     url("../fonts/SourceSerif-Black.woff")  format("woff");
+	     url("../fonts/SourceSerif-Black.woff") format("woff");
 	font-weight: 900;
 	font-style: normal;
 	font-display: block;
@@ -22,7 +22,7 @@
 	font-family: "Source Serif";
 	src: local("Source Serif Pro Regular"),
 	     local("SourceSerifPro-Regular"),
-	     url("../fonts/SourceSerif-Regular.woff")  format("woff");
+	     url("../fonts/SourceSerif-Regular.woff") format("woff");
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
@@ -32,20 +32,20 @@
 	font-family: "Source Serif";
 	src: local("Source Serif Pro Bold"),
 	     local("SourceSerifPro-Bold"),
-	     url("../fonts/SourceSerif-Bold.woff")  format("woff");
+	     url("../fonts/SourceSerif-Bold.woff") format("woff");
 	font-weight: 700;
 	font-style: normal;
 	font-display: fallback;
 }
 
 // Body fonts
-// Source Sans Regular Extended Unicode ranges: "00A0-00FF,0250-02FF,0391-03C9,1F00-1FFF,0590-05FF,0900-097F,2032-2034,2043,2103,2105,2109,2116,2122,2190-2195,21A9,21E5,2303,2318,2325,232B,238B,25AA-25AB,2605,2610-2612,266D,266F,2691,2713,FB01-FB02"
 
+// Source Sans Regular Extended Unicode ranges: "00A0-00FF,0250-02FF,0391-03C9,1F00-1FFF,0590-05FF,0900-097F,2032-2034,2043,2103,2105,2109,2116,2122,2190-2195,21A9,21E5,2303,2318,2325,232B,238B,25AA-25AB,2605,2610-2612,266D,266F,2691,2713,FB01-FB02"
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Regular"),
 	     local("SourceSansPro-Regular"),
-	     url("../fonts/SourceSans-Regular.woff")  format("woff");
+	     url("../fonts/SourceSans-Regular.woff") format("woff");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -55,7 +55,7 @@
 	font-family: "Source Sans Extended";
 	src: local("Source Sans Pro Regular"),
 	     local("SourceSansPro-Regular"),
-	     url("../fonts/SourceSans-Regular-Extended.woff")  format("woff");
+	     url("../fonts/SourceSans-Regular-Extended.woff") format("woff");
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
@@ -65,7 +65,7 @@
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Italic"),
 	     local("SourceSansPro-It"),
-	     url("../fonts/SourceSans-Italic.woff")  format("woff");
+	     url("../fonts/SourceSans-Italic.woff") format("woff");
 	font-weight: 400;
 	font-style: italic;
 	font-display: fallback;
@@ -75,7 +75,7 @@
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Bold"),
 	     local("SourceSansPro-Bold"),
-	     url("../fonts/SourceSans-Bold.woff")  format("woff");
+	     url("../fonts/SourceSans-Bold.woff") format("woff");
 	font-weight: 700;
 	font-style: normal;
 	font-display: fallback;
@@ -85,7 +85,7 @@
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Bold Italic"),
 	     local("SourceSansPro-BoldIt"),
-	     url("../fonts/SourceSans-BoldItalic.woff")  format("woff");
+	     url("../fonts/SourceSans-BoldItalic.woff") format("woff");
 	font-weight: 700;
 	font-style: italic;
 	font-display: fallback;
@@ -97,7 +97,7 @@
 	font-family: "Source Code";
 	src: local("Source Code Pro"),
 	     local("SourceCodePro-Regular"),
-	     url("../fonts/SourceCode-Regular.woff")  format("woff");
+	     url("../fonts/SourceCode-Regular.woff") format("woff");
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
