@@ -1,4 +1,97 @@
-// Includes (properties which belong together)
+// Functions
+// Includes (properties which belong together and need customization unlike placeholders)
+
+// Remove length unit
+@function strip-unit( $number ) {
+	@return $number / ( $number * 0 + 1 );
+}
+
+// Consistent box styles
+@mixin box( $background-color: $color-text-bg, $color: inherit ) {
+	border-radius: $border-radius;
+	background-color: $background-color;
+	color: $color;
+}
+
+// Block-level boxes (blockquote, pre, etc.)
+@mixin box-block( $background-color: $color-text-bg, $color: inherit ) {
+	@include box( $background-color, $color );
+	display: block;
+	padding: $gap;
+}
+
+// Span-level boxes (code, mark, etc.)
+@mixin box-span( $background-color: $color-text-bg, $color: inherit, $fix-margin: false ) {
+	@include box( $background-color, $color );
+	padding-left: .3125rem;
+	padding-right: .3125rem;
+	box-decoration-break: clone; // pad wrapped lines
+	@if $fix-margin {
+		margin-left: -.3125rem;
+		margin-right: -.3125rem;
+	}
+	@else {
+		margin: 0;
+	}
+}
+
+@mixin dim( $color: $color-text ) {
+	color: rgba( $color, .55 );
+}
+
+// Default flexbox with fallback on flex items
+@mixin flex {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	> * {
+		display: inline-block;
+		vertical-align: baseline;
+	}
+}
+
+// Font treatment for body
+@mixin font-body {
+	font-family: $font-body;
+	// font-kerning: normal;
+	// hyphens: auto;
+	// word-wrap: break-word;
+	hanging-punctuation: first last allow-end;
+	@include font-feature-settings( onum, pnum ); // old-style, proportional numbers
+}
+
+// Font treatment for headings
+@mixin font-display {
+	font-family: "Source Serif", "Source Serif Pro", $font-body;
+	font-weight: 700;   // bold
+	font-style: normal; // force, "Source Serif Pro" has no italics (yet)
+}
+
+// OpenType features
+@mixin font-feature-settings( $features... ) {
+	$font-feature-settings: ();
+	@each $feature in $features {
+		$font-feature-settings: append( $font-feature-settings, '#{$feature}' 1, comma );
+	}
+	font-feature-settings: $font-feature-settings;
+	// Recommended when Jekyll sass compiler doesn't choke on @supports
+	/*
+	@supports (font-variant-*: ...) {
+		font-feature-settings: normal;
+		font-variant-*: ...;
+	}
+	*/
+}
+
+// Font treatment for fixed-width
+@mixin font-fixed {
+	font-family: "Source Code", "Source Code Pro", monospace;
+	@include font-small;
+	@include font-feature-settings( lnum, tnum ); // lining, tabular numbers
+	hanging-punctuation: none;
+	hyphens: none;
+}
 
 @mixin font-size-fluid( $font-sizes ) {
 	$font-size-min: map-get( $font-sizes, "font-size-min" );
@@ -20,10 +113,22 @@
 	}
 }
 
+// Font treatment pull quotes and inline page names
+@mixin font-lift {
+	font-family: "Source Serif", "Source Serif Pro", $font-body;
+	font-weight: 400;   // regular
+	font-style: normal; // force, "Source Serif Pro" has no italics (yet)
+}
+
 // Maintain vertical rhythm
 @mixin font-size( $factor: 1, $line-height: $interval ) {
-	font-size: $factor * 1em;
-	line-height: ( $line-height / $factor );
+	font-size: $factor * 1rem;
+	@if $line-height < $factor {
+		line-height: 1; // floor
+	}
+	@else {
+		line-height: ( $line-height / $factor );
+	}
 }
 
 // Small font size
@@ -31,23 +136,17 @@
 	@include font-size( $font-size-small, $line-height );
 }
 
-// Font treatment for body
-@mixin font-body {
-	font-family: $font-body;
-	font-kerning: normal;
-	font-feature-settings: "onum" 1, "pnum" 1; // old-style, proportional numbers
-	// @supports (font-variant-numeric: oldstyle-nums) {
-	//	font-feature-settings: normal;
-	//	font-variant-numeric: oldstyle-nums proportional-nums; // OpenType feature "onum", "pnum"
-	// }
-	// text-rendering: optimizeLegibility;
-}
-
-// Font treatment for headings
-@mixin font-display {
-	font-family: "Source Serif", "Source Serif Pro", $font-body;
-	font-weight: 600;   // semibold
-	font-style: normal; // force, "Source Serif Pro" has no italics (yet)
+// Small-caps
+@mixin font-smcp {
+	font-family: $font-body; // must have OpenType features
+	@include font-feature-settings( smcp, c2sc, lnum ); // small-caps, capitals-to-small-caps, lining numbers
+	text-transform: uppercase; // fallback
+	letter-spacing: .0625em;
+	font-weight: normal; // only regular weight has small-caps (can be overridden for faux bold)
+	em, cite {
+		font-style: normal; // override default
+		font-weight: bolder; // will be faux bold
+	}
 }
 
 // Font treatment for site title (logo)
@@ -59,84 +158,59 @@
 	letter-spacing: -.015625em;
 }
 
-// Font treatment for fixed-width
-@mixin font-fixed {
-	font-family: "Source Code", "Source Code Pro", monospace;
-	@include font-small;
-	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
-	// @supports (font-variant-numeric: lining-nums tabular-nums) {
-	//	font-feature-settings: normal;
-	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
-	// }
-	hanging-punctuation: none;
-	hyphens: none;
-}
-
-// Small-caps
-@mixin font-smcp {
-	font-family: $font-body; // must have OpenType features
-	font-feature-settings: 'smcp' 1, 'c2sc' 1, 'lnum' 1; // small-caps, capitals-to-small-caps, lining numbers
-	// @supports (font-variant-caps: all-small-caps) and (font-variant-numeric: lining-nums) {
-	//	font-feature-settings: normal;
-	//	font-variant-caps: all-small-caps; // OpenType features "c2sc", "smcp"
-	//	font-variant-numeric: lining-nums; // OpenType feature "lnum"
-	// }
-	text-transform: uppercase; // fallback
-	letter-spacing: .0625em;
-	font-weight: normal; // only regular weight webfont has small-caps (via Font Squirrel)
-}
-
-// Consistent box styles
-@mixin box( $bg-color: $color-c, $color: inherit ) {
-	border-radius: $border-radius;
-	background-color: $bg-color;
-	color: $color;
-}
-
-// Span-level boxes (code, mark, etc.)
-@mixin box-span( $bg-color: $color-c, $color: inherit, $fix-margin: false ) {
-	@include box( $bg-color, $color );
-//	padding: .0625rem .3125rem;
-	padding-left: .25rem;
-	padding-right: .25rem;
-	@if $fix-margin {
-// 		margin: -.0625rem -.3125rem;
-		margin-left: -.25rem;
-		margin-right: -.25rem;
+// Add padding and fallback
+@mixin gutter( $factor: 1 ) {
+	@if $factor != 1 {
+		padding: ( $gap * $factor ); // fallback for calc
+		padding: calc(#{$gutter} * #{$factor});
 	}
 	@else {
-		margin: 0;
+		padding: $gap; // fallback for calc
+		padding: $gutter;
 	}
-	box-decoration-break: clone; // pad wrapped lines
 }
 
-// Block-level boxes (blockquote, pre, etc.)
-@mixin box-block( $bg-color: $color-c, $color: inherit ) {
-	@include box( $bg-color, $color );
-	display: block;
-	padding: $gap;
+// Remove custom base styles from ol, ul
+@mixin list-none {
+	li {
+		margin-left: 0;
+		&::before {
+			display: none;
+		}
+	}
 }
 
-@mixin dim( $color: $color-a ) {
-	color: rgba( $color, .55 );
+// Set the measure and center content elements
+@mixin measure( $factor: 1 ) {
+	@include max-width( $measure * $factor );
+}
+
+// Set max-width with auto margins for centering
+@mixin max-width( $width: $measure ) {
+	max-width: $width;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 // Scrolling hints (horizontal)
-@mixin scrolling-hints( $color: $color-b ) {
+@mixin scrolling-hints( $color: $color-bg ) {
 	overflow-x: auto;
 	overflow-y: hidden; // prevent vertical overflow-scrolling; side-effects?
 	background-image:
 		linear-gradient( to right, $color 30%, rgba( $color, 0 ) ),
-		radial-gradient( at left, rgba( $color-a, .15 ), rgba( $color-a, 0 ) 70% ),
+		radial-gradient( at left, rgba( $color-text, .15 ), rgba( $color-text, 0 ) 70% ),
 		linear-gradient( to left, $color 30%, rgba( $color, 0 ) ),
-		radial-gradient( at right, rgba( $color-a, .15 ), rgba( $color-a, 0 ) 70% );
+		radial-gradient( at right, rgba( $color-text, .15 ), rgba( $color-text, 0 ) 70% );
 	background-repeat: no-repeat;
 	background-size: ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%, ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%;
 	background-position: left, left, right, right;
 	background-attachment: local, scroll, local, scroll;
 }
 
-// Remove length unit
-@function strip-unit( $number ) {
-	@return $number / ( $number * 0 + 1 );
+// Inline (text) overflow
+@mixin text-overflow {
+	text-overflow: ellipsis;
+	white-space: nowrap; // required for text-overflow
+	overflow: hidden; // required for text-overflow
+	hanging-punctuation: none; // because of hidden overflow
 }

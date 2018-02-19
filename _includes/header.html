@@ -12,12 +12,16 @@ Include site header
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<link rel="stylesheet" href="{{ "/assets/css/style.css" | absolute_url }}?{{ site.github.build_revision }}">
-	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.github.build_revision }}" defer></script>
 	<script src="{{ "/assets/js/prefixfree.min.js" | absolute_url }}" async></script>
 	<script src="{{ "/assets/js/dialog-polyfill.js" | absolute_url }}" async></script>
-	<script src="{{ "/assets/js/lunr.js" | absolute_url }}" async></script>
+	<script src="{{ "/assets/js/lunr.js" | absolute_url }}" defer></script>
+	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.github.build_revision }}" defer></script>
 
 	{%- include header-meta.html -%}
+
+	{%- comment -%} Preload important assets: body font (font requires crossorigin attribute regardless), search index {%- endcomment -%}
+	<link rel="preload" href="{{ "/assets/fonts/SourceSans-Regular.woff" | absolute_url }}" as="font"   type="font/woff" crossorigin="anonymous">
+	<link rel="preload" href="{{ "/data/corpus.json" | absolute_url }}" as="fetch" type="application/json">
 
 	{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
 	<meta name="format-detection" content="telephone=no">
@@ -25,14 +29,14 @@ Include site header
 
 	{%- if site.feed -%}
 	{%- for feed in site.feed -%}
-	<link type="application/atom+xml" rel="alternate" href="{{ feed.url | absolute_url }}" title="{{ site.title | escape }}{%- if feed.title != empty -%}{{ ' ' }}{{ site.title_separator | default: '|' }}{{ ' ' }}{{ feed.title }}{%- endif -%}">
+	<link type="application/atom+xml" rel="alternate" href="{{ feed.url | default: feed | absolute_url }}" title="{{ site.title | escape }}{%- if feed.title != empty -%}{{ ' ' }}{{ site.title_separator | default: '|' }}{{ ' ' }}{{ feed.title }}{%- endif -%}">
 	{%- endfor -%}
 	{%- endif -%}
 
 	<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script><![endif]-->
 </head>
 
-<body class="layout-{{ page.layout }}">
+<body class="layout-{{ page.layout | default: 'default' }}">
 
 {%- include header-icons.html -%}
 

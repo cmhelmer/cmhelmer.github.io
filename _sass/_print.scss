@@ -1,4 +1,4 @@
-/*! Thanks to H5BP */
+// Based on H5BP
 
 @media print {
 	*,
@@ -15,7 +15,7 @@
 		text-decoration: underline;
 	}
 
-	article a[href]:after {
+	article a[href]:after { // Restrict to article (not site header, nav, footer, etc.)
 		content: " (" attr(href) ")";
 	}
 
@@ -32,6 +32,7 @@
 	pre {
 		white-space: pre-wrap !important;
 	}
+
 	pre,
 	blockquote {
 		border: 1px solid #999;

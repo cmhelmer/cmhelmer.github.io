@@ -20,14 +20,14 @@ Include document article
 
 	<header class="doc-header">
 
-		<div class="doc-index doc-meta">
+		<div class="doc-index">
 
 			{%- if my_doc.collection != "posts" -%}
-			<div class="doc-collection">{{ site.collections | where: 'label', my_doc.collection | map: 'title' | first | default: my_doc.collection }}</div>
+			<div class="doc-collection doc-meta">{{ site.collections | where: 'label', my_doc.collection | map: 'title' | first | default: my_doc.collection }}</div>
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
-			<div class="doc-id"><time datetime="{{ doc_date | strip | date_to_xmlschema }}" title="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
+			<div class="doc-id doc-meta"><time datetime="{{ doc_date | strip | date_to_xmlschema }}" title="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
 
 		</div>
 
@@ -45,10 +45,10 @@ Include document article
 		<h1 class="doc-title doc-meta">{{ doc_title | strip }}</h1>
 		{%- endunless -%}
 		
-		<div class="doc-byline doc-meta">
+		<div class="doc-byline">
 
 			{%- comment -%} Even if single author site, output author for scrapers {%- endcomment -%}
-			<div class="doc-author">By {{ doc_author_name }}</div>
+			<div class="doc-author doc-meta">By {{ doc_author_name }}</div>
 	
 			{%- comment -%}
 			Reading time
@@ -59,11 +59,11 @@ Include document article
 
 			{%- assign doc_readtime = my_doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
 			{% if doc_readtime > 1 %}
-			<div class="doc-readtime">{{ doc_readtime }} min. read</div>
+			<div class="doc-readtime doc-meta">{{ doc_readtime }} min. read</div>
 			{%- endif -%}
 
 			{%- if my_doc.updated -%}
-			<div class="doc-updated">Updated <time datetime="{{ my_doc.updated | date_to_xmlschema }}">{{ my_doc.updated | date: site.date_format }}</time></div>
+			<div class="doc-updated doc-meta">Updated <time datetime="{{ my_doc.updated | date_to_xmlschema }}">{{ my_doc.updated | date: site.date_format }}</time></div>
 			{%- endif -%}
 	
 		</div>

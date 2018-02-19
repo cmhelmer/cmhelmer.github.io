@@ -5,16 +5,18 @@
 .doc-header,
 .doc-content,
 .doc-footer {
-	padding: ( $gap / 2 );         // fallback for calc
-	padding: calc(#{$gutter} / 2); // split with body
+	@include gutter( .5 ); // split with body
 }
 
-.doc-meta {
-	max-width: $measure;
-	margin-left: auto;
-	margin-right: auto;
-	+ .doc-meta {
+.doc-header {
+	> * {
+		@include measure;
+	}
+	.doc-meta {
 		margin-top: $gap;
+	}
+	figcaption {
+		margin-top: 0; // override
 	}
 }
 
@@ -24,34 +26,22 @@
 
 .doc-id {
 	// Would make this smcp but Source Sans Pro (unlike Source Serif Pro) doesn't have tnum for smcp
-	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
-	// @supports (font-variant-numeric: lining-nums tabular-nums) {
-	//	font-feature-settings: normal;
-	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
-	// }
+	@include font-feature-settings( lnum, tnum ); // lining, tabular numbers
 // 	letter-spacing: .03125em;
-	color: $color-1;
-	a:hover &,
-	a:focus &,
-	a:active & {
-		color: inherit;
-	}
+	color: $color-accent;
 }
 
 .doc-index {
-	display: flex;
-	flex-wrap: wrap;
+	@include flex;
 	max-width: none; // override
-	color: $color-1;
+	color: $color-accent;
 	border-top: $border-width $border-style;
-	.doc-collection {
-		display: inline-block; // fallback for flexbox
+	> .doc-meta {
 		width: 50%;
+		margin-top: 0; // override
 	}
-	.doc-id {
+	> :last-child {
 		text-align: right;
-		display: inline-block; // fallback for flexbox
-		width: 50%;
 	}
 }
 
@@ -68,23 +58,26 @@
 	@include font-size( 1.5 );
 	max-width: ( $measure * 1.5 );
 // 	text-align: center;
-	.doc-meta + & {
+	&:not(:first-child) {
 		margin-top: $gap; // fallback for calc
 		margin-top: $gutter;
 	}
+	/*
 	.title {}
 	.title-separator {}
 	.subtitle {
-		font-weight: normal; // only in variable font
+		font-weight: normal;
 	}
+	*/
 }
 
 .doc-byline {
+	@include flex;
 	@include font-small;
 	@include dim;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+	> * {
+		margin-top: 0; // override
+	}
 	.doc-author {
 		display: none; // hide on single-author site but keep in html for scrapers
 	}
@@ -93,9 +86,7 @@
 .doc-content {
 	// tomfoolery, no doubt, but gives as much flexibility as possible
 	> * {
-		max-width: $measure;
-		margin-left: auto; // fallback for flexbox
-		margin-right: auto; // fallback for flexbox
+		@include measure;
 	}
 	h1 {
 		@include font-size( 1.25 );
@@ -108,11 +99,11 @@
 	}
 	figure,
 	table {
-		max-width: ( $measure * 1.5 );
+		@include measure( 1.5 );
 		width: auto;
 	}
 	iframe {
-		max-width: ( $measure * 1.5 );
+		@include measure( 1.5 );
 		width: 100%;
 	}
 	* + *,
@@ -123,7 +114,9 @@
 	* + li,
 	* + dd,
 	dt + dt,
-	figcaption {
+	figcaption,
+	li > ul,
+	li > ol {
 		margin-top: 0; // override, unless there are child <p> (above)
 	}
 	> .highlighter-rouge {
@@ -161,36 +154,34 @@ pre + .output,
 	}
 }
 
-// Footnotes (like <hr>)
+// Footnotes
 .footnotes {
 	@include font-small;
-	position: relative;
+	@extend hr;
 	padding-top: ( $gap * 2 );
-	&::before {
-		position: absolute;
-		top: 0;
-		width: 100%;
-		text-align: center;
-		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
-	}
 }
 
 .doc-footer {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	max-width: $measure;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: $gap; // fallback for calc
-	margin-top: calc(#{$gutter} / 2); // in place of padding-top
-	padding-top: $gap; // fallback for calc
-	padding-top: $gutter;
-	border-top: $border-width $border-style $color-c;
+	@include flex;
+	@include measure;
+	@include gutter( .5 );
+	margin-top: ( $gap * 1.5 ); // fallback for calc
+	margin-top: calc(#{$gutter} + #{$gap * .5}); // in place of padding-top + some
+	border-top: $border-width $border-style;
 	.doc-meta {
-		margin: 0; // override
 		a {
 			white-space: nowrap;
 		}
+	}
+}
+
+.main-aside {
+	@include measure;
+	@include gutter( .5 ); // split with body
+	* + * {
+		margin-top: $gap;
+	}
+	* + li {
+		margin-top: 0;
 	}
 }

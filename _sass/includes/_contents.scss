@@ -3,13 +3,10 @@
 }
 
 .doc-list {
-	list-style: none;
-	.doc-item {
-		margin-left: 0; // override
-	}
+	@include list-none;
 	a {
-		display: flex;
-		justify-content: space-between;
+		@include flex;
+		flex-wrap: nowrap; // override flex
 		text-decoration: none; // defer to child
 		&:hover,
 		&:focus,
@@ -22,8 +19,6 @@
 	.doc-preview,
 	.doc-reference {
 		margin-top: 0; // override * + *
-		display: inline-block; // fallback for flexbox
-		vertical-align: top;   // fallback for flexbox
 	}
 	.doc-reference {
 		margin-left: .1875rem;
@@ -34,18 +29,15 @@
 		white-space: nowrap;
 	}
 	.doc-preview {
+		@include text-overflow;
 		position: relative; // for pseudo-content
 		z-index: 1; // above pseudo-content
-		text-overflow: ellipsis;
-		white-space: nowrap; // required for text-overflow
-		overflow: hidden; // required for text-overflow
-		hanging-punctuation: none; // because of hidden overflow
 		width: 100%; // required for text-overflow to work properly with flex
 		text-decoration: underline;
 		&::after {
 			position: absolute; // avoid triggering text-overflow unnecessarily
-			font-family: $font-body; // override .doc-title
-			font-weight: normal; // override .doc-title
+			font-family: $font-body; // override .doc-name
+			font-weight: normal;     // override .doc-name
 			content: "\A0. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ."; // long enough to span $measure * 1.5
 		}
 	}

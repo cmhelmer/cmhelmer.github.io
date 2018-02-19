@@ -43,7 +43,6 @@ collections:
   notes:
     title: "Notes"
     order: 1
-#   color: "#a6565e" # thematic color
     output: true
   ctbp:
     title: "CTBP"

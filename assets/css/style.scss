@@ -25,14 +25,13 @@
 // Jekyll layouts and includes
 @import "includes/header";
 @import "includes/splash";
-@import "includes/doc";         // doc layouts (main-article) and includes article-note, article-page
+@import "includes/doc";         // doc layouts (main-article and main-aside) and includes article-note, article-page
 @import "includes/post";        // post layout and article-post include
-@import "includes/asides";      // asides (main-aside)
-@import "includes/modals";      // modals
 // @import "includes/attachments"; // attachments layout
 @import "includes/contents";    // contents layout and list-docs include
 @import "includes/tags";        // tags layout and doc-tags include
 @import "includes/footer";      // site-footer and site-aside
+@import "includes/modals";      // modals
 
 // Utility classes; cascade last
 @import "utility";

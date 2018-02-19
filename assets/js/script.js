@@ -1,15 +1,14 @@
-// TODO: Cut the mustard somewhere...
-// Current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279
-	// This is all a bit hacky...
-	// Extend for other modals
-	// Fix search results to use custom query
+// TODO: 
+// - Cut the mustard somewhere...
+// - Extend for other modals (This is all a bit hacky...)
+// - Fix search results to use custom query (current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279)
 
 window.onload = function () {
 	"use strict";
 
 	// Get site footer elements for modals (including search)
 	var infoAside     = document.querySelector("#info"),
-	    browseAside    = document.querySelector("#browse"),
+	    browseAside   = document.querySelector("#browse"),
 	    searchAside   = document.querySelector("#search");
 
 	// Get search elements
@@ -177,8 +176,8 @@ window.onload = function () {
 					resultsItem.classList.add(result.collection + "-collection");
 				}
 
-				resultsLink.setAttribute("href", result.url);
-				resultsLink.setAttribute("rel", "bookmark");
+				resultsLink.href = result.url;
+				resultsLink.rel  = "bookmark";
 			
 				// TEMP... this logic isn't foolproof and depends on using uid in filename
 				resultsPreview.classList.add("doc-preview");
@@ -211,7 +210,7 @@ window.onload = function () {
 
 	// Create semantic modals
 	// This could be automated, but as proof of concept this works
-	var infoModal = document.createElement("dialog"),
+	var infoModal   = document.createElement("dialog"),
 	    browseModal = document.createElement("dialog"),
 	    searchModal = document.createElement("dialog");
 	    
@@ -244,9 +243,9 @@ window.onload = function () {
 	document.body.appendChild(searchModal);
 
 	// Connect all nav links with modals
-	var infoLinks = document.querySelectorAll("a[href='#info']");
-	var browseLinks = document.querySelectorAll("a[href='#browse']");
-	var searchLinks = document.querySelectorAll("a[href='#search']");
+	var infoLinks   = document.querySelectorAll("a[href='#info']"),
+	    browseLinks = document.querySelectorAll("a[href='#browse']"),
+	    searchLinks = document.querySelectorAll("a[href='#search']");
 
 	// Open modals on click of nav links
 	infoLinks.forEach(function(item) {
@@ -287,7 +286,7 @@ window.onload = function () {
 	}
 
 	// Make search container focusable (when it is clicked or receives internal :target links)
-	searchAside.setAttribute("tabindex", 0);
+	searchAside.tabindex = 0;
 
 	// Focus search input when search container receives focus
 	searchAside.addEventListener("focus", function() {

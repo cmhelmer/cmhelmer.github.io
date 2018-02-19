@@ -13,14 +13,14 @@ dialog {
 	padding: $gap;
 	border: 0;
 	border-radius: ( $border-radius * 2 );
-	background: $color-b;
+	background: $color-bg;
 	color: inherit;
-	box-shadow: 0 0 $gutter $color-c;
+	box-shadow: 0 0 calc(#{$gutter} / 2) $color-shadow;
 }
 
 .site-modal {
+	@include gutter;
 	width: auto;
-	padding: $gutter;
 	.site-browse {
 		column-count: 2;
 		column-gap: $gap;
@@ -28,17 +28,22 @@ dialog {
 			column-span: all;
 		}
 	}
-	li {
-		margin-left: 0;
-		&::before {
-			display: none;
+	.site-search {
+		input[type="search"] {
+			padding-right: 6rem; // for .results-count
 		}
 	}
 }
 
 .results-count {
+	@include dim;
 	float: right;
+	position: relative;
+	top: ( $gap * 2 );
+	right: .25rem; // = input padding-right
+	pointer-events: none;
 }
+
 .results-list {
 	margin-top: $gutter;
 }
@@ -49,12 +54,13 @@ dialog:not([open]) {
 
 dialog::backdrop,
 dialog + .backdrop {
+	max-width: none; // override
 	position: fixed;
-	top: -100%; // for momentum scroll
+	top: -100%; // bleed for momentum scroll
 	left: 0;
 	right: 0;
-	bottom: -100%; // for momentum scroll
-	background: $color-c;
+	bottom: -100%; // bleed for momentum scroll
+	background: $color-shadow;
 }
 
 ._dialog_overlay {

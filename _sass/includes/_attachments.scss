@@ -1,10 +1,7 @@
 .file-list {
-	list-style: none;
-	max-width: ( $measure * 1.5 );
-	margin-right: auto;
-	margin-left: auto;
-	display: flex;
-	flex-wrap: wrap;
+	@include measure( 1.5 );
+	@include flex;
+	@include list-none;
 /*
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 18rem);
@@ -14,7 +11,6 @@
 }
 
 .file-item {
-margin-left: 0; // override
 	margin: ( $gap / -2 ); // = .file-item padding (for alignment)	display: inline-block; // fallback for flexbox
 	flex: 1 1 25%;
 	min-width: 17.5rem;
@@ -24,9 +20,6 @@ margin-left: 0; // override
 	padding: ( $gap / 2 );
 	box-sizing: border-box;
 	
-	&::before {
-		display: none;
-	}
 	a {
 		display: block;
 		height: 100%;
@@ -39,7 +32,7 @@ margin-left: 0; // override
 			min-width: 100%;
 			object-fit: cover;
 			border-radius: $border-radius;
-			background-color: $color-b; // for transparent images
+			background-color: $color-bg; // for transparent images
 		}
 		&:hover,
 		&:focus,

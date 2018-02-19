@@ -1,7 +1,12 @@
-.doc-name,
 .doc-title {
 	@include font-display;
 }
+
+/*
+.doc-name{
+	@include font-lift;	
+}
+*/
 
 .doc-collection,
 .aside-title,
@@ -234,27 +239,6 @@ a[href$=".svn"] {}
 		clip-path: none;
 		overflow: visible;
 		white-space: inherit;
-	}
-}
-
-:target {
-	animation: target 3s ease forwards;
-	outline: 4px solid rgba( $color-3, .9 );
-	outline-offset: 4px;
-}
-
-@keyframes target {
-	0% {
-		outline-color: transparent;
-	}
-	25% {
-		outline-color: rgba( $color-3, .9 );
-	}
-	60% {
-		outline-color: rgba( $color-3, .9 );
-	}
-	100% {
-		outline-color: transparent;
 	}
 }
 

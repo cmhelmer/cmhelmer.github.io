@@ -1,13 +1,13 @@
 /*! Subset with fonttools (https://github.com/fonttools/fonttools) */
 
-// Bypassed Google Fonts to use Variable fonts, OpenType features and long cache (through CDN).
-// Using css font-display as progressive enhancement, not loading fonts with js.
-// Unicode ranges for all fonts: "0020-007F,2000-2027"
-// Unicode ranges for Source Sans Regular Extended: "00A0-00FF,0250-02FF,0391-03C9,1F00-1FFF,0590-05FF,0900-097F,2032-2034,2043,2103,2105,2109,2116,2122,2190-2195,21A9,21E5,2303,2318,2325,232B,238B,25AA-25AB,2605,2610-2612,266D,266F,2691,2713,FB01-FB02"
-// OpenType features: "smcp","c2sc","unic","cpsp","case","ital","ordn","lnum","onum","pnum","tnum","subs","sups","calt","liga","ccmp","kern","mark","mkmk","opbd","lfbd","rtbd"
+// - Bypassed Google Fonts to use OpenType features, additional glyphs and long cache (through CDN).
+// - Using css font-display as progressive enhancement, not loading fonts with js.
+// - Unicode ranges unless otherwise specified: "0020-007F,2000-2027"
+// - OpenType features enabled (not all are available in all fonts): "smcp","c2sc","unic","cpsp","case","ital","ordn","lnum","onum","pnum","tnum","subs","sups","calt","liga","ccmp","kern","mark","mkmk","opbd","lfbd","rtbd"
 
-// Display Font
+// Display / Title fonts
 // Black weight font is subset to "C. M. Helmer"
+
 @font-face {
 	font-family: "Source Serif";
 	src: local("Source Serif Pro Black"),
@@ -17,18 +17,30 @@
 	font-style: normal;
 	font-display: block;
 }
+
 @font-face {
 	font-family: "Source Serif";
-	src: local("Source Serif Pro Semibold"),
-	     local("SourceSerifPro-Semibold"),
-	     url("../fonts/SourceSerif-Semibold.woff")  format("woff");
-	font-weight: 600;
+	src: local("Source Serif Pro Regular"),
+	     local("SourceSerifPro-Regular"),
+	     url("../fonts/SourceSerif-Regular.woff")  format("woff");
+	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
 }
 
-// Body Font
-// Regular weight has OpenType features included (via Font Squirrel)
+@font-face {
+	font-family: "Source Serif";
+	src: local("Source Serif Pro Bold"),
+	     local("SourceSerifPro-Bold"),
+	     url("../fonts/SourceSerif-Bold.woff")  format("woff");
+	font-weight: 700;
+	font-style: normal;
+	font-display: fallback;
+}
+
+// Body fonts
+// Source Sans Regular Extended Unicode ranges: "00A0-00FF,0250-02FF,0391-03C9,1F00-1FFF,0590-05FF,0900-097F,2032-2034,2043,2103,2105,2109,2116,2122,2190-2195,21A9,21E5,2303,2318,2325,232B,238B,25AA-25AB,2605,2610-2612,266D,266F,2691,2713,FB01-FB02"
+
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Regular"),
@@ -38,6 +50,7 @@
 	font-style: normal;
 	font-display: swap;
 }
+
 @font-face {
 	font-family: "Source Sans Extended";
 	src: local("Source Sans Pro Regular"),
@@ -47,6 +60,7 @@
 	font-style: normal;
 	font-display: fallback;
 }
+
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Italic"),
@@ -56,6 +70,7 @@
 	font-style: italic;
 	font-display: fallback;
 }
+
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Bold"),
@@ -65,6 +80,7 @@
 	font-style: normal;
 	font-display: fallback;
 }
+
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Bold Italic"),
@@ -75,7 +91,8 @@
 	font-display: fallback;
 }
 
-// Fixed-width Font
+// Fixed-width font
+
 @font-face {
 	font-family: "Source Code";
 	src: local("Source Code Pro"),

@@ -1,7 +1,6 @@
 .layout-post {
 	.site-main {
-		display: flex;
-		flex-wrap: wrap;
+		@include flex;
 	}
 	.main-aside {
 		min-width: ( $measure / 2 );
@@ -9,8 +8,8 @@
 }
 
 .post-doc {
-	margin-top: $gap;
-	margin-bottom: $gap;
+	margin-top: $gap; // ?
+	margin-bottom: $gap; // ?
 	.doc-header {
 		padding-bottom: 0; // override
 	}
@@ -21,14 +20,13 @@
 
 .doc-date {
 	@include font-smcp;
-	.doc-header & {
-		color: $color-1;
-	}
+	color: $color-accent;
 	a {
 		text-decoration: none;
 	}
 }
 
+/*
 .pagination-aside {
 	max-width: none;
 	flex: 1 1 ( $measure / 2 );
@@ -45,3 +43,4 @@
 		}
 	}
 }
+*/

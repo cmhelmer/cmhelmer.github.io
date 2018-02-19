@@ -3,19 +3,17 @@
 }
 
 .tag-list {
-	list-style: none;
+	@include list-none;
 	.doc-content & {
+		@include gutter;
 		column-width: 7.5rem; // fit 2 columns @320px (and account for vw rounding errors on padding)
 		column-gap: $gap;
-		padding-bottom: $gap; // fallback for calc
-		padding-bottom: $gutter;
 		border-bottom: $border-width $border-style;
 	}
 }
 
 .tag-item {
-	margin-left: 0; // override
-	.doc-tags & {
+	.doc-tags .tag-list & {
 		display: inline-block;
 		margin-right: .25rem;
 	}
@@ -38,15 +36,19 @@
 }
 
 .tag,
-[rel="tag"],
-[href*="/tags/#"] { // not fool-proof; should probably add absolute url
-	@include box-span( $color-1, $color-b );
+a[href*="/tags/#"] { // not fool-proof without absolute url
+	@include box-span( $color-tags-bg, $color-tags );
 	padding-top: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small
 	padding-bottom: ( ( 1 - $font-size-small ) * .5rem ); // in place of greater line-height with font-small
 	font-size: $font-size-small * 1em;
 	white-space: nowrap;
 	text-decoration: none;
-	& + & {
-		margin-left: 0;
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: $color-text;
 	}
+}
+.tag + .tag {
+	margin-left: 0; // override box-span
 }

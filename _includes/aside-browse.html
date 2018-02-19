@@ -22,7 +22,7 @@ Include lists of site pages, collections, archives
 
 	{%- if html_pages.size > 0 -%}
 	<section class="browse-pages aside-section">
-		<h4 class="aside-title">Browse Pages</h4>
+		<h3 class="aside-title">Browse:</h3>
 		<div class="aside-content">
 			<ul>
 				{%- for html_page in html_pages -%}
@@ -55,7 +55,7 @@ Include lists of site pages, collections, archives
 
 	{%- if collections.size > 0 -%}
 	<section class="browse-collections aside-section">
-		<h4 class="aside-title">Collections</h4>
+		<h3 class="aside-title">Collections:</h3>
 		<div class="aside-content">
 			<ul>
 				{%- for collection in collections -%}

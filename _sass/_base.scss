@@ -1,49 +1,40 @@
-/*! Some thanks to HTML5 Boilerplate (v6.0.1 | MIT License | https://html5boilerplate.com/) */
+// Base styles for unclassed elements
+// Default paragraph and character elements output by Markdown renderer (kramdown)
+// Extend top-level selectors to merge with reset
 
-// Base paragraph and character styles, mostly for rendered Markdown elements
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+}
 
-:root {
+html {
 	@include font-body;
 	@include font-size-fluid( $font-sizes );
 	line-height: $interval;
-	color: $color-a;
-	background-color: $color-b;
-
-	// hyphens: auto;
-	// word-wrap: break-word;
-	hanging-punctuation: first last allow-end;
+	color: $color-text;
+	background-color: $color-bg;
 	// -moz-osx-font-smoothing: grayscale;  // if animations
 	// -webkit-font-smoothing: antialiased; // if animations
 	scroll-behavior: smooth;
 }
 
-/*
-body {
-	background-image:
-		radial-gradient(circle, $color-c ( $border-width / 2 ), transparent 0%);
-	background-origin: content-box;
-	background-size: $gap $gap;
-}
-*/
-
-body, p, h1, h2, h3, h4, h5, h6, ol, ul, dl, blockquote, figure, pre, hr {
-    margin: 0;
-    padding: 0;
-}
-
 a,
 button {
-	@include box-span( transparent, inherit, true ); // apply here, not on hover, to avoid triggering layout because of rounding errors
-	box-decoration-break: clone; // pad wrapped lines
+	@include box-span( transparent, inherit, true );
 	text-decoration-skip: ink;
 	text-decoration-skip-ink: auto;
 	&:hover,
 	&:focus,
 	&:active {
-		text-decoration: none;
 		outline: 0; // careful to make it accessible
-		color: $color-b;
-		background-color: $color-a;
+		text-decoration: none;
+		color: $color-bg;
+		background-color: $color-text;
+		* {
+			color: inherit;
+		}
 	}
 }
 
@@ -57,13 +48,12 @@ h4, h5, h6 {
 
 blockquote {
 	@include box-block;
-}
-
-blockquote blockquote {
-	margin-left: $gap;
-	padding: 0; // initial
-	border-radius: 0; // initial
-	background-color: transparent; // initial
+	& & {
+		margin-left: $gap;
+		padding: 0; // initial
+		border-radius: 0; // initial
+		background-color: transparent; // initial
+	}
 }
 
 code {
@@ -71,57 +61,59 @@ code {
 }
 
 :not(pre) > code {
-	@include box-span( $color-d );
-	padding: ( .0625rem / $font-size-small ) ( .3125rem / $font-size-small ); // tweak because of @include font-small
-	word-wrap: break-word; // also overflow-wrap; necessary because there is no way within markdown-rendered `code` to break lines with `<wbr>` or `&#8203;` (zero-width space)
+	@include box-span( $color-code-bg );
+	word-wrap: break-word; // = overflow-wrap; there is no other way to break lines within markdown-rendered `code` (cannot manually insert `<wbr>` or `&#8203;` (zero-width space))
 }
 
 pre {
-	@include box-block( $color-d );
-	@include scrolling-hints( $color-d );
+	@include box-block( $color-code-bg );
+	@include scrolling-hints( $color-code-bg );
 	padding-top: ( $gap / 2 ); // override
 	padding-bottom: ( $gap / 2 ); // override
 	tab-size: 4;
 	word-wrap: normal;
 	word-break: normal;
-	// white-space: pre-wrap; // Shame...
 }
 
-ol {
-	font-feature-settings: "lnum" 1, "tnum" 1; // lining, tabular numbers
-	// @supports (font-variant-numeric: lining-nums tabular-nums) {
-	//	font-feature-settings: normal;
-	//	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
-	// }
-	li {
-		font-feature-settings: "onum" 1, "pnum" 1; // old-style numbers
-		// @supports (font-variant-numeric: oldstyle-nums proportional-nums) {
-		//	// font-feature-settings: normal; // inherited
-		//	font-variant-numeric: lining-nums proportional-nums; // OpenType features "onum", "pnum"
-		// }
-	}
-}
-
-ul > li {
-	display: block; // remove list-style
-	&::before {
-		content: "▪︎"; // small black square
-		float: left;
-		margin-left: -1.125em;
-	}
-	> ul > li::before {
-		content: "▫︎"; // small hollow square
-	}
-	> ul > li > ul li::before {
-		content: "⁃"; // hyphen bullet
+// Custom list styles; someday use ::marker instead
+// Watch out for ordered lists with attributes "start" and "reversed"
+ol:not([start]):not([reversed]) {
+// 	counter-reset: ol attr(start number, 0);
+	counter-reset: ol; // create new instance of counter with each nested ol
+	> li {
+		display: block; // remove list-style
+		counter-increment: ol; // increment only this instance of counter
+		&::before {
+			@include font-feature-settings( smcp, lnum, tnum ); // small-caps lining, tabular numbers (Source Sans Pro doesn't actually have small-cap tabular numbers
+			content: counters(ol, ".") "."; // concatenate all counters // bug?
+			float: left;
+			margin-left: ( $gap * -1 );
+			margin-right: ( $gap / 2 );
+		}
 	}
 }
 
-nav li,
-footer li {
-	margin-left: 0;
-	&::before {
-		display: none;
+ul {
+	> li {
+		display: block; // remove list-style
+		&::before {
+			content: "▪︎"; // small black square for first-level unordered list items
+			float: left;
+			margin-left: -1.125em;
+		}
+		> ul > li::before {
+			content: "▫︎"; // small hollow square for second-level items
+		}
+		> ul > li > ul li::before {
+			content: "⁃"; // hyphen bullet for third-level and deepers items
+		}
+	}
+}
+
+ol, ul {
+	header &,
+	footer & {
+		@include list-none;
 	}
 }
 
@@ -131,7 +123,7 @@ dd {
 }
 
 dt {
-	font-weight: bolder;
+	@include font-smcp;
 }
 
 dd::before {
@@ -187,24 +179,25 @@ caption {
 }
 
 table {
-	@include font-small( 1 );
+// 	@include font-small( 1 );
+	@include font-feature-settings( lnum, tnum ); // lining and tabular numbers
+	line-height: 1;
 	table-layout: fixed;
 	border-collapse: collapse;
-	font-feature-settings: "lnum" 1, "tnum" 1; // lining and tabular numbers
-	// @supports (font-variant-numeric: lining-nums tabular-nums) {
-	//	font-feature-settings: normal;
-	// 	font-variant-numeric: lining-nums tabular-nums; // OpenType features "lnum", "tnum"
-	// }
 }
 
 th, td {
-	padding: ( ( $gap - 1rem ) / 2 ) ( $gap / 2 );
+	padding: ( ( $gap - 1rem ) / 2 ) 0; // split the padding
 	text-align: left;
-	vertical-align: top;
+	vertical-align: baseline;
+	& + & {
+		padding-left: $gap; // okay if no borders
+	}
 }
 
 th {
-	border-bottom: $border-width solid;
+	@include font-smcp;
+// 	border-bottom: $border-width $border-style;
 }
 
 iframe {
@@ -215,16 +208,12 @@ iframe {
 }
 
 mark {
-	@include box-span( rgba( #ffee00, .8 ) ); // yellow
+	@include box-span( rgba( #ffee00, .85 ) ); // yellow
 }
 
 // https://alistapart.com/article/web-typography-numerals
 sub {
-	font-feature-settings: "subs" 1; // subscript
-	// @supports (font-variant-position: sub) {
-	//	font-feature-settings: normal;
-	//	font-variant-position: sub; // OpenType features "subs"
-	// }
+	@include font-feature-settings( subs ); // subscript
 	// @supports (font-variant-position: sub) or (font-feature-settings: "subs" 1) {
 	//	vertical-align: baseline;
 	//	font-size: inherit;
@@ -232,11 +221,7 @@ sub {
 }
 
 sup {
-	font-feature-settings: "sups" 1; // superscript
-	// @supports (font-variant-position: super) {
-	//	font-feature-settings: normal;
-	//	font-variant-position: super; // OpenType features "sups"
-	// }
+	@include font-feature-settings( sups ); // superscript
 	// @supports (font-variant-position: super) or (font-feature-settings: "sups" 1) {
 	//	vertical-align: baseline;
 	//	font-size: inherit;
@@ -244,7 +229,7 @@ sup {
 }
 
 // Feature queries (@supports) makes Jekyll Sass compiler choke...
-// When fixed, remove rule below and uncomment @supports above
+// When fixed, remove sub, sup rule below and uncomment @supports above
 sub,
 sup {
 	vertical-align: baseline;
@@ -259,19 +244,25 @@ small {
 	@include font-small;
 }
 
-abbr[title] {
-	-webkit-text-decoration: underline rgba(0,0,0,.25); // Not picked up by prefixfree.js
-	text-decoration: underline rgba(0,0,0,.25); // Chrome, Edge, IE, Opera, Safari
-// 	letter-spacing: .0625em;
+abbr {
+	@include font-smcp;
+	font-weight: inherit; // override; this may result in faux bold
+	&[title] {
+		-webkit-text-decoration: underline dotted; // Not picked up by prefixfree.js
+		a & {
+			-webkit-text-decoration: none; // Not picked up by prefixfree.js
+			text-decoration: none;
+		}
+	}
 }
 
 hr {
 	position: relative;
-	height: $gap;
+	min-height: $gap;
 	border: 0;
-	padding: 0;
 	&::after {
 		position: absolute;
+		top: 0;
 		width: 100%;
 		text-align: center;
 		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
@@ -280,21 +271,11 @@ hr {
 
 button,
 input {
-	font-family: inherit;
-	font-size: inherit;
+	@include font-feature-settings( lnum ); // lining numbers
 	line-height: inherit;
 	min-height: 1.5em;
 	border-radius: $border-radius;
 	border: 0;
-	font-feature-settings: "lnum" 1; // lining numbers
-	// @supports (font-variant-numeric: lining-nums) {
-	//	font-feature-settings: normal;
-	//	font-variant-numeric: lining-nums; // OpenType features "lnum"
-	// }
-}
-
-input {
-	padding: 0 .25em;
 }
 
 button {
@@ -302,5 +283,47 @@ button {
 	cursor: pointer;
 	> * { // such as svg
 		pointer-events: none;
+	}
+}
+
+input {
+	padding: 0 .25em;
+	caret-color: $color-focus; // a nice touch
+}
+
+[type="search"] {
+	background-image: -webkit-linear-gradient(transparent, transparent); // Allow search input to be styled in iOS Safari
+}
+
+[type="search"]::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+	outline: 1px dotted $color-focus;
+}
+
+:target,
+input:focus {
+	animation: target 2.5s ease forwards;
+	outline: 4px solid $color-focus;
+	outline-offset: 4px;
+}
+
+@keyframes target {
+	0% {
+		outline-color: transparent;
+	}
+	25% {
+		outline-color: $color-focus;
+	}
+	60% {
+		outline-color: $color-focus;
+	}
+	100% {
+		outline-color: transparent;
 	}
 }

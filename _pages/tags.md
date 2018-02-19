@@ -2,7 +2,6 @@
 layout:	tags
 permalink:	/tags/
 menu:
-  label:	Tags
   order:	4
 ---
 

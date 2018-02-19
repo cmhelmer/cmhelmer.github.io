@@ -25,7 +25,7 @@ layout:	default
 {%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
 {%- if latest_docs.size > 0 -%}
 <aside class="latest-notes main-aside" role="complementary">
-	<h2 class="aside-title">Latest Notes</h2>
+	<h2 class="aside-title">Latest Notes:</h2>
 	<div class="aside-content">
 
 		{%- assign limited_latest_docs = "" | split: "," -%}
@@ -50,7 +50,7 @@ layout:	default
 {%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
 {%- if featured_docs.size > 0 -%}
 <aside class="featured-notes main-aside" role="complementary">
-	<h2 class="aside-title">Featured Notes</h2>
+	<h2 class="aside-title">Featured Notes:</h2>
 	<div class="aside-content">
 
 		{%- assign limited_featured_docs = "" | split: "," -%}

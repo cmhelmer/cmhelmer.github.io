@@ -1,7 +1,7 @@
 ---
 permalink:	/about/
-menu:
-  order:	1
+# menu:
+#   order:	1
 ---
 
 # About
@@ -12,15 +12,15 @@ Personal writings on past websites are on this site as <a href="#browse">collect
 
 ----
 
-Besides my domain name, computer and time, the site has no costs. Thanks to the people behind these great projects:
+I coded this site by hand. Besides my domain name, computer and time, the site has no costs. Thanks to the people behind these great projects:
 
 - CSS:
 	- [Normalize.css](http://necolas.github.io/normalize.css/)
-	- [H5BP](https://html5boilerplate.com)
+	- [HTML5 Boilerplate](https://html5boilerplate.com)
 	- [Sass](http://sass-lang.com)
 - JavaScript:
 	- [PrefixFree.js](https://leaverou.github.io/prefixfree/)
-	- [Lunr.js](https://lunrjs.com) (for search)
+	- [Lunr.js](https://lunrjs.com) (search)
 - Fonts and Icons:
 	- [Adobe Source Sans](https://adobe-fonts.github.io/source-sans-pro/)
 	- [Adobe Source Serif](https://adobe-fonts.github.io/source-serif-pro/)
@@ -31,7 +31,11 @@ Besides my domain name, computer and time, the site has no costs. Thanks to the 
 	- [Jekyll](https://jekyllrb.com) (static site generator)
 	- [GitHub Pages](https://pages.github.com) (host and version control)
 	- [Cloudflare](https://www.cloudflare.com) (CDN and SSL)
+- References:
+	- [Can I use…](https://caniuse.com)
+	- [MDN Web Docs](https://developer.mozilla.org/en-US/)
 
-*[CSS]: Cascading Style Sheets
 *[CDN]: Content Delivery Network
+*[CSS]: Cascading Style Sheets
+*[MDN]: Mozilla Development Network
 *[SSL]: Secure Sockets Layer (for https)

@@ -1,15 +1,11 @@
 .site-footer {
-	margin-top: auto; // flex push to bottom
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	border-radius:  0 0 ( $border-radius * 2 ) ( $border-radius * 2 );
-	background-color: $color-c;
+	@include flex;
+	align-items: stretch; // override
+// 	border-radius:  0 0 ( $border-radius * 2 ) ( $border-radius * 2 );
+// 	background-color: $color-text-bg;
 	font-size: $font-size-small * 1rem; // no need to @include font-small to maintain vertical rhythm
 	.site-aside {
 		flex: 1 1 ( $measure / 3 );
-		display: inline-block; // fallback for flexbox
-		vertical-align: top;   // fallback for flexbox
 		padding: $gap;
 		border-top: $border-width $border-style;
 	}
@@ -22,20 +18,25 @@
 	* + li {
 		margin-top: 0;
 	}
+	ol, ul {
+		@include list-none;
+	}
 }
 
 .site-search {
 	form {
 		display: flex;
+		> * {
+			margin-top: 0; // override * + *
+		}
 	}
 	input {
 		width: 100%;
 	}
 	button {
 		height: 1.5em;
-		margin-top: 0; // override * + *
 	}
 	.icon-search {
-		margin-right: 0;
+		margin-right: 0; // override .icon
 	}
 }
