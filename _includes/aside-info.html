@@ -15,35 +15,35 @@ Include site info
 		<ul>
 
 			{%- if site.author.email or site.email -%}
-			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email" class="u-email"><svg class="icon icon-email" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Email</a></li>
+			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email" class="u-email"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Email</a></li>
 			{%- endif -%}
 
 			{%- if site.author.microblog -%}
-			<li><a href="https://micro.blog/{{ site.author.microblog }}" title="Micro.blog" rel="me"><svg class="icon icon-microblog" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#microblog' | absolute_url }}"></use></svg>Micro.blog</a></li>
+			<li><a href="https://micro.blog/{{ site.author.microblog }}" title="Micro.blog" rel="me"><svg class="icon icon-microblog" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#microblog' | absolute_url }}"></use></svg>Micro.blog</a></li>
 			{%- endif -%}
 
 			{%- if site.author.twitter -%}
-			<li><a href="https://twitter.com/{{ site.author.twitter }}" title="Twitter" rel="me"><svg class="icon icon-twitter" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#twitter' | absolute_url }}"></use></svg>Twitter</a></li>
+			<li><a href="https://twitter.com/{{ site.author.twitter }}" title="Twitter" rel="me"><svg class="icon icon-twitter" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#twitter' | absolute_url }}"></use></svg>Twitter</a></li>
 			{%- endif -%}
 
 			{%- if site.author.facebook -%}
-			<li><a href="https://facebook.com/{{ site.author.facebook }}" title="Facebook" rel="me"><svg class="icon icon-facebook" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#facebook' | absolute_url }}"></use></svg>Facebook</a></li>
+			<li><a href="https://facebook.com/{{ site.author.facebook }}" title="Facebook" rel="me"><svg class="icon icon-facebook" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#facebook' | absolute_url }}"></use></svg>Facebook</a></li>
 			{%- endif -%}
 
 			{%- if site.author.googleplus -%}
-			<li><a href="https://plus.google.com/{{ site.author.googleplus }}" title="Google+" rel="me"><svg class="icon icon-googleplus" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#googleplus' | absolute_url }}"></use></svg>Google+</a></li>
+			<li><a href="https://plus.google.com/{{ site.author.googleplus }}" title="Google+" rel="me"><svg class="icon icon-googleplus" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#googleplus' | absolute_url }}"></use></svg>Google+</a></li>
 			{%- endif -%}
 
 			{%- if site.author.linkedin -%}
-			<li><a href="https://www.linkedin.com/in/{{ site.author.googleplus }}" title="LinkedIn" rel="me"><svg class="icon icon-linkedin" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#linkedin' | absolute_url }}"></use></svg>LinkedIn</a></li>
+			<li><a href="https://www.linkedin.com/in/{{ site.author.googleplus }}" title="LinkedIn" rel="me"><svg class="icon icon-linkedin" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#linkedin' | absolute_url }}"></use></svg>LinkedIn</a></li>
 			{%- endif -%}
 
 			{%- if site.author.github -%}
-			<li><a href="https://github.com/{{ site.author.github }}" title="GitHub" rel="me"><svg class="icon icon-github" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>GitHub</a></li>
+			<li><a href="https://github.com/{{ site.author.github }}" title="GitHub" rel="me"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>GitHub</a></li>
 			{%- endif -%}
 
 			{%- if site.feed.first -%}
-			<li><a href="{{ site.feed.first.url | absolute_url }}" title="Feed"><svg class="icon icon-feed" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#feed' | absolute_url }}"></use></svg>Feed</a></li>
+			<li><a href="{{ site.feed.first.url | absolute_url }}" title="Feed"><svg class="icon icon-feed" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#feed' | absolute_url }}"></use></svg>Feed</a></li>
 			{%- endif -%}
 
 		</ul>

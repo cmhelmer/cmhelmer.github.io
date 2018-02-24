@@ -105,12 +105,12 @@ Include document article
 
 		{%- comment -%} Reply by email {%- endcomment -%}
 		{%- if doc_author_email -%}
-		<div class="doc-reply doc-meta"><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></div>
+		<div class="doc-reply doc-meta"><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></div>
 		{%- endif -%}
 
 		{%- comment -%} Link to GitHub history {%- endcomment -%}
 		{%- if site.author.github -%}
-		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a></div>
+		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a></div>
 		{%- endif -%}
 
 	</div>
