@@ -11,17 +11,17 @@ Include site header
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<link rel="stylesheet" href="{{ "/assets/css/style.css" | absolute_url }}?{{ site.github.build_revision }}">
-	<script src="{{ "/assets/js/prefixfree.min.js" | absolute_url }}" async></script>
-	<script src="{{ "/assets/js/dialog-polyfill.js" | absolute_url }}" async></script>
-	<script src="{{ "/assets/js/lunr.js" | absolute_url }}" defer></script>
-	<script src="{{ "/assets/js/script.js" | absolute_url }}?{{ site.github.build_revision }}" defer></script>
+	<link rel="stylesheet" href="{{ '/assets/css/style.css' | absolute_url }}?{{ site.github.build_revision }}">
+	<script src="{{ '/assets/js/prefixfree.min.js' | absolute_url }}"></script>
 
 	{%- include header-meta.html -%}
 
-	{%- comment -%} Preload important assets: body font (font requires crossorigin attribute regardless), search index {%- endcomment -%}
-	<link rel="preload" href="{{ "/assets/fonts/SourceSans-Regular.woff" | absolute_url }}" as="font"   type="font/woff" crossorigin="anonymous">
-	<link rel="preload" href="{{ "/data/corpus.json" | absolute_url }}" as="fetch" type="application/json">
+	{%- comment -%}
+	Preload important assets: body font (font requires crossorigin attribute regardless), search index
+	Don't add `type="application/json"` unless it is a feed, else feed readers may crash when subscribing
+	{%- endcomment -%}
+	<link rel="preload" href="{{ '/assets/fonts/SourceSans-Regular.woff' | absolute_url }}" as="font"   type="font/woff" crossorigin="anonymous">
+	<link rel="preload" href="{{ '/data/corpus.json' | absolute_url }}" as="fetch">
 
 	{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
 	<meta name="format-detection" content="telephone=no">
@@ -38,15 +38,13 @@ Include site header
 
 <body class="layout-{{ page.layout | default: 'default' }}">
 
-{%- include header-icons.html -%}
-
 {%- if page.layout == "home" -%}
 {%- include header-splash.html -%}
 {%- endif -%}
 
 <header class="site-header">
 	<a href="#main" class="reader">Skip to main content</a>
-	<h1 class="site-title"><a href="{{ "/" | absolute_url }}" rel="home"><span>From the Field Desk of</span> <span>C. M. Helmer</span></a></h1>
+	<h1 class="site-title"><a href="{{ '/' | absolute_url }}" rel="home"><span>From the Field Desk of</span> <span>C. M. Helmer</span></a></h1>
 
 	<nav class="site-nav">
 		<ul class="nav-list">

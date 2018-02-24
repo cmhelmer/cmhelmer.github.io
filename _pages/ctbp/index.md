@@ -1,5 +1,7 @@
 ---
 layout:	contents
+collection: ctbp
+permalink: /ctbp/
 ---
 
 # Church Translating Bible Planters

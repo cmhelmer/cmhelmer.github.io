@@ -7,7 +7,7 @@ Include lists of site pages, collections, archives
 <aside id="browse" class="site-browse site-aside">
 
 	{%- comment -%}
-	<h3 class="aside-title">Browse</h3>
+	<h2 class="aside-title">Browse</h2>
 	{%- endcomment -%}
 
 	{%- comment -%}
@@ -22,7 +22,7 @@ Include lists of site pages, collections, archives
 
 	{%- if html_pages.size > 0 -%}
 	<section class="browse-pages aside-section">
-		<h3 class="aside-title">Browse:</h3>
+		<h2 class="aside-title">Browse:</h2>
 		<div class="aside-content">
 			<ul>
 				{%- for html_page in html_pages -%}
@@ -55,21 +55,14 @@ Include lists of site pages, collections, archives
 
 	{%- if collections.size > 0 -%}
 	<section class="browse-collections aside-section">
-		<h3 class="aside-title">Collections:</h3>
+		<h2 class="aside-title">Collections:</h2>
 		<div class="aside-content">
 			<ul>
 				{%- for collection in collections -%}
 	
-				{%- assign index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
+				{%- assign index = site.pages | where_exp: "page", "page.collection == collection.label" | where_exp: "page", "page.layout == 'contents'" | first -%}
 	
-				{%- if index.url.size > 0 -%}
-	
-				{%- comment -%} Make pretty url {%- endcomment -%}
-				{%- assign url = index.url | split: "/" | pop | join: "/" | append: "/" -%}
-
-				<li><a href="{{ url | absolute_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
-	
-				{%- endif -%}
+				<li><a href="{{ index.url | absolute_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
 	
 				{%- endfor -%}
 			</ul>

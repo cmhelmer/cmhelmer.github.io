@@ -9,14 +9,13 @@ Include page article
 
 {%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc -%}{%- endcapture -%}
 
-<article id="page-{{ my_doc.title | slugify }}" class="page-doc main-doc" role="document">
+<article id="page-{{ my_doc.title | slugify }}" class="page-doc main-doc h-entry" role="document">
 	<header class="doc-header">
-		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
+		<h1 class="doc-title doc-meta">{{ doc_title | strip }}</h1>
 	</header>
 	<div class="doc-content">
 
-		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
-		{%- capture my_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
 		{{ my_content | strip }}
 
 	</div>

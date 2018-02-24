@@ -1,4 +1,5 @@
 dialog {
+	@include gutter;
 	position: absolute;
 	display: block;
 	left: ($gap / 2);
@@ -10,7 +11,6 @@ dialog {
 	height: fit-content;
 	margin: auto;
 	margin-bottom: $gap;
-	padding: $gap;
 	border: 0;
 	border-radius: ( $border-radius * 2 );
 	background: $color-bg;
@@ -19,8 +19,15 @@ dialog {
 }
 
 .site-modal {
-	@include gutter;
+	padding: 0; // override, to children
 	width: auto;
+	.site-aside {
+		@include gutter( .5 ); // split below
+		> * {
+			@include gutter( .5 ); // split above
+			margin-top: 0; // override * + *
+		}
+	}
 	.site-browse {
 		column-count: 2;
 		column-gap: $gap;
@@ -29,6 +36,19 @@ dialog {
 		}
 	}
 	.site-search {
+		.aside-header {
+			@include sticky;
+			background-color: $color-bg; // fallback for gradient
+			background: linear-gradient(to top, rgba( $color-bg, 0 ), $color-bg ( $gap / 2 ) );
+			padding-bottom: $gutter; // for position sticky
+		}
+		.aside-content {
+			margin-top: 0; // for .aside-header
+			padding-top: 0; // for .aside-header
+			&:empty {
+				display: none;
+			}
+		}
 		input[type="search"] {
 			padding-right: 6rem; // for .results-count
 		}
@@ -42,10 +62,6 @@ dialog {
 	top: ( $gap * 2 );
 	right: .25rem; // = input padding-right
 	pointer-events: none;
-}
-
-.results-list {
-	margin-top: $gutter;
 }
 
 dialog:not([open]) {

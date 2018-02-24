@@ -16,7 +16,7 @@ Only shows files with metadata "attachment" set to true (static files are assume
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-attachments" class="{{ page.collection | default: 'site' }}-collection attachments-doc main-doc" role="document"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="{{ page.collection | default: 'site' }}-attachments" class="{{ page.collection | default: 'site' }}-collection attachments-doc main-doc" role="document">
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>

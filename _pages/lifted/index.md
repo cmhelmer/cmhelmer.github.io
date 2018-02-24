@@ -1,5 +1,7 @@
 ---
 layout:	contents
+collection:	lifted
+permalink:	/lifted/
 ---
 
 # Lifted

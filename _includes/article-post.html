@@ -1,7 +1,7 @@
 {%- comment -%}
 
 Include post/blog article
-- Pass in post
+- Pass in document
 
 {%- endcomment -%}
 
@@ -12,15 +12,19 @@ Include post/blog article
 {%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
 
-<article id="post-{{ my_doc.slug }}" class="post-doc main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+<article id="post-{{ my_doc.slug }}" class="post-doc main-doc h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="doc-header">
 		<div class="doc-date doc-meta">{{ doc_date }}</div>
 	</header>
 	<div class="doc-content">
 
-		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
-		{%- capture my_content -%}{%- include filter-content.html my_content=my_doc.content -%}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
 		{{ my_content | strip }}
+
+		{%- if my_doc.reference -%}
+		{%- capture ref_content -%}{%- include content-reference.html my_doc=my_doc -%}{%- endcapture -%}
+		{{ ref_content | strip }}
+		{%- endif -%}
 
 	</div>
 </article>

@@ -15,42 +15,28 @@ Note: mimic this include in script.js search results
 
 	{%- for doc in my_docs -%}
 
-	{%- assign doc_title = doc.title | strip -%}
-	{%- assign doc_title_slugified = doc_title | slugify -%}
-
-	{%- comment -%}
-	
-	TEMP... what's wrong with the (slugified) title equal to slug? This is expected when not using UID in the permalink or filename, even if title explicitly set ... 
-	
-	{%- endcomment -%}
-
-	{%- if doc_title_slugified != doc.slug -%}
-
 	{%- capture doc_preview -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
-	{%- assign preview_class = "doc-name" -%}
 
+	{%- comment -%} Pick preview class based on logic in filter-title.html... hacky {%- endcomment -%}
+
+	{%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip -%}
+	{%- if doc_title_slug == doc.slug -%}
+		{%- assign preview_class = "doc-name" -%}
 	{%- else -%}
-
-	{%- capture doc_preview -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
-	{%- assign preview_class = "doc-excerpt" -%}
-
+		{%- assign preview_class = "doc-excerpt" -%}
 	{%- endif -%}
-	
-	{%- if doc.collection == "posts" -%}
-	
-	{%- assign doc_reference = doc.date | date: site.date_format -%}
-	{%- assign reference_class = "doc-date" -%}
-	
-	{%- else -%}
 
-	{%- assign doc_reference = doc.uid -%}
-	{%- assign reference_class = "doc-id" -%}
-	
+	{%- if doc.collection == "posts" -%}
+		{%- assign doc_reference = doc.date | date: site.date_format -%}
+		{%- assign reference_class = "doc-date" -%}
+	{%- else -%}
+		{%- assign doc_reference = doc.uid -%}
+		{%- assign reference_class = "doc-id" -%}
 	{%- endif -%}
 	
 	{%- assign collection = site.collections | where_exp: "collection", "collection.label == doc.collection" | first -%}
 
-	<li class="doc-item {{ doc.collection }}-collection"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+	<li class="doc-item {{ doc.collection }}-collection">
 		<a href="{{ doc.url | absolute_url }}" rel="bookmark">
 			<span class="doc-preview {{ preview_class }}">{{ doc_preview | strip }}</span>
 			<span class="doc-reference {{ reference_class }}">{{ doc_reference | strip }}</span>

@@ -88,6 +88,7 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <meta name="twitter:site" content="@{{ site.author.twitter | replace:"@","" }}">
 <meta name="twitter:creator" content="@{{ page.author.twitter | default: page.authors.first.twitter | default: site.author.twitter | replace:"@","" }}">
 {%- endif -%}
+
 {%- if page.image -%}
 <meta name="twitter:card" content="summary_large_image">
 {%- if page.image.description -%}
@@ -97,7 +98,6 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <meta name="twitter:card" content="summary">
 {%- endif -%}
 
-{%- if site.author.facebook -%}
 {%- if site.author.facebook.admins -%}
 <meta property="fb:admins" content="{{ site.author.facebook.admins }}">
 {%- endif -%}
@@ -108,7 +108,6 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 
 {%- if site.author.facebook.app_id -%}
 <meta property="fb:app_id" content="{{ site.author.facebook.app_id }}">
-{%- endif -%}
 {%- endif -%}
 
 {%- if site.author.microblog -%}

@@ -11,7 +11,7 @@ Builds a table of contents (list) for site documents or the current collection
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document">
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>

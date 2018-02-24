@@ -35,6 +35,9 @@ button {
 		* {
 			color: inherit;
 		}
+		svg {
+			fill: currentcolor;
+		}
 	}
 }
 
@@ -86,7 +89,7 @@ ol:not([start]):not([reversed]) {
 		&::before {
 			@include font-feature-settings( smcp, lnum, tnum ); // small-caps lining, tabular numbers (Source Sans Pro doesn't actually have small-cap tabular numbers
 			content: counters(ol, ".") "."; // concatenate all counters // bug?
-			float: left;
+			float: left; // ugly when items more than single digit; consider absolute position, right: 100%
 			margin-left: ( $gap * -1 );
 			margin-right: ( $gap / 2 );
 		}
@@ -99,7 +102,7 @@ ul {
 		&::before {
 			content: "▪︎"; // small black square for first-level unordered list items
 			float: left;
-			margin-left: -1.125em;
+			margin-left: -#{$gap}; // left align; -1.125em to match default
 		}
 		> ul > li::before {
 			content: "▫︎"; // small hollow square for second-level items
@@ -197,7 +200,7 @@ th, td {
 
 th {
 	@include font-smcp;
-// 	border-bottom: $border-width $border-style;
+	@include sticky; // only supported in Chrome on th, not thead or tr
 }
 
 iframe {
@@ -249,6 +252,7 @@ abbr {
 	font-weight: inherit; // override; this may result in faux bold
 	&[title] {
 		-webkit-text-decoration: underline dotted; // Not picked up by prefixfree.js
+		text-decoration: underline dotted; // added here just to be consistent with above
 		a & {
 			-webkit-text-decoration: none; // Not picked up by prefixfree.js
 			text-decoration: none;
@@ -264,7 +268,7 @@ hr {
 		position: absolute;
 		top: 0;
 		width: 100%;
-		text-align: center;
+// 		text-align: center;
 		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
 	}
 }

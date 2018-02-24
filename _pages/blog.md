@@ -12,4 +12,4 @@ menu:
 
 # Micro Blog
 
-Syndicated to [http://micro.blog/cmhelmer](http://micro.blog/cmhelmer).
+Syndicated to [http://micro.blog/{{ site.author.microblog }}](http://micro.blog/{{ site.author.microblog }}).

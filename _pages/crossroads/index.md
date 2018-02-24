@@ -1,5 +1,7 @@
 ---
 layout:	contents
+collection: crossroads
+permalink: /crossroads/
 ---
 
 # Crossroads to the Nations Church

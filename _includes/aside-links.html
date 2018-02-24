@@ -1,15 +1,17 @@
 {%- comment -%}
 
 Include list of docs which link back to this page
+Matches reference metadata also (reference.uid or reference)
 - Pass in ID
 
 {%- endcomment -%}
 
 {%- assign my_uid = include.my_uid -%}
 
-{%- comment -%} Exclude posts (until it is resolved how to mix posts/notes in one list) {%- endcomment -%}
-
-{%- assign my_docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.collection != 'posts'" | where_exp: "doc", "doc.content contains my_uid" | sort: "uid", "first" | reverse -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.content contains my_uid" -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference == my_uid" | concat: my_docs -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference.uid == my_uid" | concat: my_docs -%}
+{%- assign my_docs = my_docs | uniq | sort: "uid", "first" | reverse -%}
 
 {%- if my_docs.size > 0 -%}
 <aside class="doc-links main-aside" role="complementary">

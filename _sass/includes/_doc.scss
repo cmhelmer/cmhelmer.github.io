@@ -22,6 +22,10 @@
 
 .doc-collection {
 	@include font-smcp;
+// 	color: $color-accent;
+	a {
+		text-decoration: none;
+	}
 }
 
 .doc-id {
@@ -152,6 +156,10 @@ pre + .output,
 		height: ( $gap + $border-width );
 		border-left: inherit;
 	}
+}
+
+.ref {
+	font-style: normal;
 }
 
 // Footnotes

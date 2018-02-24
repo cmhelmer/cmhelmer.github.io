@@ -3,6 +3,7 @@
 Filter title
 
 Modify titles if title is not explicitly set
+Fallback to reference title, date (posts only), or excerpt (in that order)
 Convert quotes to typographer's (curly) quotes
 Advanced: Avoid typographical orphans and widows and provide way to style titles and subtitles (split on colon)
 
@@ -13,15 +14,20 @@ Advanced: Avoid typographical orphans and widows and provide way to style titles
 
 {%- assign my_doc = include.my_doc -%}
 {%- assign my_title = my_doc.title | strip_html | normalize_whitespace | strip -%}
-{%- assign my_slug = my_doc.slug -%}
 
 {%- comment -%}
-Default titles: title, date for posts, filename for notes (in that order)
+Default titles: title, link title, date for posts, filename for notes (in that order)
 {%- endcomment -%}
 
-{%- assign my_title_slugified = my_title | slugify -%}
-{%- if my_title_slugified == my_slug and my_doc.collection == "posts" -%}
-{%- assign my_title = my_doc.date | date: site.date_format -%}
+{%- assign my_title_slug = my_title | slugify -%}
+{%- if my_title_slug == my_doc.slug -%}
+	{%- if my_doc.reference.title -%}
+		{%- assign my_title = my_doc.reference.title -%}
+	{%- elsif my_doc.collection == "posts" -%}
+		{%- assign my_title = my_doc.date | date: site.date_format -%}
+	{%- else -%}
+		{%- capture my_title -%}{%- include filter-excerpt.html my_doc=my_doc -%}{%- endcapture -%}
+	{%- endif -%}
 {%- endif -%}
 
 {%- comment -%}

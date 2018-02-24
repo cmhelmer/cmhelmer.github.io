@@ -1,10 +1,13 @@
 // TODO: 
-// - Cut the mustard somewhere...
+// - Cut the mustard somewhere (isn't using DOMContentLoaded good for IE 9+?...
 // - Extend for other modals (This is all a bit hacky...)
 // - Fix search results to use custom query (current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279)
 
-window.onload = function () {
+(function() {
 	"use strict";
+
+	// Search ready flag
+	window.searchReady = false;
 
 	// Get site footer elements for modals (including search)
 	var infoAside     = document.querySelector("#info"),
@@ -28,7 +31,6 @@ window.onload = function () {
 	// Set up results display
 	resultsList.classList.add("doc-list");
 	resultsList.classList.add("results-list");
-	searchContent.appendChild(resultsList);
 
 	// Get Lunr data
 	// Try to initialize Lunr with session cache first
@@ -43,7 +45,7 @@ window.onload = function () {
 		window.console.log("Couldn't load search with serialized index");
 	}
 
-	if (lunrData !== undefined  && lunrIndex !== undefined) {
+	if (lunrData !== undefined && lunrIndex !== undefined) {
 		window.console.log("Loaded search data from storage");
 		captureSearch();
 	}
@@ -109,28 +111,29 @@ window.onload = function () {
 		// Disable default action
 		searchForm.addEventListener("submit", function(e) {
 			e.preventDefault();
-			searchIndex();
+// 			searchIndex();
 			return false;
 		});
 
 		// Hide submit button for that matter
 		var submit = searchAside.querySelector('[type="submit"]');
 		submit.parentNode.removeChild(submit);
-
-		// ...And hide paragraph with notice about Google Search
-		var paragraph = searchAside.querySelector("p");
-		paragraph.parentNode.removeChild(paragraph);
+		
+		// ...and any content (like notice about Google Search)
+		searchContent.innerHTML = "";
 
 		// Listen for typing in search input
 		searchInput.addEventListener("keyup", searchIndex);
-	
+		
+		// Set ready flag for other scripts using search
+		window.searchReady = true;
 	}
 
 	// Search Lunr index
 	function searchIndex() {
 		// Go Lunr!
 		// Silently add wildcard for typeahead results?
-		var results = lunrIndex.search(this.value);
+		var results = lunrIndex.search(searchInput.value);
 
 		// Run custom query to include typeahead results in an efficient and sensible way
 		// https://github.com/olivernn/lunr.js/issues/276
@@ -149,6 +152,7 @@ window.onload = function () {
 	function displayResults(results) {
 
 		// Clear old results
+		searchContent.innerHTML = "";
 		resultsList.innerHTML = "";
 
 		// Display results count if there is a real search
@@ -205,6 +209,8 @@ window.onload = function () {
 				resultsItem.appendChild(resultsLink);
 				resultsList.appendChild(resultsItem);
 			});
+			
+			searchContent.appendChild(resultsList);
 		}
 	}
 
@@ -272,7 +278,11 @@ window.onload = function () {
 
 	// Open modal in style
 	function openModal(modal) {
+
+		// Dialog API (or polyfill)
 		modal.showModal();
+
+		// Add close listener (`esc` also works by default)
 		modal.addEventListener("click", function(e) {
 			if (e.target === this || e.target === this.querySelector("aside")) {
 				closeModal(modal);
@@ -282,6 +292,8 @@ window.onload = function () {
 	
 	// Close modal in style
 	function closeModal(modal) {
+		
+		// Dialog API (or polyfill)
 		modal.close();
 	}
 
@@ -292,5 +304,4 @@ window.onload = function () {
 	searchAside.addEventListener("focus", function() {
 		searchInput.focus();
 	});
-
-};
+})();

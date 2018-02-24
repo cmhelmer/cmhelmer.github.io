@@ -12,7 +12,9 @@ Personal writings on past websites are on this site as <a href="#browse">collect
 
 ----
 
-I coded this site by hand. Besides my domain name, computer and time, the site has no costs. Thanks to the people behind these great projects:
+This site has no ads, sponsored content, affiliate links or tracking.
+
+I coded this site myself. Besides my domain name, computer and time, the site has no costs. Thanks to the people behind these great projects:
 
 - CSS:
 	- [Normalize.css](http://necolas.github.io/normalize.css/)
@@ -38,4 +40,4 @@ I coded this site by hand. Besides my domain name, computer and time, the site h
 *[CDN]: Content Delivery Network
 *[CSS]: Cascading Style Sheets
 *[MDN]: Mozilla Development Network
-*[SSL]: Secure Sockets Layer (for https)
+*[SSL]: Secure Sockets Layer (https)

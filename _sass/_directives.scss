@@ -193,6 +193,7 @@
 }
 
 // Scrolling hints (horizontal)
+// Bug in iOS?
 @mixin scrolling-hints( $color: $color-bg ) {
 	overflow-x: auto;
 	overflow-y: hidden; // prevent vertical overflow-scrolling; side-effects?
@@ -205,6 +206,27 @@
 	background-size: ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%, ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%;
 	background-position: left, left, right, right;
 	background-attachment: local, scroll, local, scroll;
+}
+
+// Position sticky headers
+@mixin sticky {
+	position: -webkit-sticky; // not picked up by prefixfree.js
+	position: sticky;
+	z-index: 100000;
+	top: 0;
+	background-color: $color-bg;
+/*
+	&::before { // avoid Safari layering bug (it's still happening...)
+		content: "";
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: $color-bg;
+	}
+*/
 }
 
 // Inline (text) overflow

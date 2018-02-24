@@ -6,7 +6,7 @@ Order of filters in config takes precedence in conflict (if two overlap). Splits
 
 This is maddening without functions and regular expressions.
 
-- Pass in rendered content
+- Pass in document (with unrendered content)
 - Capture this include and use "strip" filter to remove whitespace.
 - Set in `_config.yml`:
 	content_filters:
@@ -32,7 +32,7 @@ TODO:
 	
 {%- endcomment -%}
 
-{%- assign my_content = include.my_content -%}
+{%- assign my_content = include.my_doc.content | markdownify -%}
 
 {%- assign figure_needles = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
 {%- assign mark_needles   = '::...::' | split: '...' -%}
@@ -222,19 +222,12 @@ TODO:
 
 								{%- assign my_uid = fragment | slice: 0, 12 -%}
 								{%- assign my_phrase = fragment | replace_first: my_uid, '' | lstrip -%}
-								{%- assign my_docs = site.documents | where: "uid", my_uid -%}
+								{%- assign my_doc = site.documents | where: "uid", my_uid  | first -%}
+								{%- capture content_replace -%}
 
-								{%- comment -%} Replace if we're sure we matched one {%- endcomment -%}
-								{%- if my_docs.size == 1 -%}
+									<a href="{{ my_doc.url | absolute_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
 
-									{%- assign my_doc = my_docs.first -%}
-									{%- capture content_replace -%}
-
-										<a href="{{ my_doc.url | absolute_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
-
-									{%- endcapture -%}
-
-								{%- endif -%}
+								{%- endcapture -%}
 
 							{%- endcase -%}
 

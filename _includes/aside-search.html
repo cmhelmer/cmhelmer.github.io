@@ -7,13 +7,15 @@ Default (no JavaScript) opens search in Google Search
 {%- endcomment -%}
 
 <aside id="search" class="site-search site-aside">
-	<h3 class="aside-title">Search:</h3>
-	<div class="aside-content">
-		<form action="https://google.com/search" target="_blank" method="GET">
+	<header class="aside-header">
+		<h2 class="aside-title">Search:</h2>
+		<form class="aside-form" action="https://google.com/search" target="_blank" method="GET">
 			<input type="search" name="q" id="q">
 			<input type="hidden" name="as_sitesearch" value="{{ site.url }}">
-			<button type="submit"><svg class="icon icon-search" width="32" height="32"><use xlink:href="#icon-search"></use></svg></button>
+			<button type="submit"><svg class="icon icon-search" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#search' | absolute_url }}"></use></svg></button>
 		</form>
+	</header>
+	<div class="aside-content">
 		<p><small class="-dim -right">(Opens in Google Search)</small></p>
 	</div>
 </aside>

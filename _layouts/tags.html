@@ -15,7 +15,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
+<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document">
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>

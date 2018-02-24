@@ -1,0 +1,206 @@
+---
+# Check layout
+# Run checks on documents and files for site or collection
+layout:	default
+---
+
+{%- assign media_dir = "/media/" -%}
+
+{%- assign issues_count = 0 -%}
+{%- assign word_count = 0 -%}
+{%- if page.collection -%}
+	{%- assign documents = site.documents | where_exp: "doc", "doc.collection == page.collection" -%}
+	{%- assign collections = page.collection -%}
+{%- else -%}
+	{%- assign documents = site.documents -%}
+	{%- assign collections = site.collections -%}
+{%- endif -%}
+{%- assign attachments = site.static_files | where_exp: "file", "file.attachment" -%}
+{%- assign tags = documents | map: "tags" | uniq -%}
+
+{%- for doc in documents -%}
+	{%- assign word_count = doc.content | number_of_words | plus: word_count -%}
+{%- endfor -%}
+{%- capture word_count_size -%}{%- include format-number.html number=word_count -%}{%- endcapture -%}
+
+{%- capture documents_size -%}{%- include format-number.html number=documents.size -%}{%- endcapture -%}
+{%- capture attachments_size -%}{%- include format-number.html number=attachments.size -%}{%- endcapture -%}
+{%- capture collections_size -%}{%- include format-number.html number=collections.size -%}{%- endcapture -%}
+{%- capture tags_size -%}{%- include format-number.html number=tags.size -%}{%- endcapture -%}
+
+{%- assign dup_uids = "" | split: "," -%}
+{%- assign uid_docs = documents | where_exp: "doc", "doc.uid != nil" -%}
+{%- assign uids = uid_docs | map: "uid" | uniq -%}
+{%- if uids.size < uid_docs.size -%}
+	{%- assign check_uids = "" | split: "," -%}
+	{%- for doc in documents -%}
+		{%- if check_uids contains doc.uid -%}
+			{%- assign dup_uids = dup_uids | push: doc.uid -%}
+		{%- else -%}
+			{%- assign check_uids = check_uids | push: doc.uid -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endif -%}
+{%- capture dup_uids_size -%}{%- include format-number.html number=dup_uids.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: dup_uids.size -%}
+
+{%- assign no_uid_docs = documents | where_exp: "doc", "doc.uid == nil" -%}
+{%- capture no_uid_docs_size -%}{%- include format-number.html number=no_uid_docs.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: no_uid_docs.size -%}
+
+{%- assign misdated_docs = "" | split: "," -%}
+{%- assign dated_docs = documents | where_exp: "doc", "doc.uid" | where_exp: "doc", "doc.date != site.time" -%}
+{%- for doc in dated_docs -%}
+	{%- assign doc_uid = doc.uid | strip -%}
+	{%- assign doc_date = doc.date | date: "%Y%m%d%H%M" -%}
+	{%- assign doc_time_truncated = doc_date | slice: 8, 4 -%}
+	{%- assign doc_date_truncated = doc_date | slice: 0, 8 -%}
+	{%- assign doc_uid_truncated = doc.uid | slice: 0, 8 -%}
+	{%- if doc_date_truncated == doc_uid_truncated -%}
+		{%- if doc_date == doc_uid or doc_time_truncated == "0000" -%}
+			{%- continue -%}
+		{%- endif -%}
+	{%- endif -%}
+	{%- assign misdated_docs = misdated_docs | push: doc -%}
+{%- endfor -%}
+{%- capture misdated_docs_size -%}{%- include format-number.html number=misdated_docs.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: misdated_docs.size -%}
+
+{%- assign misnamed_docs = "" | split: "," -%}
+{%- assign uid_docs = documents | where_exp: "doc", "doc.uid != nil" -%}
+{%- for doc in uid_docs -%}
+	{%- assign doc_uid = doc.uid | strip -%}
+	{%- if doc.slug != doc_uid -%}
+		{%- assign misnamed_docs = misnamed_docs | push: doc -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- capture misnamed_docs_size -%}{%- include format-number.html number=misnamed_docs.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: misnamed_docs.size -%}
+
+{%- assign missing_attachments = "" | split: "," -%}
+{%- assign media_links = "" | split: "," -%}
+{%- for doc in documents -%}
+	{%- if doc.content contains media_dir -%}
+		{%- assign parts = doc.content | split: media_dir -%}
+		{%- for part in parts -%}
+			{%- if forloop.first -%}
+				{%- continue -%}
+			{%- endif -%}
+			{%- assign fragment = part | split: ")" | first -%}
+			{%- assign fragment = fragment | split: " " | first -%}
+			{%- assign fragment = fragment | split: '"' | first -%}
+			{%- assign media_link = media_dir | append: fragment -%}
+			{%- assign media_links = media_links | push: media_link -%}
+		{%- endfor -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- assign media_links = media_links | uniq -%}
+{%- assign media_files = attachments | map: "path" -%}
+{%- for media_link in media_links -%}
+	{%- if media_files contains media_link -%}
+		{%- continue -%}
+	{%- endif -%}
+	{%- assign missing_attachments = missing_attachments | push: media_link -%}
+{%- endfor -%}
+{%- capture missing_attachments_size -%}{%- include format-number.html number=missing_attachments.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: missing_attachments.size -%}
+
+{%- assign orphaned_attachments = "" | split: "," -%}
+{%- for attachment in attachments -%}
+	{%- assign orphaned = true -%}
+	{%- for doc in documents -%}
+		{%- if doc.content contains attachment.path or doc.image contains attachment.path or doc.image.path contains attachment.path -%}
+			{%- assign orphaned = false -%}
+			{%- break -%}
+		{%- endif -%}
+	{%- endfor -%}
+	{%- if orphaned -%}
+		{%- assign orphaned_attachments = orphaned_attachments | push: attachment.path -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- capture orphaned_attachments_size -%}{%- include format-number.html number=orphaned_attachments.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: orphaned_attachments.size -%}
+
+<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document">
+	<header class="doc-header">
+		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
+	</header>
+	<div class="doc-content">
+
+		{{ content }}
+
+		<p>There{{" "}}{%- if issues_count == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}<code>{{ issues_count }}</code> issue{%- if issues_count != 1 -%}s{%- endif -%}{%- if issues_count > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		<ul>
+			<li><code>{{ word_count_size | strip }}</code> word{%- if word_count != 1 -%}s{%- endif -%}</li>
+			<li><code>{{ documents_size | strip }}</code> document{%- if documents.size != 1 -%}s{%- endif -%}</li>
+			<li><code>{{ collections_size | strip }}</code> collection{%- if collections.size != 1 -%}s{%- endif -%}</li>
+			<li><code>{{ attachments_size | strip }}</code> attachment{%- if attachments.size != 1 -%}s{%- endif -%}</li>
+			<li><code>{{ tags_size | strip }}</code> tag{%- if tags.size != 1 -%}s{%- endif -%}</li>
+		</ul>
+
+		<h2>Duplicate UIDs</h2>
+
+		<p><code>{{ dup_uids_size | strip }}</code> duplicate <code>uid</code> metadata{%- if dup_uids.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if dup_uids.size > 0 -%}
+		<ul>
+		{%- for uid in dup_uids -%}
+		<li><code>{{ uid }}</code></li>
+		{%- endfor -%}
+		</ul>
+		{%- endif -%}
+
+		<h2>Unidentified Documents</h2>
+
+		<p><code>{{ no_uid_docs_size | strip }}</code> document{%- if no_uid_docs.size != 1 -%}s{%- endif -%}{{" "}}with no <code>uid</code> metadata{%- if no_uid_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if no_uid_docs.size > 0 -%}
+		{%- capture no_uid_docs_list -%}{%- include list-docs.html my_docs=no_uid_docs -%}{%- endcapture -%}
+		{{ no_uid_docs_list | strip }}
+		{%- endif -%}
+
+		<h2>Misdated Documents</h2>
+
+		<p><code>{{ misdated_docs_size | strip }}</code> document{%- if misdated_docs.size != 1 -%}s{%- endif -%}{{" "}}with <code>date</code> and <code>uid</code> that do not match{%- if misdated_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if misdated_docs.size > 0 -%}
+		{%- capture misdated_docs_list -%}{%- include list-docs.html my_docs=misdated_docs -%}{%- endcapture -%}
+		{{ misdated_docs_list | strip }}
+		{%- endif -%}
+
+		<h2>Misnamed Documents</h2>
+
+		<p><code>{{ misnamed_docs_size | strip }}</code> document{%- if misnamed_docs.size != 1 -%}s{%- endif -%}{{" "}}with <code>slug</code> and <code>uid</code> that do not match{%- if misnamed_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if misnamed_docs.size > 0 -%}
+		{%- capture misnamed_docs_list -%}{%- include list-docs.html my_docs=misnamed_docs -%}{%- endcapture -%}
+		{{ misnamed_docs_list | strip }}
+		{%- endif -%}
+
+		<h2>Missing Attachments</h2>
+
+		<p><code>{{ missing_attachments_size | strip }}</code> attachment{%- if missing_attachments.size != 1 -%}s{%- endif -%}{{" "}}which are missing{%- if missing_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if missing_attachments.size > 0 -%}
+		<ul>
+		{%- for attachment in missing_attachments -%}
+		<li><code>{{ attachment }}</code></li>
+		{%- endfor -%}
+		</ul>
+		{%- endif -%}
+
+		<h2>Orphaned Attachments</h2>
+
+		<p><code>{{ orphaned_attachments_size | strip }}</code> attachment{%- if orphaned_attachments.size != 1 -%}s{%- endif -%}{{" "}}which are not referenced{%- if orphaned_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if orphaned_attachments.size > 0 -%}
+		<ul>
+		{%- for attachment in orphaned_attachments -%}
+		<li><code>{{ attachment }}</code></li>
+		{%- endfor -%}
+		</ul>
+		{%- endif -%}
+
+	</div>
+</article>

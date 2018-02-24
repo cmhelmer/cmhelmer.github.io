@@ -3,9 +3,12 @@ description: "Personal website of C. M. Helmer re: missiology, technology, bibli
 author:
   name: C. M. Helmer
   email: desk@cmhelmer.com
-  github: cmhlmr
-  twitter: cmhlmr
-  microblog: cmhlmr
+  github: cmhelmr
+  twitter: cmhelmr
+#  linkedin: 
+#  facebook: 
+  microblog: cmhelmr
+#  googleplus: 
 
 url: https://cmhelmer.com
 
@@ -32,7 +35,7 @@ content_filters:
 - mark
 - figure
 
-permalink: /:collection/:slug
+permalink: /:slug
 
 include: ["_pages"]
 
@@ -44,22 +47,27 @@ collections:
     title: "Notes"
     order: 1
     output: true
+    permalink: /:slug
   ctbp:
     title: "CTBP"
     order: 2
     output: true
+    permalink: /:slug
   lifted:
     title: "Lifted"
     order: 3
     output: true
+    permalink: /:slug
   nepali:
     title: "Nepali"
     order: 4
     output: true
+    permalink: /:slug
   crossroads:
     title: "Crossroads"
     order: 5
     output: true
+    permalink: /:slug
 
 defaults:
 - scope:

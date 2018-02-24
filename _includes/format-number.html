@@ -1,0 +1,22 @@
+{%- comment -%}
+
+Format number
+Only integer formatting
+- Pass in number
+
+{%- endcomment -%}
+
+{%- assign number_grouping = "," -%}
+
+{%- assign number = include.number | split: "" | reverse -%}
+{%- assign formatted_number = "" | split: "" -%}
+
+{%- for digit in number -%}
+	{%- assign formatted_number = formatted_number | push: digit -%}
+	{%- assign place = forloop.index | modulo: 3 -%}
+	{%- unless place > 0 or forloop.last -%}
+		{%- assign formatted_number = formatted_number | push: number_grouping -%}
+	{%- endunless -%}
+{%- endfor -%}
+
+{{ formatted_number | reverse | join: "" }}

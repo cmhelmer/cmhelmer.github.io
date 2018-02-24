@@ -7,8 +7,6 @@ Include document article
 
 {%- assign my_doc = include.my_doc -%}
 
-{%- assign collection = site.collections | where_exp: "collection", "collection.label == my_doc.collection" | first -%}
-
 {%- assign doc_uid = my_doc.uid | strip -%}
 {%- assign doc_title = my_doc.title | strip -%}
 {%- assign doc_image = my_doc.image.path | default: my_doc.image -%}
@@ -16,14 +14,28 @@ Include document article
 {%- assign doc_author_name = doc_author.name | default: doc_author -%}
 {%- assign doc_author_email = doc_author.email | default: site.email -%}
 
-<article id="note-{{ doc_uid }}" class="{{ my_doc.collection }}-collection main-doc" role="document" itemscope itemtype="http://schema.org/BlogPosting"{%- if collection.color -%}{{ " " }}style="--collection-color:{{ collection.color }}"{%- endif -%}>
-
+<article id="note-{{ doc_uid }}" class="{{ my_doc.collection }}-collection main-doc h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="doc-header">
 
 		<div class="doc-index">
 
+			{%- comment -%} Display collection, with link if collection "index" page exists {%- endcomment -%}
+
 			{%- if my_doc.collection != "posts" -%}
-			<div class="doc-collection doc-meta">{{ site.collections | where: 'label', my_doc.collection | map: 'title' | first | default: my_doc.collection }}</div>
+			{%- assign collection = site.collections | where: "label", my_doc.collection | first -%}
+			{%- assign collection_index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
+			{%- assign collection_url = collection_index.url | split: "/" | pop | join: "/" | append: "/" -%}
+			{%- assign collection_name = collection.title | default: my_doc.collection -%}
+
+			{%- capture collection_meta -%}
+			{%- if collection_url.size > 1 -%}
+			<a href="{{ collection_url | absolute_url }}">{{ collection_name }}</a>
+			{%- else -%}
+			{{ collection_name }}
+			{%- endif -%}
+			{%- endcapture -%}
+
+			<div class="doc-collection doc-meta">{{ collection_meta }}</div>
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
@@ -35,7 +47,7 @@ Include document article
 	    {%- unless doc_image contains "://" -%}
 	    {%- assign doc_image = doc_image | absolute_url -%}
 	    {%- endunless -%}
-		<figure class="doc-image doc-meta"><img src="{{ doc_image }}" alt="">{%- if my_doc.image.description -%}<figcaption>{{ my_doc.image.description }}</figcaption>{%- endif -%}</figure>
+		<figure class="doc-image doc-meta"><img src="{{ doc_image }}" alt="{{ my_doc.image.description | escape }}" class="u-featured">{%- if my_doc.image.description -%}<figcaption>{{ my_doc.image.description }}</figcaption>{%- endif -%}</figure>
 		{%- endif -%}
 
 		{%- comment -%} Don't display title if none explicitly set {%- endcomment -%}
@@ -79,9 +91,13 @@ Include document article
 
 	<div class="doc-content">
 
-		{%- capture doc_content -%}{{ content }}{%- endcapture -%}
-		{%- capture my_content -%}{%- include filter-content.html my_content=my_doc.content -%}{%- endcapture -%}
+		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
 		{{ my_content | strip }}
+
+		{%- if my_doc.reference -%}
+		{%- capture ref_content -%}{%- include content-reference.html my_doc=my_doc -%}{%- endcapture -%}
+		{{ ref_content | strip }}
+		{%- endif -%}
 
 	</div>
 	
@@ -89,12 +105,12 @@ Include document article
 
 		{%- comment -%} Reply by email {%- endcomment -%}
 		{%- if doc_author_email -%}
-		<div class="doc-reply doc-meta"><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="32" height="32"><use xlink:href="#icon-email"></use></svg>Reply</a></div>
+		<div class="doc-reply doc-meta"><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></div>
 		{%- endif -%}
 
 		{%- comment -%} Link to GitHub history {%- endcomment -%}
 		{%- if site.author.github -%}
-		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="32" height="32"><use xlink:href="#icon-github"></use></svg>History</a></div>
+		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="16" height="16"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a></div>
 		{%- endif -%}
 
 	</div>

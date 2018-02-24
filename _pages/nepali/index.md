@@ -1,5 +1,7 @@
 ---
 layout:	contents
+collection: nepali
+permalink: /nepali/
 ---
 
 # Nepali

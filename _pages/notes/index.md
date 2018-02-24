@@ -1,5 +1,7 @@
 ---
 layout:	contents
+collection:	notes
+permalink:	/notes/
 ---
 
 # Notes
