@@ -27,7 +27,8 @@ Note: mimic this include in script.js search results
 	{%- endif -%}
 
 	{%- if doc.collection == "posts" -%}
-		{%- assign doc_reference = doc.date | date: site.date_format -%}
+		{%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_reference = doc_date | date: site.date_format -%}
 		{%- assign reference_class = "doc-date" -%}
 	{%- else -%}
 		{%- assign doc_reference = doc.uid -%}

@@ -5,7 +5,7 @@ permalink:	/data/prose/tags.jsonp
 ---
 
 {%- comment -%} Assemble and sort tags for all documents {%- endcomment -%}
-{%- assign tags = site.documents | map: "tags" | uniq | sort_natural -%}
+{%- assign tags = site.documents | map: "tags" | compact | uniq | sort_natural -%}
 
 {%- capture site_tags -%}
 

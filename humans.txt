@@ -3,7 +3,7 @@
 
 # TEAM
 
-    C. M. Helmer -- @cmhlmr
+    C. M. Helmer -- @cmhelmr
 
 # TECHNOLOGY COLOPHON
 

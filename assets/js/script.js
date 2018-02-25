@@ -82,14 +82,14 @@
 		lunrIndex = lunr(function () {
 			this.field("uid");
 			this.field("title");
-			this.field("date");
-			// this.field("author");
 			this.field("content");
-			this.field("excerpt");
 			this.field("collection");
-			// this.field("category");
 			this.field("tag");
+			this.field("date");
 			this.field("url");
+			// this.field("author");
+			// this.field("excerpt");
+			// this.field("category");
 			this.ref("id");
 
 			lunrData.forEach(function(item, i) {
@@ -183,16 +183,8 @@
 				resultsLink.href = result.url;
 				resultsLink.rel  = "bookmark";
 			
-				// TEMP... this logic isn't foolproof and depends on using uid in filename
 				resultsPreview.classList.add("doc-preview");
-				if (result.title === result.uid) {
-					resultsPreview.classList.add("doc-excerpt");
-					resultsPreview.innerHTML = result.excerpt;
-				}
-				else {
-					resultsPreview.classList.add("doc-name");
-					resultsPreview.innerHTML = result.title;
-				}
+				resultsPreview.innerHTML = result.title;
 
 				resultsReference.classList.add("doc-reference");
 				if (result.collection === "posts") {

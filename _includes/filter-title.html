@@ -3,7 +3,7 @@
 Filter title
 
 Modify titles if title is not explicitly set
-Fallback to reference title, date (posts only), or excerpt (in that order)
+Falls back to reference title or excerpt (in that order)
 Convert quotes to typographer's (curly) quotes
 Advanced: Avoid typographical orphans and widows and provide way to style titles and subtitles (split on colon)
 
@@ -21,13 +21,13 @@ Default titles: title, link title, date for posts, filename for notes (in that o
 
 {%- assign my_title_slug = my_title | slugify -%}
 {%- if my_title_slug == my_doc.slug -%}
-	{%- if my_doc.reference.title -%}
-		{%- assign my_title = my_doc.reference.title -%}
-	{%- elsif my_doc.collection == "posts" -%}
-		{%- assign my_title = my_doc.date | date: site.date_format -%}
-	{%- else -%}
-		{%- capture my_title -%}{%- include filter-excerpt.html my_doc=my_doc -%}{%- endcapture -%}
-	{%- endif -%}
+	{%- capture my_title -%}
+		{%- if my_doc.reference.title -%}
+			“{{ my_doc.reference.title }}”
+		{%- else -%}
+			{%- include filter-excerpt.html my_doc=my_doc excerpt_length=70 -%}
+		{%- endif -%}
+	{%- endcapture -%}
 {%- endif -%}
 
 {%- comment -%}
@@ -141,4 +141,4 @@ Smart filters
 
 {%- endif -%}
 
-{{ my_title }}
+{{- my_title -}}

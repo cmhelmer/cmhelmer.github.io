@@ -16,7 +16,7 @@ layout:	default
 	{%- assign collections = site.collections -%}
 {%- endif -%}
 {%- assign attachments = site.static_files | where_exp: "file", "file.attachment" -%}
-{%- assign tags = documents | map: "tags" | uniq -%}
+{%- assign tags = documents | map: "tags" | compact | uniq -%}
 
 {%- for doc in documents -%}
 	{%- assign word_count = doc.content | number_of_words | plus: word_count -%}
@@ -29,8 +29,7 @@ layout:	default
 {%- capture tags_size -%}{%- include format-number.html number=tags.size -%}{%- endcapture -%}
 
 {%- assign dup_uids = "" | split: "," -%}
-{%- assign uid_docs = documents | where_exp: "doc", "doc.uid != nil" -%}
-{%- assign uids = uid_docs | map: "uid" | uniq -%}
+{%- assign uids = documents | map: "uid" | compact | uniq -%}
 {%- if uids.size < uid_docs.size -%}
 	{%- assign check_uids = "" | split: "," -%}
 	{%- for doc in documents -%}
@@ -52,10 +51,10 @@ layout:	default
 {%- assign dated_docs = documents | where_exp: "doc", "doc.uid" | where_exp: "doc", "doc.date != site.time" -%}
 {%- for doc in dated_docs -%}
 	{%- assign doc_uid = doc.uid | strip -%}
+	{%- assign doc_uid_truncated = doc_uid | slice: 0, 8 -%}
 	{%- assign doc_date = doc.date | date: "%Y%m%d%H%M" -%}
-	{%- assign doc_time_truncated = doc_date | slice: 8, 4 -%}
 	{%- assign doc_date_truncated = doc_date | slice: 0, 8 -%}
-	{%- assign doc_uid_truncated = doc.uid | slice: 0, 8 -%}
+	{%- assign doc_time_truncated = doc_date | slice: 8, 4 -%}
 	{%- if doc_date_truncated == doc_uid_truncated -%}
 		{%- if doc_date == doc_uid or doc_time_truncated == "0000" -%}
 			{%- continue -%}
@@ -121,15 +120,27 @@ layout:	default
 {%- capture orphaned_attachments_size -%}{%- include format-number.html number=orphaned_attachments.size -%}{%- endcapture -%}
 {%- assign issues_count = issues_count | plus: orphaned_attachments.size -%}
 
+{%- assign unfiltered_docs = "" | split: "," -%}
+{%- for doc in documents -%}
+	{%- assign doc_content = doc.content | markdownify -%}
+	{%- capture doc_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+	{%- assign doc_content = doc_content | strip_html | normalize_whitespace | strip -%}
+	{%- if doc_content contains "[[" and doc_content contains "]]" -%}
+		{%- assign unfiltered_docs = unfiltered_docs | push: doc -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- capture unfiltered_docs_size -%}{%- include format-number.html number=unfiltered_docs.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: unfiltered_docs.size -%}
+
 <article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document">
 	<header class="doc-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
 	<div class="doc-content">
 
-		{{ content }}
+		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 
-		<p>There{{" "}}{%- if issues_count == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}<code>{{ issues_count }}</code> issue{%- if issues_count != 1 -%}s{%- endif -%}{%- if issues_count > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		{{ content }}
 
 		<ul>
 			<li><code>{{ word_count_size | strip }}</code> word{%- if word_count != 1 -%}s{%- endif -%}</li>
@@ -138,6 +149,8 @@ layout:	default
 			<li><code>{{ attachments_size | strip }}</code> attachment{%- if attachments.size != 1 -%}s{%- endif -%}</li>
 			<li><code>{{ tags_size | strip }}</code> tag{%- if tags.size != 1 -%}s{%- endif -%}</li>
 		</ul>
+
+		<p>There{{" "}}{%- if issues_count == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}<code>{{ issues_count }}</code> issue{%- if issues_count != 1 -%}s{%- endif -%}{%- if issues_count > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		<h2>Duplicate UIDs</h2>
 
@@ -200,6 +213,15 @@ layout:	default
 		<li><code>{{ attachment }}</code></li>
 		{%- endfor -%}
 		</ul>
+		{%- endif -%}
+
+		<h2>Unfiltered Documents</h2>
+
+		<p><code>{{ unfiltered_docs_size | strip }}</code> document{%- if unfiltered_docs.size != 1 -%}s{%- endif -%}{{" "}}with unrendered markup (<code>[[</code> and <code>]]</code>){%- if unfiltered_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if unfiltered_docs.size > 0 -%}
+		{%- capture unfiltered_docs_list -%}{%- include list-docs.html my_docs=unfiltered_docs -%}{%- endcapture -%}
+		{{ unfiltered_docs_list | strip }}
 		{%- endif -%}
 
 	</div>

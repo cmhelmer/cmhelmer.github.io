@@ -6,7 +6,7 @@ Order of filters in config takes precedence in conflict (if two overlap). Splits
 
 This is maddening without functions and regular expressions.
 
-- Pass in document (with unrendered content)
+- Pass in rendered content
 - Capture this include and use "strip" filter to remove whitespace.
 - Set in `_config.yml`:
 	content_filters:
@@ -32,7 +32,7 @@ TODO:
 	
 {%- endcomment -%}
 
-{%- assign my_content = include.my_doc.content | markdownify -%}
+{%- assign my_content = include.my_content -%}
 
 {%- assign figure_needles = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
 {%- assign mark_needles   = '::...::' | split: '...' -%}
@@ -196,7 +196,7 @@ TODO:
 
 								{%- comment -%}
 								
-								Mark filter
+								Mark (highlight) filter
 
 								That's it.
 								
@@ -215,14 +215,21 @@ TODO:
 								Wiki filter
 
 								Assume note IDs are first 12 digits
-								Keep remaining text for link
+								Keep any remaining text for link
 								Get referenced note url and title
+								Skip if reference not found
 								
 								{%- endcomment -%}
 
 								{%- assign my_uid = fragment | slice: 0, 12 -%}
 								{%- assign my_phrase = fragment | replace_first: my_uid, '' | lstrip -%}
 								{%- assign my_doc = site.documents | where: "uid", my_uid  | first -%}
+
+								{%- if my_doc.url == nil -%}
+									{%- assign previous_parts = previous_parts | push: part -%}
+									{%- continue -%}
+								{%- endif -%}
+
 								{%- capture content_replace -%}
 
 									<a href="{{ my_doc.url | absolute_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
@@ -259,4 +266,4 @@ TODO:
 
 {%- endif -%}
 
-{{ my_content }}
+{{- my_content -}}

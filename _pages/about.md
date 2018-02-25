@@ -28,7 +28,7 @@ I coded this site myself. Besides my domain name, computer and time, the site ha
 	- [Adobe Source Serif](https://adobe-fonts.github.io/source-serif-pro/)
 	- [Adobe Source Code](https://adobe-fonts.github.io/source-code-pro/)
 	- [fontTools](https://github.com/fonttools/fonttools)
-	- [IcoMoon](https://icomoon.io) (SVG icons and `svgxuse` polyfill)
+	- [IcoMoon](https://icomoon.io) (SVG icons and polyfill)
 - Delivery:
 	- [Jekyll](https://jekyllrb.com) (static site generator)
 	- [GitHub Pages](https://pages.github.com) (host and version control)

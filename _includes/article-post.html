@@ -7,7 +7,10 @@ Include post/blog article
 
 {%- assign my_doc = include.my_doc -%}
 
-{%- capture doc_date -%}<time datetime="{{ my_doc.date | date_to_xmlschema }}">{{ my_doc.date | date: site.date_format }}</time>:{%- endcapture -%}
+{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
+
+{%- capture doc_date -%}<time datetime="{{ doc_date }}">{{ doc_date | date: site.date_format }}</time>:{%- endcapture -%}
+
 {%- if page.url != my_doc.url -%}
 {%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
@@ -18,13 +21,9 @@ Include post/blog article
 	</header>
 	<div class="doc-content">
 
-		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
-		{{ my_content | strip }}
+		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
 
-		{%- if my_doc.reference -%}
-		{%- capture ref_content -%}{%- include content-reference.html my_doc=my_doc -%}{%- endcapture -%}
-		{{ ref_content | strip }}
-		{%- endif -%}
+		{{ content }}
 
 	</div>
 </article>

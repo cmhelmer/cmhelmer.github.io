@@ -22,14 +22,14 @@ Include document article
 			{%- comment -%} Display collection, with link if collection "index" page exists {%- endcomment -%}
 
 			{%- if my_doc.collection != "posts" -%}
+
 			{%- assign collection = site.collections | where: "label", my_doc.collection | first -%}
-			{%- assign collection_index = collection.docs | where_exp: "doc", "doc.slug == 'index'" | first -%}
-			{%- assign collection_url = collection_index.url | split: "/" | pop | join: "/" | append: "/" -%}
 			{%- assign collection_name = collection.title | default: my_doc.collection -%}
+			{%- assign index = site.pages | where_exp: "page", "page.collection == my_doc.collection" | where_exp: "page", "page.layout == 'contents'" | first -%}
 
 			{%- capture collection_meta -%}
-			{%- if collection_url.size > 1 -%}
-			<a href="{{ collection_url | absolute_url }}">{{ collection_name }}</a>
+			{%- if index.url -%}
+			<a href="{{ index.url | absolute_url }}">{{ collection_name }}</a>
 			{%- else -%}
 			{{ collection_name }}
 			{%- endif -%}
@@ -39,7 +39,7 @@ Include document article
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
-			<div class="doc-id doc-meta"><time datetime="{{ doc_date | strip | date_to_xmlschema }}" title="{{ doc_date | strip | date_to_xmlschema }}">{{ doc_uid }}</time></div>
+			<div class="doc-id doc-meta"><time datetime="{{ doc_date }}" title="{{ doc_date }}">{{ doc_uid }}</time></div>
 
 		</div>
 
@@ -91,13 +91,9 @@ Include document article
 
 	<div class="doc-content">
 
-		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
-		{{ my_content | strip }}
+		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
 
-		{%- if my_doc.reference -%}
-		{%- capture ref_content -%}{%- include content-reference.html my_doc=my_doc -%}{%- endcapture -%}
-		{{ ref_content | strip }}
-		{%- endif -%}
+		{{ content }}
 
 	</div>
 	

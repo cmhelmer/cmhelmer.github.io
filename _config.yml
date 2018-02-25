@@ -1,4 +1,4 @@
-title: From the Field Desk of C. M. Helmer
+title: From the Field Desk
 description: "Personal website of C. M. Helmer re: missiology, technology, bibliology."
 author:
   name: C. M. Helmer
@@ -24,9 +24,7 @@ date_format: "%b %-d, %Y"
 
 title_separator: "/"
 
-excerpt_separator: "
-
-"
+excerpt_separator: "\n\n"
 
 excerpt_length: 140
 

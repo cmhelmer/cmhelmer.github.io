@@ -5,7 +5,10 @@ Feed layout
 Generates feed for site or current collection
 Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
-Ignore any passed in content
+Ignores any passed in content
+
+TODO:
+- Add featured image or other media in metadata as enclosure (if we can parse `type`)
 
 {%- endcomment -%}
 
@@ -79,16 +82,13 @@ Ignore any passed in content
     <id>{{ doc.url | absolute_url | xml_escape }}</id>
     <content type="html" xml:base="{{ doc.url | absolute_url | xml_escape }}">
 
-		{%- comment -%} Include featured image (consider adding this as enclosure if we can parse `type`) {%- endcomment -%}
+		{%- comment -%} Include featured image {%- endcomment -%}
 		{%- capture image_content -%}{%- include content-image.html my_doc=doc -%}{%- endcapture -%}
 		{{- image_content | strip -}}
 
-		{%- capture doc_content -%}{%- include filter-content.html my_doc=doc -%}{%- endcapture -%}
-		{{- doc_content | strip | xml_escape -}}
+		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
 
-		{%- comment -%} Include reference {%- endcomment -%}
-		{%- capture ref_content -%}{%- include content-reference.html my_doc=doc -%}{%- endcapture -%}
-		{{- ref_content | strip -}}
+		{{- content | strip | xml_escape -}}
 
     </content>
 

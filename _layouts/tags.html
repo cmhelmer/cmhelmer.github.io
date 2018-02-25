@@ -21,6 +21,8 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 	</header>
 	<div class="doc-content">
 
+		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
+
 		{{ content }}
 
 		{%- comment -%} Get list of unique tags for site or collection {%- endcomment -%}
@@ -30,7 +32,8 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 		{%- else -%}
 			{%- assign docs = site.documents -%}
 		{%- endif -%}
-		{%- assign tags = docs | map: "tags" | uniq | sort_natural -%}
+
+		{%- assign tags = docs | map: "tags" | compact | uniq | sort_natural -%}
 
 		{%- comment -%}
 		Subset list of tags to those in data set

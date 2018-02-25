@@ -1,7 +1,7 @@
 {%- comment -%}
 
 Include page article
-- Pass in page
+- Pass in document
 
 {%- endcomment -%}
 
@@ -15,8 +15,9 @@ Include page article
 	</header>
 	<div class="doc-content">
 
-		{%- capture my_content -%}{%- include filter-content.html my_doc=my_doc -%}{%- endcapture -%}
-		{{ my_content | strip }}
+		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+
+		{{ content }}
 
 	</div>
 </article>

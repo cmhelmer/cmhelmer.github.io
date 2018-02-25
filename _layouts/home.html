@@ -3,11 +3,13 @@
 layout:	default
 ---
 
+{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
+
 {{ content }}
 
 {%- assign limit = 5 -%}
 
-{%- comment -%} Use site.documents in place of site.posts to avoid unrendered content {%- endcomment -%}
+{%- comment -%} Use site.documents in place of site.posts to be consistent {%- endcomment -%}
 {%- assign site_posts = site.documents | where: "collection", "posts" | reverse -%}
 {%- if site_posts.size > 0 -%}
 	{%- for post in site_posts limit: limit -%}

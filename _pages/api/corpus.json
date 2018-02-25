@@ -5,72 +5,91 @@
 permalink:	/data/corpus.json
 ---
 
-{%- comment -%} Get all documents {%- endcomment -%}
 {%- assign docs = site.documents -%}
 
 {%- capture index -%}
 
-[
+{{- "[" -}}
 
 	{%- for doc in docs -%}
+
+		{%- assign fields = "" | split: "," -%}
 
 		{%- comment -%}
 
 		Build data for Lunr, matching fields added to lunr function in script.js
-
-		Use loop index as unique reference (pass as string)
-		Avoid sending entire doc because that will balloon size of json file 10×
-		Render content then strip it bare
-		Format date for display
-		Custom value "description" in place of excerpt
-		Pass tags as "tag" so that searching can be done naturally on that field (i.e. "tag: love")
 		
-		This notation, {{-""-}}, eats up white-space while maintaining readability
+		Avoid sending entire doc because that will balloon size of json file 10×
+		Render items just as in layouts
+
+		Some fields may be required by layout: url, title, date, uid
 
 		{%- endcomment -%}
 
 		{%- assign doc_uid = doc.uid | strip -%}
+		{%- assign doc_uid = doc_uid | jsonify | prepend: '"uid":' -%}
+		{%- assign fields = fields | push: doc_uid -%}
 
-		{%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip | smartify -%}
+		{%- capture doc_title -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_title = doc_title | jsonify | prepend: '"title":' -%}
+		{%- assign fields = fields | push: doc_title -%}
 
-		{%- assign doc_date = doc.date | date: site.date_format -%}
-
-		{%- assign doc_author = doc.author.name | default: doc.author -%}
-
-		{%- assign doc_content = doc.content | markdownify | newline_to_br | replace: "<br />", " " | strip_html | strip_newlines | normalize_whitespace -%}
-		
-		{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
-		{%- assign doc_excerpt = doc_excerpt | strip -%}
+		{%- capture doc_content -%}{%- include content.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_content = doc_content | newline_to_br | replace: "<br />", " " | strip_html | strip_newlines | normalize_whitespace -%}
+		{%- assign doc_content = doc_content | jsonify | prepend: '"content":' -%}
+		{%- assign fields = fields | push: doc_content -%}
 
 		{%- assign doc_collection = doc.collection -%}
+		{%- assign doc_collection = doc_collection | jsonify | prepend: '"collection":' -%}
+		{%- assign fields = fields | push: doc_collection -%}
 		
+		{%- comment -%} Pass tags as singular "tag" for more natural search (i.e. "tag: love") {%- endcomment -%}
 		{%- assign doc_tags = doc.tags | join: ", " -%}
+		{%- assign doc_tags = doc_tags | jsonify | prepend: '"tag":' -%}
+		{%- assign fields = fields | push: doc_tags -%}
 
+		{%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_date = doc_date | date: site.date_format -%}
+		{%- assign doc_date = doc_date | jsonify | prepend: '"date":' -%}
+		{%- assign fields = fields | push: doc_date -%}
+
+		{%- assign doc_url = doc.url -%}
+		{%- assign doc_url = doc_url | jsonify | prepend: '"url":' -%}
+		{%- assign fields = fields | push: doc_url -%}
+
+		{%- comment -%}
+		
+		NOTE: Fields below not in use for search. If added, also add to lunr index function in script.js
+		
+		{%- assign doc_author = doc.author.name | default: doc.author | default: site.author.name | default: site.author -%}
+		{%- assign doc_author = doc_author | jsonify | prepend: '"author":' -%}
+		{%- assign fields = fields | push: doc_author -%}
+		
+		{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
+		{%- assign doc_excerpt = doc_excerpt | jsonify | prepend: '"excerpt":' -%}
+		{%- assign fields = fields | push: doc_excerpt -%}
+
+		{%- assign doc_category = doc.category -%}
+		{%- assign doc_category = doc_category | jsonify | prepend: '"category":' -%}
+		{%- assign fields = fields | push: doc_category -%}
+
+		{%- endcomment -%}
+		
 		{
-			{{-""-}}
-			"uid": {{- doc_uid | jsonify | append: "," -}}
-			"title": {{- doc_title | jsonify | append: "," -}}
-			"date": {{- doc_date | jsonify | append: "," -}}
-			"content": {{- doc_content | jsonify | append: "," -}}
-			"excerpt": {{- doc_excerpt | jsonify | append: "," -}}
-			"collection": {{- doc_collection | jsonify | append: "," -}}
-			"tag": {{- doc_tags | jsonify | append: "," -}}
-			"url": {{- doc.url | jsonify -}}
-			{%- comment -%}
-			"author": {{- doc_author | jsonify | append: "," -}}
-			"category": {{- doc.category | jsonify | append: "," -}}
-			{%- endcomment -%}
-			{{-""-}}
+
+			{{- fields | join: "," -}}
+
 		}
-		{{-""-}}
 
 		{%- unless forloop.last -%}
-			,
+
+			{{- "," -}}
+
 		{%- endunless -%}
 	
 	{%- endfor -%}
 
-]
+{{- "]" -}}
 
 {%- endcapture -%}
 
