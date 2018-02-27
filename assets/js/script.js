@@ -1,5 +1,5 @@
 // TODO: 
-// - Cut the mustard somewhere (isn't using DOMContentLoaded good for IE 9+?...
+// - Cut the mustard somewhere (is using DOMContentLoaded good for IE 9+?...
 // - Extend for other modals (This is all a bit hacky...)
 // - Fix search results to use custom query (current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279)
 
@@ -79,6 +79,7 @@
 	// Initialize Lunr
 	function initLunr() {
 
+		// Add fields, match what's available in data
 		lunrIndex = lunr(function () {
 			this.field("uid");
 			this.field("title");
@@ -92,8 +93,8 @@
 			// this.field("category");
 			this.ref("id");
 
+			// Use array index as unique reference 'id'
 			lunrData.forEach(function(item, i) {
-				// Use array index as unique reference
 				item.id = i;
 				this.add(item);
 			}, this);
@@ -111,7 +112,7 @@
 		// Disable default action
 		searchForm.addEventListener("submit", function(e) {
 			e.preventDefault();
-// 			searchIndex();
+			searchIndex();
 			return false;
 		});
 
@@ -122,7 +123,7 @@
 		// ...and any content (like notice about Google Search)
 		searchContent.innerHTML = "";
 
-		// Listen for typing in search input
+		// Listen for typing in search input and send to Lunr
 		searchInput.addEventListener("keyup", searchIndex);
 		
 		// Set ready flag for other scripts using search
@@ -284,16 +285,8 @@
 	
 	// Close modal in style
 	function closeModal(modal) {
-		
 		// Dialog API (or polyfill)
 		modal.close();
 	}
-
-	// Make search container focusable (when it is clicked or receives internal :target links)
-	searchAside.tabindex = 0;
-
-	// Focus search input when search container receives focus
-	searchAside.addEventListener("focus", function() {
-		searchInput.focus();
-	});
+	
 })();

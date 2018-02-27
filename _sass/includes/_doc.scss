@@ -104,7 +104,6 @@
 	figure,
 	table {
 		@include measure( 1.5 );
-		width: auto;
 	}
 	iframe {
 		@include measure( 1.5 );

@@ -12,7 +12,7 @@ layout:	default
 	<div class="aside-content">
 		<a href="{{ post.previous.url | absolute_url }}" rel="prev">
 			<span class="doc-date">{{ post.previous.date | date: site.date_format }}</span>
-			<span class="doc-preview">{{ previous_preview | strip }}</span>
+			<span class="doc-preview">{{ previous_preview }}</span>
 		</a>
 	</div>
 </aside>
@@ -25,7 +25,7 @@ layout:	default
 	<div class="aside-content">
 		<a href="{{ post.next.url | absolute_url }}" rel="next">
 			<span class="doc-date">{{ post.next.date | date: site.date_format }}</span>
-			<span class="doc-preview">{{ next_preview | strip }}</span>
+			<span class="doc-preview">{{ next_preview }}</span>
 		</a>
 	</div>
 </aside>

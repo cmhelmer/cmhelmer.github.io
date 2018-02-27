@@ -19,39 +19,53 @@ dialog {
 }
 
 .site-modal {
-	padding: 0; // override, to children
 	width: auto;
 	.site-aside {
-		@include gutter( .5 ); // split below
-		> * {
-			@include gutter( .5 ); // split above
-			margin-top: 0; // override * + *
+		padding: 0; // override
+	}
+}
+
+.info-modal {
+	.aside-content {
+		column-width: 12rem; // to taste
+		column-gap: $gap; // fallback for calc
+		column-gap: $gutter;
+	}
+}
+
+.search-modal {
+	.aside-header {
+		@include sticky;
+		@include gutter;
+		margin: ( $gap * -1 ); // fallback for calc
+		margin: calc(#{$gutter} * -1); // counteract gutter
+		border-radius: ( $border-radius * 2 );
+		&::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: ( $gap / 2 );
+			right: ( $gap / 2 );
+			height: ( $gap / 2 );
+
+			// Scrolling hints
+			background-image:
+				radial-gradient( at top, $color-text-bg, rgba( $color-text-bg, 0 ) 70% );
+			background-repeat: no-repeat;
+			background-size: 100%;
+			background-position: top;
 		}
 	}
-	.site-browse {
-		column-count: 2;
-		column-gap: $gap;
-		> .aside-title {
-			column-span: all;
+	.aside-content {
+// 		margin-top: 0; // for .aside-header
+		padding-top: $gap; // fallback for calc
+		padding-top: $gutter; // for .aside-header
+		&:empty {
+			display: none;
 		}
 	}
-	.site-search {
-		.aside-header {
-			@include sticky;
-			background-color: $color-bg; // fallback for gradient
-			background: linear-gradient(to top, rgba( $color-bg, 0 ), $color-bg ( $gap / 2 ) );
-			padding-bottom: $gutter; // for position sticky
-		}
-		.aside-content {
-			margin-top: 0; // for .aside-header
-			padding-top: 0; // for .aside-header
-			&:empty {
-				display: none;
-			}
-		}
-		input[type="search"] {
-			padding-right: 6rem; // for .results-count
-		}
+	input[type="search"] {
+		padding-right: 6rem; // for .results-count
 	}
 }
 

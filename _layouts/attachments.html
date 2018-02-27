@@ -24,7 +24,7 @@ Only shows files with metadata "attachment" set to true (static files are assume
 
 		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 
-		{{ content }}
+		{{- content -}}
 
 		{%- comment -%} Get list of static files, sort by reverse modified-date order {%- endcomment -%}
 

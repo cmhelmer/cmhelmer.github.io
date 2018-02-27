@@ -8,7 +8,9 @@ Convert quotes to typographer's (curly) quotes
 Advanced: Avoid typographical orphans and widows and provide way to style titles and subtitles (split on colon)
 
 - Pass in full document (page)
-- Capture this include and use "strip" filter to remove whitespace.
+
+TODO:
+- Add ordinals filter
 
 {%- endcomment -%}
 
@@ -16,7 +18,7 @@ Advanced: Avoid typographical orphans and widows and provide way to style titles
 {%- assign my_title = my_doc.title | strip_html | normalize_whitespace | strip -%}
 
 {%- comment -%}
-Default titles: title, link title, date for posts, filename for notes (in that order)
+Default titles: explicit title, reference title, reduced excerpt (in that order) (ignores filename)
 {%- endcomment -%}
 
 {%- assign my_title_slug = my_title | slugify -%}

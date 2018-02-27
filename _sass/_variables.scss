@@ -7,7 +7,7 @@ $width-max: 1280px; // cap
 // Colors
 $color-bg:      #f5f2df;                  // background: body (cream)
 $color-text:    #263d4b;                  // primary: text (dark blue)
-$color-text-bg: rgba( $color-text, .15 ); // background: blockquotes, etc. (opaque dark blue)
+$color-text-bg: rgba( $color-text, .2 ); // background: blockquotes, etc. (opaque dark blue)
 $color-code:    inherit;                  // text color: code, pre
 $color-code-bg: rgba( #fff, .85);         // background: code, pre (opaque white)
 $color-accent:  #a6565e;                  // accent: note IDs, collection names (red)

@@ -23,6 +23,19 @@
 	}
 }
 
+.site-browse {
+	@include flex;
+	> * {
+		flex: 1 1 50%;
+		min-width: 7.5rem; // to taste
+		margin-top: 0;
+		margin-bottom: $gap;
+	}
+	> :last-child {
+		margin-bottom: 0;
+	}
+}
+
 .site-search {
 	form {
 		display: flex;

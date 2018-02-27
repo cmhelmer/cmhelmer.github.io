@@ -158,7 +158,7 @@ video {
 }
 
 figure {
-	width: fit-content;
+	width: fit-content; // No IE/Edge
 	img {
 		border-radius: $border-radius;
 	}

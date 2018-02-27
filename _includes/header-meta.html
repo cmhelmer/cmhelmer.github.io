@@ -12,32 +12,19 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 {%- endif -%}
 {%- capture meta_title -%}
 	{%- if page_title -%}
-		{{- page_title -}}
-		{{- " " -}}
-		{{- site.title_separator | default: "|" -}}
-		{{- " " -}}
+		{{ page_title }}{{" "}}{{ site.title_separator | default: "|" }}{{" "}}
 	{%- endif -%}
-	{{- site.title -}}
+	{{ site.title }}
 {%- endcapture -%}
-<title>{{ meta_title | strip_html | strip }}</title>
+<title>{{ meta_title | strip_html }}</title>
 {%- if page_title -%}
-<meta property="og:title" content="{{ page_title | strip | escape }}">
+<meta property="og:title" content="{{ page_title | escape }}">
 {%- endif -%}
 <meta property="og:site_name" content="{{ site.title }}">
 
-{%- if page.content -%}
-	{%- capture meta_description -%}
-		{%- if page.content != empty or page.description -%}
-			{%- include filter-excerpt.html my_doc=page -%}
-		{%- else -%}
-			{{ site.description }}
-		{%- endif -%}
-	{%- endcapture -%}
-{%- endif -%}
-{%- unless meta_description == empty -%}
-<meta name="description" content="{{ meta_description | strip | escape }}">
-<meta property="og:description" content="{{ meta_description | strip | escape }}">
-{%- endunless -%}
+{%- capture page_description -%}{%- include filter-excerpt.html my_doc=page -%}{%- endcapture -%}
+<meta name="description" content="{{ page_description | default: site.description | escape }}">
+<meta property="og:description" content="{{ page_description | default: site.description | escape }}">
 
 {%- if page.url or site.url -%}
 <link rel="canonical" href="{{ page.url | site.url | absolute_url }}">

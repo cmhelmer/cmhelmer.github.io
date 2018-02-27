@@ -108,7 +108,7 @@ layout:	default
 {%- for attachment in attachments -%}
 	{%- assign orphaned = true -%}
 	{%- for doc in documents -%}
-		{%- if doc.content contains attachment.path or doc.image contains attachment.path or doc.image.path contains attachment.path -%}
+		{%- if doc.content contains attachment.path or doc.image contains attachment.path or doc.image.path contains attachment.path or doc.enclosure contains attachment.path -%}
 			{%- assign orphaned = false -%}
 			{%- break -%}
 		{%- endif -%}
@@ -119,6 +119,16 @@ layout:	default
 {%- endfor -%}
 {%- capture orphaned_attachments_size -%}{%- include format-number.html number=orphaned_attachments.size -%}{%- endcapture -%}
 {%- assign issues_count = issues_count | plus: orphaned_attachments.size -%}
+
+{%- assign unspecified_attachments = "" | split: "," -%}
+{%- for attachment in attachments -%}
+	{%- if site.data.media[attachment.extname] == nil -%}
+		{%- assign unspecified_attachments = unspecified_attachments | push: attachment.path -%}
+	{%- endif -%}
+{%- endfor -%}
+{%- assign unspecified_attachments = unspecified_attachments -%}
+{%- capture unspecified_attachments_size -%}{%- include format-number.html number=unspecified_attachments.size -%}{%- endcapture -%}
+{%- assign issues_count = issues_count | plus: unspecified_attachments.size -%}
 
 {%- assign unfiltered_docs = "" | split: "," -%}
 {%- for doc in documents -%}
@@ -140,21 +150,21 @@ layout:	default
 
 		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 
-		{{ content }}
+		{{- content -}}
 
 		<ul>
-			<li><code>{{ word_count_size | strip }}</code> word{%- if word_count != 1 -%}s{%- endif -%}</li>
-			<li><code>{{ documents_size | strip }}</code> document{%- if documents.size != 1 -%}s{%- endif -%}</li>
-			<li><code>{{ collections_size | strip }}</code> collection{%- if collections.size != 1 -%}s{%- endif -%}</li>
-			<li><code>{{ attachments_size | strip }}</code> attachment{%- if attachments.size != 1 -%}s{%- endif -%}</li>
-			<li><code>{{ tags_size | strip }}</code> tag{%- if tags.size != 1 -%}s{%- endif -%}</li>
+			<li><code>{{ word_count_size }}</code> word{%- unless word_count == 1 -%}s{%- endunless -%}</li>
+			<li><code>{{ documents_size }}</code> document{%- unless documents.size == 1 -%}s{%- endunless -%}</li>
+			<li><code>{{ collections_size }}</code> collection{%- unless collections.size == 1 -%}s{%- endunless -%}</li>
+			<li><code>{{ attachments_size }}</code> attachment{%- unless attachments.size == 1 -%}s{%- endunless -%}</li>
+			<li><code>{{ tags_size }}</code> tag{%- unless tags.size == 1 -%}s{%- endunless -%}</li>
 		</ul>
 
-		<p>There{{" "}}{%- if issues_count == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}<code>{{ issues_count }}</code> issue{%- if issues_count != 1 -%}s{%- endif -%}{%- if issues_count > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p>{%- if issues_count > 0 -%}<mark>{%- endif -%}There{{" "}}{%- if issues_count == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}<code>{{ issues_count }}</code> issue{%- unless issues_count == 1 -%}s{%- endunless -%}{%- if issues_count > 0 -%}:{%- else -%}.{%- endif -%}{%- if issues_count > 0 -%}</mark>{%- endif -%}</p>
 
 		<h2>Duplicate UIDs</h2>
 
-		<p><code>{{ dup_uids_size | strip }}</code> duplicate <code>uid</code> metadata{%- if dup_uids.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ dup_uids_size }}</code> duplicate <code>uid</code> metadata{%- if dup_uids.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if dup_uids.size > 0 -%}
 		<ul>
@@ -166,34 +176,34 @@ layout:	default
 
 		<h2>Unidentified Documents</h2>
 
-		<p><code>{{ no_uid_docs_size | strip }}</code> document{%- if no_uid_docs.size != 1 -%}s{%- endif -%}{{" "}}with no <code>uid</code> metadata{%- if no_uid_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ no_uid_docs_size }}</code> document{%- unless no_uid_docs.size == 1 -%}s{%- endunless -%}{{" "}}with no <code>uid</code> metadata{%- if no_uid_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if no_uid_docs.size > 0 -%}
 		{%- capture no_uid_docs_list -%}{%- include list-docs.html my_docs=no_uid_docs -%}{%- endcapture -%}
-		{{ no_uid_docs_list | strip }}
+		{{ no_uid_docs_list }}
 		{%- endif -%}
 
 		<h2>Misdated Documents</h2>
 
-		<p><code>{{ misdated_docs_size | strip }}</code> document{%- if misdated_docs.size != 1 -%}s{%- endif -%}{{" "}}with <code>date</code> and <code>uid</code> that do not match{%- if misdated_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ misdated_docs_size }}</code> document{%- unless misdated_docs.size == 1 -%}s{%- endunless -%}{{" "}}with <code>date</code> and <code>uid</code> that do not match{%- if misdated_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if misdated_docs.size > 0 -%}
 		{%- capture misdated_docs_list -%}{%- include list-docs.html my_docs=misdated_docs -%}{%- endcapture -%}
-		{{ misdated_docs_list | strip }}
+		{{ misdated_docs_list }}
 		{%- endif -%}
 
 		<h2>Misnamed Documents</h2>
 
-		<p><code>{{ misnamed_docs_size | strip }}</code> document{%- if misnamed_docs.size != 1 -%}s{%- endif -%}{{" "}}with <code>slug</code> and <code>uid</code> that do not match{%- if misnamed_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ misnamed_docs_size }}</code> document{%- unless misnamed_docs.size == 1 -%}s{%- endunless -%}{{" "}}with <code>slug</code> and <code>uid</code> that do not match{%- if misnamed_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if misnamed_docs.size > 0 -%}
 		{%- capture misnamed_docs_list -%}{%- include list-docs.html my_docs=misnamed_docs -%}{%- endcapture -%}
-		{{ misnamed_docs_list | strip }}
+		{{ misnamed_docs_list }}
 		{%- endif -%}
 
 		<h2>Missing Attachments</h2>
 
-		<p><code>{{ missing_attachments_size | strip }}</code> attachment{%- if missing_attachments.size != 1 -%}s{%- endif -%}{{" "}}which are missing{%- if missing_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ missing_attachments_size }}</code> attachment{%- unless missing_attachments.size == 1 -%}s{%- endunless -%}{{" "}}{%- if missing_attachments.size == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}missing{%- if missing_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if missing_attachments.size > 0 -%}
 		<ul>
@@ -205,7 +215,7 @@ layout:	default
 
 		<h2>Orphaned Attachments</h2>
 
-		<p><code>{{ orphaned_attachments_size | strip }}</code> attachment{%- if orphaned_attachments.size != 1 -%}s{%- endif -%}{{" "}}which are not referenced{%- if orphaned_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ orphaned_attachments_size }}</code> attachment{%- unless orphaned_attachments.size == 1 -%}s{%- endunless -%}{{" "}}{%- if orphaned_attachments.size == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}not referenced{%- if orphaned_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if orphaned_attachments.size > 0 -%}
 		<ul>
@@ -215,13 +225,25 @@ layout:	default
 		</ul>
 		{%- endif -%}
 
+		<h2>Unspecified Attachment</h2>
+
+		<p><code>{{ unspecified_attachments_size }}</code> attachment extension{%- unless unspecified_attachments.size == 1 -%}s{%- endunless -%}{{" "}}{%- if unspecified_attachments.size == 1 -%}is{%- else -%}are{%- endif -%}{{" "}}without a type in <code>site.data.media</code>{%- if unspecified_attachments.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+
+		{%- if unspecified_attachments.size > 0 -%}
+		<ul>
+		{%- for attachment in unspecified_attachments -%}
+		<li><code>{{ attachment }}</code></li>
+		{%- endfor -%}
+		</ul>
+		{%- endif -%}
+
 		<h2>Unfiltered Documents</h2>
 
-		<p><code>{{ unfiltered_docs_size | strip }}</code> document{%- if unfiltered_docs.size != 1 -%}s{%- endif -%}{{" "}}with unrendered markup (<code>[[</code> and <code>]]</code>){%- if unfiltered_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
+		<p><code>{{ unfiltered_docs_size }}</code> document{%- unless unfiltered_docs.size == 1 -%}s{%- endunless -%}{{" "}}{%- if unfiltered_docs.size == 1 -%}has{%- else -%}have{%- endif -%}{{" "}}unrendered markup (<code>[[</code> and <code>]]</code>){%- if unfiltered_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if unfiltered_docs.size > 0 -%}
 		{%- capture unfiltered_docs_list -%}{%- include list-docs.html my_docs=unfiltered_docs -%}{%- endcapture -%}
-		{{ unfiltered_docs_list | strip }}
+		{{ unfiltered_docs_list }}
 		{%- endif -%}
 
 	</div>

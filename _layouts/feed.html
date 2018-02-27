@@ -7,9 +7,6 @@ Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
 Ignores any passed in content
 
-TODO:
-- Add featured image or other media in metadata as enclosure (if we can parse `type`)
-
 {%- endcomment -%}
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -54,19 +51,19 @@ TODO:
   {%- comment -%} Get list of docs; sort by ID, unless posts {%- endcomment -%}
 
   {%- if page.collection -%}
-	  {%- assign my_docs = site.documents | where: "collection", page.collection -%}
+    {%- assign my_docs = site.documents | where: "collection", page.collection -%}
   {%- else -%}
-	  {%- assign my_docs = site.documents -%}
+    {%- assign my_docs = site.documents -%}
   {%- endif -%}
 
   {%- unless page.collection == "posts" -%}
-	  {%- assign my_docs = my_docs | where_exp: "doc", "doc.uid" | sort: "uid", "first" -%}
+    {%- assign my_docs = my_docs | where_exp: "doc", "doc.uid" | sort: "uid", "first" -%}
   {%- endunless -%}
 
   {%- comment -%} Reverse to show recent first {%- endcomment -%}
   {%- assign my_docs = my_docs | reverse -%}
 
-  {%- for doc in my_docs limit: 10 -%}
+  {%- for doc in my_docs limit: 20 -%}
 
   {%- capture doc_title -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
   {%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
@@ -74,23 +71,70 @@ TODO:
   {%- comment -%} Use referenced link if available {%- endcomment -%}
   {%- assign doc_url = doc.reference.url | default: doc.url -%}
 
+  {%- comment -%}
+  Enclosures
+  Add properly as `link rel="enclosure"`
+  Also add to content because enclosures are not supported by all clients
+  Add featured image as enclosure
+  Atom supports multiple enclosures
+  Get mime type from site.data.media
+  {%- endcomment -%}
+
+  {%- assign doc_enclosures = "" | split: "," -%}
+
+  {%- comment -%} Add enclosure(s) {%- endcomment -%}
+
+  {%- if doc.enclosure != nil -%}
+    {%- if doc.enclosure.first -%}
+      {%- assign doc_enclosures = doc_enclosures | concat: doc.enclosure -%}
+    {%- else -%}
+      {%- assign doc_enclosures = doc_enclosures | push: doc.enclosure -%}
+    {%- endif -%}
+  {%- endif -%}
+
   <entry{%- if doc.lang -%}{{ " " }}xml:lang="{{ doc.lang }}"{%- endif -%}>
-    <title type="html">{{ doc_title | strip | xml_escape }}</title>
+    <title type="html">{{ doc_title | xml_escape }}</title>
     <link href="{{ doc_url | absolute_url }}" rel="alternate" type="text/html" title="{{ doc_title | xml_escape }}" />
-    <published>{{ doc_date | strip | date_to_xmlschema }}</published>
-    <updated>{{ doc.updated | default: doc_date | strip | date_to_xmlschema }}</updated>
+    <published>{{ doc_date | date_to_xmlschema }}</published>
+    <updated>{{ doc.updated | default: doc_date | date_to_xmlschema }}</updated>
     <id>{{ doc.url | absolute_url | xml_escape }}</id>
-    <content type="html" xml:base="{{ doc.url | absolute_url | xml_escape }}">
+    <content type="html" xml:base="{{ doc.url | absolute_url }}">
 
-		{%- comment -%} Include featured image {%- endcomment -%}
-		{%- capture image_content -%}{%- include content-image.html my_doc=doc -%}{%- endcapture -%}
-		{{- image_content | strip -}}
+      {%- comment -%} Include featured image {%- endcomment -%}
+      {%- capture image_content -%}{%- include content-image.html my_doc=doc -%}{%- endcapture -%}
+      {{- image_content | xml_escape -}}
 
-		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+      {%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+      {{- content | xml_escape -}}
 
-		{{- content | strip | xml_escape -}}
+      {%- comment -%} Include links to enclosures (backup) {%- endcomment -%}
+      {%- if doc_enclosures.size > 0 -%}
+      {%- capture enclosure_content -%}
+      <hr />
+      <h2>Media Attachment{%- unless doc_enclosures.size == 1 -%}s{%- endunless -%}:</h2>
+      <ul>
+      {%- for enclosure in doc_enclosures -%}
+      <li><a href="{{ enclosure | absolute_url }}">{{ enclosure | xml_escape }}</a></li>
+      {%- endfor -%}
+      </ul>
+      {%- endcapture -%}
+      {{- enclosure_content | xml_escape -}}
+      {%- endif -%}
 
     </content>
+
+    {%- comment -%} Add featured image to enclosures {%- endcomment -%}
+
+    {%- if doc.image -%}
+      {%- assign doc_image = doc.image.path | default: doc.image -%}
+      {%- assign doc_enclosures = doc_enclosures | push: doc_image -%}
+    {%- endif -%}
+
+    {%- for enclosure in doc_enclosures -%}
+    {%- assign extension = enclosure | split: "" | reverse | join: "" | split: "." | first | split: "" | reverse | join: "" -%}
+    {%- assign media_type = site.data.media[extension] -%}
+    <link rel="enclosure"{%- if media_type != nil -%}{{" "}}type="{{ media_type }}"{%- endif -%}{{" "}}href="{{ enclosure | absolute_url }}" />
+    {%- endfor -%}
 
     {%- assign doc_author = doc.author | default: doc.authors.first | default: site.author -%}
     {%- assign doc_author_name = doc_author.name | default: doc_author -%}
@@ -106,7 +150,7 @@ TODO:
       {%- endif -%}
     </author>
 
-	{%- if doc.collection != "posts" -%}
+    {%- if doc.collection != "posts" -%}
     <category term="{{ site.collections | where: 'label', doc.collection | map: 'title' | first | default: doc.collection | xml_escape }}" />
     {%- endif -%}
 
@@ -118,11 +162,11 @@ TODO:
     <category term="{{ tag | xml_escape }}" />
     {%- endfor -%}
 
-	{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
+    {%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
     <summary type="html">{{ doc_excerpt | xml_escape }}</summary>
 
     {%- if doc.image -%}
-    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="{{ doc.image.path | default: doc.image | absolute_url | xml_escape }}" />
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="{{ doc.image.path | default: doc.image | absolute_url }}" />
     {%- endif -%}
 
   </entry>

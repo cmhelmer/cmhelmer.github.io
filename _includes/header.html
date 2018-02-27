@@ -12,16 +12,16 @@ Include site header
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<link rel="stylesheet" href="{{ '/assets/css/style.css' | absolute_url }}?{{ site.github.build_revision }}">
-	<script src="{{ '/assets/js/prefixfree.min.js' | absolute_url }}"></script>
+	<script src="{{ '/assets/js/prefixfree.min.js' | absolute_url }}" defer></script>
 
 	{%- include header-meta.html -%}
 
 	{%- comment -%}
 	Preload important assets: body font (font requires crossorigin attribute regardless), search index
 	Don't add `type="application/json"` unless it is a feed, else feed readers may crash when subscribing
+	<link rel="preload" href="{{ '/data/corpus.json' | absolute_url }}" as="fetch">
 	{%- endcomment -%}
 	<link rel="preload" href="{{ '/assets/fonts/SourceSans-Regular.woff' | absolute_url }}" as="font"   type="font/woff" crossorigin="anonymous">
-	<link rel="preload" href="{{ '/data/corpus.json' | absolute_url }}" as="fetch">
 
 	{%- comment -%} Disable phone number detection because note IDs may look like them {%- endcomment -%}
 	<meta name="format-detection" content="telephone=no">

@@ -5,7 +5,9 @@
 .tag-list {
 	@include list-none;
 	.doc-content & {
-		@include gutter;
+		padding-bottom: $gap; // fallback for calc
+		padding-bottom: $gutter;
+		margin-bottom: $gutter; // no need for fallback; it's already there in * + *
 		column-width: 7.5rem; // fit 2 columns @320px (and account for vw rounding errors on padding)
 		column-gap: $gap;
 		border-bottom: $border-width $border-style;

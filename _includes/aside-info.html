@@ -7,11 +7,8 @@ Include site info
 <aside id="info" class="site-info site-aside">
 	<h2 class="aside-title">Info:</h2>
 	<div class="aside-content h-card vcard">
-		<p>
-			{{ site.description }}
-			
-			<a href="{{ '/about/' | absolute_url }}" rel="author">More about <span class="p-name">{{ site.author.name | default: site.author }}</span></a>.
-		</p>
+		<p>{{ site.description }}</p>
+		<p><a href="{{ '/about/' | absolute_url }}" rel="author">More about <span class="p-name">{{ site.author.name | default: site.author }}</span></a>.</p>
 		<ul>
 
 			{%- if site.author.email or site.email -%}

@@ -9,13 +9,13 @@ Include featured image (intended for feeds)
 {%- if my_doc.image -%}
 
 {%- capture doc_image -%}
-	{%- if my_doc.image.description -%}
-	<figure><img src="{{ my_doc.image.path | absolute_url }}" alt="{{ my_doc.image.description }}" /><figcaption>{{ my_doc.image.description }}</figcaption></figure>
-	{%- else -%}
-	<img src="{{ my_doc.image | absolute_url }}" alt="" />
-	{%- endif -%}
+{%- if my_doc.image.description -%}
+<figure><img src="{{ my_doc.image.path | absolute_url }}" alt="{{ my_doc.image.description }}" /><figcaption>{{ my_doc.image.description }}</figcaption></figure>
+{%- else -%}
+<img src="{{ my_doc.image.path | default: my_doc.image | absolute_url }}" alt="" />
+{%- endif -%}
 {%- endcapture -%}
 
-{{ doc_image | strip }}
+{{- doc_image -}}
 
 {%- endif -%}

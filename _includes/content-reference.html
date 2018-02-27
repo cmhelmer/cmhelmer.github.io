@@ -4,9 +4,6 @@ Include reference if present in metadata
 Gets reference metadata of another document by uid
 - Pass in reference metadata
 
-TODO:
-- Stop assuming that references are links/bookmarks if they're not linked to another note by reference.uid or just reference
-
 {%- endcomment -%}
 
 {%- assign my_ref = include.my_ref -%}
@@ -84,6 +81,6 @@ TODO:
 
 	{%- endcapture -%}
 
-<p class="doc-ref">{{ doc_ref | strip }}</p>
+<p class="doc-ref">{{ doc_ref }}</p>
 
 {%- endif -%}

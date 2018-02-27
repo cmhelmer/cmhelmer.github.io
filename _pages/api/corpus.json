@@ -93,4 +93,4 @@ permalink:	/data/corpus.json
 
 {%- endcapture -%}
 
-{{ index | strip_newlines | normalize_whitespace | strip }}
+{{- index -}}

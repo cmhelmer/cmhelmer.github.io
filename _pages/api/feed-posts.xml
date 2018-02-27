@@ -7,5 +7,5 @@
 title:	Micro Blog
 collection:	posts
 layout: feed
-permalink:	/posts/feed
+permalink:	/posts/feed.xml
 ---

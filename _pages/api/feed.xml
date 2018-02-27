@@ -2,5 +2,6 @@
 # Site Feed
 # Content will be ignored
 layout: feed
-permalink:	/feed
+redirect_from:	/feed
+permalink:	/feed.xml
 ---
