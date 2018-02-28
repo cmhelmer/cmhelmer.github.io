@@ -3,8 +3,4 @@
 layout:	default
 ---
 
-{%- comment -%} Get corresponding document for consistency {%- endcomment -%}
-
-{%- assign my_doc = site.documents | where: "id", page.id | first -%}
-
-{%- include article-page.html my_doc=my_doc -%}
+{%- include article-page.html my_page=page -%}

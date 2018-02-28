@@ -1,21 +1,25 @@
 {%- comment -%}
 
 Include page article
-- Pass in document
+- Pass in page
 
 {%- endcomment -%}
 
-{%- assign my_doc = include.my_doc -%}
+{%- assign my_page = include.my_page -%}
 
-{%- capture doc_title -%}{%- include filter-title.html my_doc=my_doc -%}{%- endcapture -%}
+{%- capture page_title -%}{%- include filter-title.html my_doc=my_page -%}{%- endcapture -%}
 
-<article id="page-{{ my_doc.title | slugify }}" class="page-doc main-doc h-entry" role="document">
+<article id="page-{{ my_page.title | slugify }}" class="page-doc main-doc h-entry" role="document">
 	<header class="doc-header">
-		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
+		<h1 class="doc-title doc-meta">{{ page_title }}</h1>
 	</header>
 	<div class="doc-content">
 
-		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+		{%- comment -%} Pages need content rendered {%- endcomment -%}
+
+		{%- assign my_content = my_page.content | markdownify -%}
+
+		{%- capture content -%}{%- include filter-content.html my_content=my_content -%}{%- endcapture -%}
 
 		{{- content -}}
 
