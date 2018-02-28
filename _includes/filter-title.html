@@ -3,8 +3,9 @@
 Filter title
 
 Modify titles if title is not explicitly set
-Falls back to reference title or excerpt (in that order)
+Default titles: explicit title, reference title, reduced excerpt (in that order) (ignores filename)
 Convert quotes to typographer's (curly) quotes
+
 Advanced: Avoid typographical orphans and widows and provide way to style titles and subtitles (split on colon)
 
 - Pass in full document (page)
@@ -18,7 +19,7 @@ TODO:
 {%- assign my_title = my_doc.title | strip_html | normalize_whitespace | strip -%}
 
 {%- comment -%}
-Default titles: explicit title, reference title, reduced excerpt (in that order) (ignores filename)
+Title defaults to avoid slug-for-a-title
 {%- endcomment -%}
 
 {%- assign my_title_slug = my_title | slugify -%}
@@ -39,7 +40,7 @@ Quotes treatment
 {%- assign my_title = my_title | smartify -%}
 
 {%- comment -%}
-Smart filters
+Advanced filters
 {%- endcomment -%}
 
 {%- if include.advanced -%}

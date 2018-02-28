@@ -3,7 +3,8 @@
 		@include flex;
 	}
 	.main-aside {
-		min-width: ( $measure / 2 );
+		flex: 1 1;
+		width: ( $measure / 2 );
 	}
 }
 

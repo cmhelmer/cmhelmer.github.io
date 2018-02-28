@@ -1,7 +1,7 @@
 {%- comment -%}
 
 Include custom content for documents
-- Pass in document (with unrendered content)
+- Pass in document
 
 {%- endcomment -%}
 
@@ -9,6 +9,6 @@ Include custom content for documents
 
 {%- include content-reference.html my_ref=my_doc.reference -%}
 
-{%- assign my_content = my_doc.content | markdownify -%}
+{%- assign my_content = my_doc.content -%}
 
 {%- include filter-content.html my_content=my_content -%}

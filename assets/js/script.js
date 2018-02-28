@@ -339,7 +339,7 @@
 			
 			// Add footnote aside to content
 			// Fix possible conflict of ids with cloned elements
-			// TODO: Add as data attribute to <a> in hexadecimal Unicode?
+			// TODO: Instead, add as data attribute to <a> in hexadecimal Unicode for CSS content?
 			backlinks_refs.forEach(function(backlink_ref) {
 				var footnote_ref = document.getElementById(backlink_ref),
 				    footnote_aside_clone = footnote_aside.cloneNode(true),
@@ -347,33 +347,7 @@
 				    footnote_ref_a = footnote_ref.querySelector("a");
 				footnote_aside_clone.id = new_ref;
 				footnote_ref_a.setAttribute("href", "#" + new_ref);
-// 				footnote_ref.appendChild(footnote_aside_clone);
-
-String.prototype.hexEncode = function(){
-	var hex, i;
-	
-	var result = "";
-	for (i=0; i<this.length; i++) {
-		hex = this.charCodeAt(i).toString(16);
-		result += "\\" + ("000"+hex).slice(-4);
-	}
-	
-	return result;
-};
-
-String.prototype.toUnicode = function(){
-    var result = "";
-    for(var i = 0; i < this.length; i++){
-        // Assumption: all characters are < 0xffff
-        result += "\\u" + ("000" + this[i].charCodeAt(0).toString(16)).substr(-4);
-    }
-    return result;
-};
-
-var test_string = "<p>The fox</p>".toUnicode();
-window.console.log(test_string);
-footnote_ref_a.setAttribute("data-footnote", test_string);
-
+				footnote_ref.appendChild(footnote_aside_clone);
 				footnote_ref.classList.add("sup-footnote");
 			});
 		});

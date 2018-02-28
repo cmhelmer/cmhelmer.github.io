@@ -122,7 +122,8 @@ layout:	default
 
 {%- assign unspecified_attachments = "" | split: "," -%}
 {%- for attachment in attachments -%}
-	{%- if site.data.media[attachment.extname] == nil -%}
+	{%- assign attachment_ext = attachment.extname | remove_first: "." -%}
+	{%- if site.data.media[attachment_ext] == nil -%}
 		{%- assign unspecified_attachments = unspecified_attachments | push: attachment.path -%}
 	{%- endif -%}
 {%- endfor -%}
@@ -132,8 +133,7 @@ layout:	default
 
 {%- assign unfiltered_docs = "" | split: "," -%}
 {%- for doc in documents -%}
-	{%- assign doc_content = doc.content | markdownify -%}
-	{%- capture doc_content -%}{%- include filter-content.html my_content=doc_content -%}{%- endcapture -%}
+	{%- capture doc_content -%}{%- include filter-content.html my_content=doc.content -%}{%- endcapture -%}
 	{%- assign doc_content = doc_content | strip_html | normalize_whitespace | strip -%}
 	{%- if doc_content contains "[[" and doc_content contains "]]" -%}
 		{%- assign unfiltered_docs = unfiltered_docs | push: doc -%}

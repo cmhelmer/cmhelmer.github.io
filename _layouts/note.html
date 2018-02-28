@@ -3,9 +3,12 @@
 # Generic layout for collections documents (documents which are not pages or posts)
 layout: default
 ---
+{%- comment -%} Get corresponding document for consistency {%- endcomment -%}
 
-{%- include article-note.html my_doc=page -%}
+{%- assign my_doc = site.documents | where: "id", page.id | first -%}
 
-{%- include aside-links.html my_uid=page.uid -%}
+{%- include article-note.html my_doc=my_doc -%}
 
-{%- include aside-tags.html my_tags=page.tags -%}
+{%- include aside-links.html my_uid=my_doc.uid -%}
+
+{%- include aside-tags.html my_tags=my_doc.tags -%}

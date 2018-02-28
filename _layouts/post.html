@@ -3,30 +3,34 @@
 layout:	default
 ---
 
-{%- include article-post.html my_doc=page -%}
+{%- comment -%} Get corresponding documents for consistency {%- endcomment -%}
 
-{%- if post.previous -%}
-{%- capture previous_preview -%}{%- include filter-excerpt.html my_doc=post.previous -%}{%- endcapture -%}
+{%- assign my_doc = site.documents | where: "id", page.id | first -%}
+
+{%- include article-post.html my_doc=my_doc -%}
+
+{%- if page.previous -%}
+
+{%- assign doc_previous = site.documents | where: "id", page.previous.id -%}
+
 <aside class="pagination-aside prev-aside main-aside">
 	<h1 class="aside-title">Previous</h1>
 	<div class="aside-content">
-		<a href="{{ post.previous.url | absolute_url }}" rel="prev">
-			<span class="doc-date">{{ post.previous.date | date: site.date_format }}</span>
-			<span class="doc-preview">{{ previous_preview }}</span>
-		</a>
+		{%- include list-docs.html my_docs=doc_previous -%}
 	</div>
 </aside>
+
 {%- endif -%}
 
-{%- if post.next -%}
-{%- capture next_preview -%}{%- include filter-excerpt.html my_doc=post.next -%}{%- endcapture -%}
+{%- if page.next -%}
+
+{%- assign doc_next = site.documents | where: "id", page.next.id -%}
+
 <aside class="pagination-aside next-aside main-aside">
 	<h1 class="aside-title">Next</h1>
 	<div class="aside-content">
-		<a href="{{ post.next.url | absolute_url }}" rel="next">
-			<span class="doc-date">{{ post.next.date | date: site.date_format }}</span>
-			<span class="doc-preview">{{ next_preview }}</span>
-		</a>
+		{%- include list-docs.html my_docs=doc_next -%}
 	</div>
 </aside>
+
 {%- endif -%}
