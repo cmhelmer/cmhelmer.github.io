@@ -168,6 +168,78 @@ pre + .output,
 	padding-top: ( $gap * 2 );
 }
 
+// Inline footnote overlays (placed by script.js)
+.sup-footnote {
+	position: relative;
+}
+
+.footnote {
+	position: relative;
+	z-index: 1001; // above .aside-foonote
+}
+
+// TEMP
+[data-footnote]:hover {
+	&::after {
+		content: attr(data-footnote);
+	}
+}
+
+.aside-footnote {
+	visibility: hidden; // accessible
+	@include font-body; // override sup
+	@include font-small;
+	position: absolute;
+	z-index: 1000;
+	left: 50%;
+	bottom: 100%;
+	transform: translateX(-50%);
+	margin-bottom: ( $gap / 2 );
+	padding: ( $gap / 2 );
+	width: 17rem; // to taste; within 320px
+	color: $color-bg;
+	background: $color-text;
+	border-radius: $border-radius;
+	box-shadow: 0 0 ( $gap / 2 ) $color-text-bg;
+	// Extend overlay
+	&::before {
+		position: absolute;
+		content: "";
+		z-index: -1;
+		top: ( $gap / -1 );
+		left: ( $gap / -1 );
+		right: ( $gap / -1 );
+		bottom: ( $gap / -1 );
+	}
+	// Cute little speech triangle
+	&::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%) rotate(-45deg);
+		transform-origin: top left;
+		width: .5rem;
+		height: .5rem;
+		border-bottom-left-radius: inherit;
+		background: inherit;
+		box-shadow: inherit;
+	}
+	// Show overlay
+	.footnote:hover ~ &,
+	.footnote:focus ~ &,
+	.footnote:active ~ &,
+	&:hover,
+	&:focus,
+	&:active,
+	&:target {
+		visibility: visible;
+	}
+	&:target {
+		z-index: 999; // in case of subsequent footnote references
+	}
+}
+
 .doc-footer {
 	@include flex;
 	@include measure;

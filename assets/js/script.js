@@ -20,9 +20,10 @@
 
 	// Set up display elements (mimic list-docs.html include)
 	var searchContent = searchAside.querySelector(".aside-content"), // to place results
-   	    searchTitle   = searchAside.querySelector(".aside-title"),   // to place results count
+   	    searchTitle   = searchAside.querySelector(".aside-title"),   // to place results count and tooltip
 	    resultsList   = document.createElement("ol"),
-	    resultsCount  = document.createElement("span");
+	    resultsCount  = document.createElement("span"),
+	    searchTooltip = document.createElement("span");
 
 	// Set up results count display
 	resultsCount.classList.add("results-count");
@@ -31,6 +32,9 @@
 	// Set up results display
 	resultsList.classList.add("doc-list");
 	resultsList.classList.add("results-list");
+	
+	// Set up search tooltip
+// 	searchTooltip.innerHTML = '<a href="#search-tooltip"><svg class="icon icon-info" width="16" height="16" role="img" title="Info"><use xlink:href="/assets/img/icons.svg#info"></use></svg></a><aside id="#search-tooltip" class="tooltip">Searching</aside>';
 
 	// Get Lunr data
 	// Try to initialize Lunr with session cache first
@@ -122,6 +126,9 @@
 		
 		// ...and any content (like notice about Google Search)
 		searchContent.innerHTML = "";
+		
+		// Add a tooltip
+// 		searchTitle.appendChild(searchTooltip);
 
 		// Listen for typing in search input and send to Lunr
 		searchInput.addEventListener("keyup", searchIndex);
@@ -289,4 +296,89 @@
 		modal.close();
 	}
 	
+	
+	// Footnote manipulation
+	// Work with kramdown output
+	// Grab footnote and add alongside footnote reference
+	// Then leave it to styles away
+	
+	// Get footnotes div
+	var footnotes_container = document.querySelector(".footnotes");
+	
+	if (footnotes_container) {
+		var footnotes = footnotes_container.querySelectorAll("[id^='fn:']");
+
+		footnotes.forEach(function(footnote) {
+			// Can be multiple backlinks in a footnote if referenced in content multiple times
+			var backlinks = footnote.querySelectorAll("[href^='#fnref:']"),
+			    backlinks_parent = backlinks[0].parentNode,
+			    backlinks_refs = [];
+
+			backlinks.forEach(function(backlink) {
+				// Get reference(s) to footnote
+				backlinks_refs.push(backlink.getAttribute("href").slice(1));
+
+				// Remove backlink from footnote
+				backlink.parentNode.removeChild(backlink);
+
+				// Clean up trailing &nbsp; for inline backlinks
+				if (backlinks_parent.innerHTML.slice(-"&nbsp;".length) === "&nbsp;") {
+					backlinks_parent.innerHTML = backlinks_parent.innerHTML.slice(0, -"&nbsp;".length);
+				}
+			});
+			
+			// Clean up empty paragraphs for standalone backlinks
+			if (!backlinks_parent.innerHTML) {
+				backlinks_parent.parentNode.removeChild(backlinks_parent);
+			}
+			
+			// Create footnote aside
+			var footnote_aside = document.createElement("aside");
+			footnote_aside.classList.add("aside-footnote");
+			footnote_aside.innerHTML = footnote.innerHTML;
+			
+			// Add footnote aside to content
+			// Fix possible conflict of ids with cloned elements
+			// TODO: Add as data attribute to <a> in hexadecimal Unicode?
+			backlinks_refs.forEach(function(backlink_ref) {
+				var footnote_ref = document.getElementById(backlink_ref),
+				    footnote_aside_clone = footnote_aside.cloneNode(true),
+				    new_ref = backlink_ref.replace("ref", ""),
+				    footnote_ref_a = footnote_ref.querySelector("a");
+				footnote_aside_clone.id = new_ref;
+				footnote_ref_a.setAttribute("href", "#" + new_ref);
+// 				footnote_ref.appendChild(footnote_aside_clone);
+
+String.prototype.hexEncode = function(){
+	var hex, i;
+	
+	var result = "";
+	for (i=0; i<this.length; i++) {
+		hex = this.charCodeAt(i).toString(16);
+		result += "\\" + ("000"+hex).slice(-4);
+	}
+	
+	return result;
+};
+
+String.prototype.toUnicode = function(){
+    var result = "";
+    for(var i = 0; i < this.length; i++){
+        // Assumption: all characters are < 0xffff
+        result += "\\u" + ("000" + this[i].charCodeAt(0).toString(16)).substr(-4);
+    }
+    return result;
+};
+
+var test_string = "<p>The fox</p>".toUnicode();
+window.console.log(test_string);
+footnote_ref_a.setAttribute("data-footnote", test_string);
+
+				footnote_ref.classList.add("sup-footnote");
+			});
+		});
+		
+		// Remove original footnotes
+		footnotes_container.parentNode.removeChild(footnotes_container);
+	}
 })();

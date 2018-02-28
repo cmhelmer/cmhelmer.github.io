@@ -27,7 +27,8 @@ button {
 	text-decoration-skip-ink: auto;
 	&:hover,
 	&:focus,
-	&:active {
+	&:active,
+	&:focus-within {
 		outline: 0; // careful to make it accessible
 		text-decoration: none;
 		color: $color-bg;
@@ -232,11 +233,14 @@ sup {
 }
 
 // Feature queries (@supports) makes Jekyll Sass compiler choke...
-// When fixed, remove sub, sup rule below and uncomment @supports above
+// When fixed, remove sub, sup rule below (vertical-align and font-size) and uncomment @supports above
 sub,
 sup {
 	vertical-align: baseline;
 	font-size: inherit;
+	a {
+		padding: 0 .45em; // a little breathing room for links and between multiple footnotes
+	}
 }
 
 address {
