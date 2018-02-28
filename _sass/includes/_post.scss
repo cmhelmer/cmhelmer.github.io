@@ -3,20 +3,26 @@
 		@include flex;
 	}
 	.main-aside {
-		flex: 1 1;
-		width: ( $measure / 2 );
+// 		flex: 1 1 $measure; // TEMP
 	}
 }
 
 .post-doc {
+	.doc-meta {
+		margin-top: 0; // override
+	}
+	> * {
+		&:not(:first-child) {
+			padding-top: $gap; // override
+		}
+		&:not(:last-child) {
+			padding-bottom: 0; // override
+		}
+	}
+/*
 	margin-top: $gap; // ?
 	margin-bottom: $gap; // ?
-	.doc-header {
-		padding-bottom: 0; // override
-	}
-	.doc-content {
-		padding-top: $gap; // override
-	}
+*/
 }
 
 .doc-date {

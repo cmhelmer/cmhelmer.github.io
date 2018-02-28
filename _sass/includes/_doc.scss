@@ -1,11 +1,8 @@
 .main-doc {
 	width: 100%; // for flexbox
-}
-
-.doc-header,
-.doc-content,
-.doc-footer {
-	@include gutter( .5 ); // split with body
+	> * {
+		@include gutter( .5 ); // split with body
+	}
 }
 
 .doc-header {
@@ -255,12 +252,21 @@ pre + .output,
 }
 
 .main-aside {
-	@include measure;
-	@include gutter( .5 ); // split with body
-	* + * {
-		margin-top: $gap;
+	width: 100%; // for flexbox
+	> * {
+		@include measure;
+		@include gutter( .5 ); // split with body
+		&:not(:first-child) {
+			padding-top: $gap; // override
+		}
+		&:not(:last-child) {
+			padding-bottom: 0; // override
+		}
 	}
-	* + li {
-		margin-top: 0;
+}
+
+.aside-content {
+	* + *:not(li) {
+		margin-top: $gap;
 	}
 }
