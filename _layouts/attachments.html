@@ -16,11 +16,13 @@ Only shows files with metadata "attachment" set to true (static files are assume
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-attachments" class="{{ page.collection | default: 'site' }}-collection attachments-doc main-doc" role="document">
-	<header class="doc-header">
+<hr class="main-rule rule-article">
+
+<article id="{{ page.collection | default: 'site' }}-attachments" class="{{ page.collection | default: 'site' }}-collection attachments-doc main-article" role="document">
+	<header class="article-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
-	<div class="doc-content">
+	<div class="article-content">
 
 		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 

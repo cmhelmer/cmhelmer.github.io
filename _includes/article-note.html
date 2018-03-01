@@ -1,7 +1,7 @@
 {%- comment -%}
 
 Include document article
-- Pass in page
+- Pass in document
 
 {%- endcomment -%}
 
@@ -14,8 +14,10 @@ Include document article
 {%- assign doc_author_name = doc_author.name | default: doc_author -%}
 {%- assign doc_author_email = doc_author.email | default: site.email -%}
 
-<article id="note-{{ doc_uid }}" class="{{ my_doc.collection }}-collection main-doc h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
-	<header class="doc-header">
+<hr class="main-rule rule-article">
+
+<article id="note-{{ doc_uid }}" class="note-doc {{ my_doc.collection }}-collection main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+	<header class="article-header">
 
 		<div class="doc-index">
 
@@ -35,11 +37,11 @@ Include document article
 			{%- endif -%}
 			{%- endcapture -%}
 
-			<div class="doc-collection doc-meta">{{ collection_meta }}</div>
+			<span class="doc-collection doc-meta">{{ collection_meta }}</span>{{" "}}
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
-			<div class="doc-id doc-meta"><time datetime="{{ doc_date }}" title="{{ doc_date }}">{{ doc_uid }}</time></div>
+			<span class="doc-id doc-meta"><time datetime="{{ doc_date }}" title="{{ doc_date }}">{{ doc_uid }}</time></span>
 
 		</div>
 
@@ -89,7 +91,7 @@ Include document article
 
 	</header>
 
-	<div class="doc-content">
+	<div class="article-content">
 
 		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
 
@@ -97,18 +99,23 @@ Include document article
 
 	</div>
 	
-	<div class="doc-footer">
+	<footer class="article-footer">
 
 		{%- comment -%} Reply by email {%- endcomment -%}
 		{%- if doc_author_email -%}
-		<div class="doc-reply doc-meta"><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></div>
+		<div class="doc-reply doc-meta">
+			<p><a href="mailto:{{ doc_author_email }}?subject=Re: {{ my_doc.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></p>
+		</div>
 		{%- endif -%}
 
 		{%- comment -%} Link to GitHub history {%- endcomment -%}
 		{%- if site.author.github -%}
-		<div class="doc-history doc-meta"><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a></div>
+		<div class="doc-history doc-meta">
+			<p><a href="{{ site.github.repository_url }}/commits/master/{{ my_doc.path }}"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a>
+			</p>
+		</div>
 		{%- endif -%}
 
-	</div>
+	</footer>
 
 </article>

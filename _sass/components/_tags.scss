@@ -1,0 +1,47 @@
+.layout-tags .main-article .article-content > p {
+	@include box-block;
+}
+
+.tag-list {
+	@include list-none;
+	.article-content & {
+		column-width: 8.5rem; // 2-up @320px
+		column-gap: $gap;
+	}
+	+ .tag-details {
+		border-top: $border-width $border-style;
+	}
+}
+
+.doc-tags .tag-item {
+	display: inline-block;
+	margin-right: .25rem;
+}
+
+.tag-item {
+/*
+	.article-content & {
+		display: block;
+	}
+*/
+}
+
+.tag {
+	@include box-span( $color-tags-bg, $color-tags );
+	font-size: $font-size-small * 1em;
+	padding-top: ( ( 1 - $font-size-small ) / 2 * 1rem ); // in place of greater line-height with font-small
+	padding-bottom: ( ( 1 - $font-size-small ) / 2 * 1rem ); // in place of greater line-height with font-small
+	font-weight: normal;
+	white-space: nowrap;
+	text-decoration: none;
+	& + & {
+		margin-left: 0; // override box-span
+	}
+}
+a.tag {
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: $color-text;
+	}
+}

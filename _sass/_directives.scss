@@ -17,7 +17,9 @@
 @mixin box-block( $background-color: $color-text-bg, $color: inherit ) {
 	@include box( $background-color, $color );
 	display: block;
-	padding: $gap;
+	padding-left: $gap;
+	padding-right: $gap;
+	column-count: 1; // create block formatting context to contain child margins (someday contain: layout?)
 }
 
 // Span-level boxes (code, mark, etc.)
@@ -44,10 +46,13 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	align-items: baseline;
+	align-items: first baseline;
+
 	> * {
 		display: inline-block;
-		vertical-align: baseline;
+		vertical-align: top; // equivalent to first baseline if vertical rhythm kept
+		margin-top: 0; // override, because flex messes up collapsing margin, rely on children
+		margin-bottom: 0; // override, because flex messes up collapsing margin, rely on children
 	}
 }
 
@@ -71,9 +76,11 @@
 // OpenType features
 @mixin font-feature-settings( $features... ) {
 	$font-feature-settings: ();
+
 	@each $feature in $features {
 		$font-feature-settings: append( $font-feature-settings, '#{$feature}' 1, comma );
 	}
+
 	font-feature-settings: $font-feature-settings;
 	// Recommended when Jekyll sass compiler doesn't choke on @supports
 	/*
@@ -94,22 +101,19 @@
 }
 
 @mixin font-size-fluid( $font-sizes ) {
-	$font-size-min: map-get( $font-sizes, "font-size-min" );
-	$font-size-max: map-get( $font-sizes, "font-size-max" );
-	$width-min:     map-get( $font-sizes, "width-min" );
-	$width-max:     map-get( $font-sizes, "width-max" );
+	$font-size-min: map-get( $font-sizes, "min" );
+	$font-size-responsive: map-get( $font-sizes, "responsive" );
+	$font-size-max: map-get( $font-sizes, "max" );
 
-	font-size: $font-size-min; // fallback
+	font-size: $font-size-min;
 
 	@media screen and (min-width: $width-min) {
-		font-size: ( ( $font-size-max + $font-size-min ) / 2 ); // fallback (average)
-
-		// https://www.smashingmagazine.com/2016/05/fluid-typography/
-		font-size: calc(#{$font-size-min} + #{strip-unit($font-size-max) - strip-unit($font-size-min)} * (100vw - #{$width-min}) / #{strip-unit($width-max) - strip-unit($width-min)});
+		font-size: ( ( $font-size-max + $font-size-min ) / 2 ); // fallback to average of min and max
+		font-size: $font-size-responsive;
 	}
 
 	@media screen and (min-width: $width-max) {
-		font-size: $font-size-max; // cap
+		font-size: $font-size-max;
 	}
 }
 
@@ -143,6 +147,7 @@
 	text-transform: uppercase; // fallback
 	letter-spacing: .0625em;
 	font-weight: normal; // only regular weight has small-caps (can be overridden for faux bold)
+
 	em, cite {
 		font-style: normal; // override default
 		font-weight: bolder; // will be faux bold
@@ -158,22 +163,11 @@
 	letter-spacing: -.015625em;
 }
 
-// Add padding and fallback
-@mixin gutter( $factor: 1 ) {
-	@if $factor != 1 {
-		padding: ( $gap * $factor ); // fallback for calc
-		padding: calc(#{$gutter} * #{$factor});
-	}
-	@else {
-		padding: $gap; // fallback for calc
-		padding: $gutter;
-	}
-}
-
 // Remove custom base styles from ol, ul
 @mixin list-none {
 	li {
 		margin-left: 0;
+
 		&::before {
 			display: none;
 		}
@@ -198,9 +192,9 @@
 	overflow-x: auto;
 	overflow-y: hidden; // prevent vertical overflow-scrolling; side-effects?
 	background-image:
-		linear-gradient( to right, $color 30%, rgba( $color, 0 ) ),
+		linear-gradient( to right, $color 50%, rgba( $color, 0 ) ),
 		radial-gradient( at left, $color-text-bg, rgba( $color-text-bg, 0 ) 70% ),
-		linear-gradient( to left, $color 30%, rgba( $color, 0 ) ),
+		linear-gradient( to left, $color 50%, rgba( $color, 0 ) ),
 		radial-gradient( at right, $color-text-bg, rgba( $color-text-bg, 0 ) 70% );
 	background-repeat: no-repeat;
 	background-size: ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%, ( $gap * 1.5 ) 100%, ( $gap / 2 ) 100%;

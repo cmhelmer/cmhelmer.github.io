@@ -1,133 +1,137 @@
-.main-doc {
-	width: 100%; // for flexbox
+.main-article {
 	> * {
-		@include gutter( .5 ); // split with body
+		margin-top: var(--gutter);
+		margin-bottom: var(--gutter);
 	}
 }
 
-.doc-header {
+.post-doc {
+	> .article-header {
+		margin-bottom: $gap; // override
+	}
+	
+	> .article-content {
+		margin-top: $gap; // override
+	}
+}
+
+.note-doc {
+	.article-header {
+		margin-top: 0; // move to .doc-title
+	}
+	
+	.doc-title {
+		margin-top: var(--gutter);
+	}	
+}
+
+.article-header {
 	> * {
 		@include measure;
 	}
-	.doc-meta {
-		margin-top: $gap;
-	}
-	figcaption {
-		margin-top: 0; // override
-	}
-}
-
-.doc-collection {
-	@include font-smcp;
-// 	color: $color-accent;
-	a {
-		text-decoration: none;
-	}
-}
-
-.doc-id {
-	// Would make this smcp but Source Sans Pro (unlike Source Serif Pro) doesn't have tnum for smcp
-	@include font-feature-settings( lnum, tnum ); // lining, tabular numbers
-// 	letter-spacing: .03125em;
-	color: $color-accent;
 }
 
 .doc-index {
 	@include flex;
 	max-width: none; // override
-	color: $color-accent;
-	border-top: $border-width $border-style;
-	> .doc-meta {
-		width: 50%;
-		margin-top: 0; // override
-	}
+	margin-top: 0; // override
+
 	> :last-child {
-		text-align: right;
+		float: right; // fallback for flex
 	}
+}
+
+.doc-collection {
+	@include font-smcp;
+	color: $color-accent;
+}
+
+.doc-id {
+	@include font-smcp; // unfortunately Source Sans Pro (unlike Source Serif Pro) has no tnum for smcp
+	color: $color-accent;
 }
 
 .doc-image {
 	max-width: none; // override
 	width: 100%;
+
 	> img {
 		width: 100%;
 		border-radius: ( $border-radius * 2 );
 	}
 }
 
-.doc-title {
-	@include font-size( 1.5 );
-	max-width: ( $measure * 1.5 );
-// 	text-align: center;
-	&:not(:first-child) {
-		margin-top: $gap; // fallback for calc
-		margin-top: $gutter;
-	}
-	/*
-	.title {}
-	.title-separator {}
-	.subtitle {
-		font-weight: normal;
-	}
-	*/
+.doc-date { // for posts only
+	@include font-smcp;
+	color: $color-accent;
 }
+
+.doc-title {
+	@include font-display;
+	@include font-size( 1.5 );
+	@include measure( 1.5 );
+}
+
+/*
+.doc-name{
+	@include font-lift;	
+}
+*/
 
 .doc-byline {
 	@include flex;
 	@include font-small;
 	@include dim;
-	> * {
-		margin-top: 0; // override
-	}
+
 	.doc-author {
-		display: none; // hide on single-author site but keep in html for scrapers
+		display: none; // hide on single-author site
 	}
 }
 
-.doc-content {
-	// tomfoolery, no doubt, but gives as much flexibility as possible
+.article-content {
+	// Set max-width on article children for flexibility: allows pull quotes, etc.
 	> * {
 		@include measure;
 	}
+
 	h1 {
 		@include font-size( 1.25 );
 	}
+
 	h2 {
 		@include font-size( 1.125 );
 	}
+
 	h3 {
 		@include font-size( 1.0625 );
 	}
+
 	figure,
 	table {
 		@include measure( 1.5 );
 	}
+
 	iframe {
 		@include measure( 1.5 );
 		width: 100%;
 	}
-	* + *,
-	li + li > p,
-	dd + dd > p {
-		margin-top: $gap;
-	}
-	* + li,
-	* + dd,
-	dt + dt,
-	figcaption,
-	li > ul,
-	li > ol {
-		margin-top: 0; // override, unless there are child <p> (above)
-	}
-	> .highlighter-rouge {
-		max-width: ( $measure + ( $gap * 2 ) );
+}
+
+// kramdown syntax highlighter output (Rouge)
+.highlighter-rouge {
+	max-width: ( $measure + ( $gap * 2 ) );
+	.highlight {
+		margin-top: 0;
+		margin-bottom: 0;
 	}
 }
 
-pre + .output,
+// Style .output which follows pre with flow-chart arrow
+// pre + .output,
 .highlighter-rouge + .output {
-	border: $border-width dotted; // match color of pre?
+	border: $border-width $border-style;
 	position: relative;
+
 	// Downward arrow
 	&::before {
 		position: absolute;
@@ -143,6 +147,7 @@ pre + .output,
 		border-left: 0;
 // 		border-radius: $border-radius;
 	}
+
 	&::after {
 		position: absolute;
 		content: '';
@@ -154,15 +159,33 @@ pre + .output,
 	}
 }
 
-.ref {
-	font-style: normal;
+// Document references prepended to content with "reference" metadata
+.doc-ref {
+	a {
+		display: inline-block;
+	}
+
+	.icon {
+		float: left;
+	}
+
+	.ref {
+		display: block;
+		margin: 0 0 0 $gap;
+		font-style: normal; // override cite
+	}
 }
 
 // Footnotes
 .footnotes {
 	@include font-small;
 	@extend hr;
-	padding-top: ( $gap * 2 );
+	margin-top: ( $gap * 3 );
+
+	&::after {
+		top: ( $gap * -1.5 );
+		width: 50%; // override hr
+	}
 }
 
 // Inline footnote overlays (placed by script.js)
@@ -175,29 +198,34 @@ pre + .output,
 	z-index: 1001; // above .aside-foonote
 }
 
-// TEMP
-[data-footnote]:hover {
-	&::after {
-		content: attr(data-footnote);
-	}
-}
-
 .aside-footnote {
-	visibility: hidden; // accessible
 	@include font-body; // override sup
 	@include font-small;
+	visibility: hidden; // for accessibility and scripting
 	position: absolute;
 	z-index: 1000;
-	left: 50%;
 	bottom: 100%;
-	transform: translateX(-50%);
+	width: 17rem; // to taste; within 320px
+	margin-left: 50%;
 	margin-bottom: ( $gap / 2 );
 	padding: ( $gap / 2 );
-	width: 17rem; // to taste; within 320px
+	transform: translateX(-50%);
 	color: $color-bg;
 	background: $color-text;
 	border-radius: $border-radius;
 	box-shadow: 0 0 ( $gap / 2 ) $color-text-bg;
+	
+	--left: 0px; // overridden by script.js if 
+	left: var(--left);
+
+	:first-child {
+		margin-top: 0; // override because of padding
+	}
+
+	:last-child {
+		margin-bottom: 0; // override because of padding
+	}
+
 	// Extend overlay
 	&::before {
 		position: absolute;
@@ -213,7 +241,7 @@ pre + .output,
 		content: "";
 		position: absolute;
 		top: 100%;
-		left: 50%;
+		margin-left: 50%;
 		transform: translateX(-50%) rotate(-45deg);
 		transform-origin: top left;
 		width: .5rem;
@@ -221,7 +249,10 @@ pre + .output,
 		border-bottom-left-radius: inherit;
 		background: inherit;
 		box-shadow: inherit;
+		
+		left: calc(var(--left) * -1); // keep cute little speech triangle near source (no IE)
 	}
+
 	// Show overlay
 	.footnote:hover ~ &,
 	.footnote:focus ~ &,
@@ -232,41 +263,19 @@ pre + .output,
 	&:target {
 		visibility: visible;
 	}
+
 	&:target {
 		z-index: 999; // in case of subsequent footnote references
 	}
 }
 
-.doc-footer {
+.article-footer {
 	@include flex;
 	@include measure;
-	@include gutter( .5 );
-	margin-top: ( $gap * 1.5 ); // fallback for calc
-	margin-top: calc(#{$gutter} + #{$gap * .5}); // in place of padding-top + some
-	border-top: $border-width $border-style;
+
 	.doc-meta {
 		a {
 			white-space: nowrap;
 		}
-	}
-}
-
-.main-aside {
-	width: 100%; // for flexbox
-	> * {
-		@include measure;
-		@include gutter( .5 ); // split with body
-		&:not(:first-child) {
-			padding-top: $gap; // override
-		}
-		&:not(:last-child) {
-			padding-bottom: 0; // override
-		}
-	}
-}
-
-.aside-content {
-	* + *:not(li) {
-		margin-top: $gap;
 	}
 }

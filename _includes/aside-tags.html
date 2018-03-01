@@ -19,10 +19,14 @@ Doesn't display tags which only match one document (this one)
 {%- assign useful_tags = useful_tags | uniq | sort_natural -%}
 
 {%- if useful_tags.size > 0 -%}
+
+<hr class="main-rule rule-aside">
+
 <aside class="doc-tags main-aside" role="complementary">
 	<h2 class="aside-title">More On…</h2>
 	<div class="aside-content">
 		{%- include list-tags.html my_tags=useful_tags -%}
 	</div>
 </aside>
+
 {%- endif -%}

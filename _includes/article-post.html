@@ -15,11 +15,13 @@ Include post/blog article
 {%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
 
-<article id="post-{{ my_doc.slug }}" class="post-doc main-doc h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
-	<header class="doc-header">
+<hr class="main-rule rule-article">
+
+<article id="post-{{ my_doc.slug }}" class="post-doc main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+	<header class="article-header">
 		<div class="doc-date doc-meta">{{ doc_date }}</div>
 	</header>
-	<div class="doc-content">
+	<div class="article-content">
 
 		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
 

@@ -1,15 +1,20 @@
 /* Variables */
 
-// Widths (specify in px for devices)
-$width-min:  320px; // ~mobile; site is designed mobile-first!
-$width-max: 1280px; // cap
+// These variables are the repeated values in this theme.
+// It was not designed to be extensible through just these variables.
+
+// TODO: Cap gutter like font-size
+
+// Widths (specify in px for devices; converted to custom property factor in mixins)
+$width-min:  320px; // mobile-first!
+$width-max: 1280px; // cap (stop responsize font-size and margins)
 
 // Colors
 $color-bg:      #f5f2df;                  // background: body (cream)
 $color-text:    #263d4b;                  // primary: text (dark blue)
 $color-text-bg: rgba( $color-text, .25 ); // background: blockquotes, etc. (opaque dark blue)
 $color-code:    inherit;                  // text color: code, pre
-$color-code-bg: rgba( #fff, .85);         // background: code, pre (opaque white)
+$color-code-bg: #fefdfa;                  // background: code, pre (not opaque)
 $color-accent:  #a6565e;                  // accent: note IDs, collection names (red)
 $color-tags:    $color-bg;                // tags text color
 $color-tags-bg: $color-accent;            // tags background color
@@ -17,24 +22,25 @@ $color-focus:   rgba( #1d9bf6, .85 );     // focus, target outlines (bright blue
 $color-shadow:  $color-text-bg;           // background shadows and modal backdrops
 
 // Fonts (include @font-face in fonts.scss)
-// Body font here as default; see "directives" partial for more
-$font-body:  "Source Sans", "Source Sans Extended", "Source Sans Pro", sans-serif;
-// $font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; // someday: system-ui
+$font-body:  "Source Sans", "Source Sans Extended", "Source Sans Pro", sans-serif; // body font here as default; see "directives" partial for more
 $font-sizes: (
-	"font-size-min": 16px,
-	"font-size-max": 20px,
-	"width-min":     $width-min,
-	"width-max":     $width-max,
-);                      // specify in px; called in font-size-fluid
+	"min":        1rem,
+	"responsive": calc(.91666667rem + .41666667vw), // eek! (do the math)
+	"max":        1.25rem
+);                      // map: font-size at $width-min, responsize size between min and max, cap font-size at $width-max
 $font-size-small: .875; // unitless factor
-$interval: 1.5;         // vertical rhythm
+$interval: 1.5;         // vertical rhythm (unitless)
 $measure: 32rem;        // 60-70 characters
 
 // Margins
-$gap:    1rem * $interval;        // between block elements
-$gutter: calc(#{$gap / 3} + 5vw); // page margin/padding, a balance of white-space and width (= 1 gap @320px) (note: $gutter calc gets nested in calc (ok!), so fallback is $gap and provided by directives mixin)
+$gap:    1rem * $interval; // between block-level elements
+$gutter-sizes: (
+	"min":        $gap,
+	"responsive": calc(#{$gap / 3} + 5vw),
+	"max":       ( $gap * 2.5 )
+); // map: margin at $width-min, responsize size between min and max, cap margin at $width-max (used to set custom property --gutter)
 
 // Borders
-$border-style:  solid;
+$border-style:  dotted;
 $border-width:  .09375rem;
 $border-radius: $border-width;

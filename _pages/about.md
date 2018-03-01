@@ -6,7 +6,7 @@ permalink:	/about/
 
 # About
 
-C. M. Helmer works abroad as a web developer, student and Christian missionary.
+C. M. Helmer works abroad as a web developer, student teacher and Christian missionary.
 
 Personal writings on past websites are on this site as <a href="#browse">collections</a>.
 

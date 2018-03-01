@@ -1,0 +1,113 @@
+body {
+	margin: $gap; // fallback for vw
+	margin: var(--gutter);
+}
+
+.site-header,
+.site-main,
+.site-footer {
+	@include max-width( $width-max );
+	margin-top: var(--gutter);
+	margin-bottom: var(--gutter);
+}
+
+// Site Header
+
+.site-header {
+	@include flex;
+}
+
+.site-title {
+	a {
+		display: inline-block;
+	}
+
+	span {
+		display: block;
+		white-space: nowrap;
+
+		&:first-child {
+			@include font-smcp;
+			transform: translateX(.125em); // tweak
+		}
+
+		&:last-child {
+			@include font-title;
+			@include font-size( 2, 1 );
+		}
+	}
+}
+
+.site-nav {
+	margin-top: $gap;
+	margin-left: auto; // for flexbox
+	text-align: right; // fallback for flexbox
+}
+
+.nav-list {
+	@include flex;
+}
+
+.nav-item {
+	@include font-smcp;
+	margin-left: $gap; // fallback
+	margin-left: var(--gutter);
+
+	a {
+		display: block;
+	}
+}
+
+// Site Footer
+
+.site-footer {
+	@include font-small;
+
+	> * {
+		margin-top: var(--gutter);
+		margin-bottom: var(--gutter);
+		border-top: $border-width $border-style;
+	}
+
+	.site-rule {
+		display: none;
+	}
+}
+
+.site-aside {
+	ol, ul {
+		@include list-none;
+	}
+}
+
+.site-browse {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(7rem, auto)); // min 2-up @320px
+	grid-gap: $gap; // fallback
+	grid-gap: var(--gutter);
+
+	@supports (display: grid) {
+		> * {
+			margin-top: 0; // using grid-gap
+			margin-bottom: 0; // and grid doesn't collapse margins
+		}
+	}
+}
+
+.site-search {
+	form {
+		display: flex;
+	}
+
+	input {
+		width: 100%;
+	}
+
+	button {
+		height: 1.5em;
+	}
+
+	.icon-search {
+		margin-right: 0; // override .icon
+	}
+}

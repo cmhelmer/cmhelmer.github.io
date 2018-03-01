@@ -1,13 +1,17 @@
-.layout-contents .main-doc .doc-content > p {
+.layout-contents .main-article .article-content > p {
 	@include box-block;
+	padding-top: $gap;
+	padding-bottom: $gap;
 }
 
 .doc-list {
 	@include list-none;
+
 	a {
 		@include flex;
 		flex-wrap: nowrap; // override flex
 		text-decoration: none; // defer to child
+
 		&:hover,
 		&:focus,
 		&:active {
@@ -16,24 +20,19 @@
 			}
 		}
 	}
-	.doc-preview,
-	.doc-reference {
-		margin-top: 0; // override * + *
-	}
+
 	.doc-reference {
 		margin-left: .1875rem;
-	}
-	.doc-date {
-// 		min-width: 6rem;
-		text-align: right;
 		white-space: nowrap;
 	}
+
 	.doc-preview {
 		@include text-overflow;
 		position: relative; // for pseudo-content
 		z-index: 1; // above pseudo-content
 		width: 100%; // required for text-overflow to work properly with flex
 		text-decoration: underline;
+
 		&::after {
 			position: absolute; // avoid triggering text-overflow unnecessarily
 			font-family: $font-body; // override .doc-name

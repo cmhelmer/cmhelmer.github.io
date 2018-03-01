@@ -1,0 +1,57 @@
+// Site Main
+.site-main {
+	margin-bottom: ( $gap * 5 ); // bottoms always need more
+
+	> *:not(.main-rule) {
+		margin-top: var(--gutter);
+		margin-bottom: var(--gutter);
+	}
+}
+
+.main-article {
+	width: 100%; // for flexbox
+}
+
+.main-aside {
+	width: 100%; // for flexbox
+
+	> * {
+		@include measure;
+	}
+}
+
+.rule-article {
+	@include measure( 1.5 );
+}
+
+.layout-home .main-rule,
+.layout-post .main-rule {
+	@include measure;
+}
+
+.layout-home .main-rule {
+	&:last-of-type {
+		max-width: none;
+
+		&::after {
+			width: 100%;
+		}
+	}
+}
+
+.layout-note .rule-article {
+	margin-bottom: 0;
+	
+	&::after {
+		width: 100%;
+		color: $color-accent;
+	}
+	
+	+ .main-article {
+		margin-top: 0;
+	}
+}
+
+.layout-note .rule-aside {
+	@include measure;
+}

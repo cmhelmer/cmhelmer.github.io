@@ -10,22 +10,38 @@ layout:	default
 {%- assign limit = 5 -%}
 
 {%- comment -%} Use site.documents in place of site.posts to be consistent {%- endcomment -%}
+
 {%- assign site_posts = site.documents | where: "collection", "posts" | reverse -%}
+
 {%- if site_posts.size > 0 -%}
-	{%- for post in site_posts limit: limit -%}
-		{%- include article-post.html my_doc=post -%}
-	{%- endfor -%}
-	{%- if site_posts.size > limit -%}
-		{%- comment -%} NOTE: Manually set url to an blog archives page if there is one {%- endcomment -%}
-		<div class="more"><a href="{{ '/posts/' | absolute_url }}">More blog posts…</a></div>
-	{%- endif -%}
+
+{%- for post in site_posts limit: limit -%}
+	{%- include article-post.html my_doc=post -%}
+{%- endfor -%}
+
+{%- if site_posts.size > limit -%}
+
+{%- comment -%} NOTE: Manually set url to an blog archives page if there is one {%- endcomment -%}
+
+<hr class="main-rule rule-aside">
+
+<aside class="main-aside" role="complementary">
+	<p class="more"><a href="{{ '/posts/' | absolute_url }}" rel="archives">More blog posts…</a></p>
+</aside>
+
+{%- endif -%}
+
 {%- endif -%}
 
 {%- assign documents = site.documents | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
 {%- assign home_docs = "" | split: "," -%}
 
 {%- assign latest_docs = documents | where_exp: "doc", "doc.collection != 'posts'" -%}
+
 {%- if latest_docs.size > 0 -%}
+
+<hr class="main-rule rule-aside">
+
 <aside class="latest-notes main-aside" role="complementary">
 	<h2 class="aside-title">Latest Notes:</h2>
 	<div class="aside-content">
@@ -43,17 +59,19 @@ layout:	default
 
 		{%- include list-docs.html my_docs=limited_latest_docs -%}
 
-		{%- comment -%} NOTE: Manually set url to an site archives page if there is one {%- endcomment -%}
-		<div class="more"><a href="{{ '/contents/' | absolute_url }}">More notes…</a></div>
-
 	</div>
 </aside>
+
 {%- endif -%}
 
 {%- comment -%}
 
 {%- assign featured_docs = documents | where_exp: "doc", "doc.featured" -%}
+
 {%- if featured_docs.size > 0 -%}
+
+<hr class="main-rule rule-aside">
+
 <aside class="featured-notes main-aside" role="complementary">
 	<h2 class="aside-title">Featured Notes:</h2>
 	<div class="aside-content">
@@ -73,10 +91,15 @@ layout:	default
 
 	</div>
 </aside>
+
 {%- endif -%}
 
 {%- assign updated_docs = documents | where_exp: "doc", "doc.updated" -%}
+
 {%- if updated_docs.size > 0 -%}
+
+<hr class="main-rule rule-aside">
+
 <aside class="updated-notes main-aside" role="complementary">
 	<h2 class="aside-title">Updated Notes</h2>
 	<div class="aside-content">
@@ -96,6 +119,7 @@ layout:	default
 	
 	</div>
 </aside>
+
 {%- endif -%}
 
 {%- endcomment -%}

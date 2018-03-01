@@ -14,6 +14,9 @@ Matches reference metadata also (reference.uid or reference)
 {%- assign my_docs = my_docs | uniq | sort: "uid", "first" | reverse -%}
 
 {%- if my_docs.size > 0 -%}
+
+<hr class="main-rule rule-aside">
+
 <aside class="doc-links main-aside" role="complementary">
 	<h2 class="aside-title">What Links Here…</h2>
 	<div class="aside-content">
@@ -22,4 +25,5 @@ Matches reference metadata also (reference.uid or reference)
 
 	</div>
 </aside>
+
 {%- endif -%}

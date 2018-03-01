@@ -9,27 +9,31 @@ layout:	default
 
 {%- include article-post.html my_doc=my_doc -%}
 
-{%- if page.previous -%}
+{%- if page.next -%}
 
-{%- assign doc_previous = site.documents | where: "id", page.previous.id -%}
+{%- assign doc_next = site.documents | where: "id", page.next.id -%}
 
-<aside class="pagination-aside prev-aside main-aside">
-	<h1 class="aside-title">Previous</h1>
+<hr class="main-rule rule-aside">
+
+<aside class="pagination-aside main-aside">
+	<h1 class="aside-title">Next</h1>
 	<div class="aside-content">
-		{%- include list-docs.html my_docs=doc_previous -%}
+		{%- include list-docs.html my_docs=doc_next -%}
 	</div>
 </aside>
 
 {%- endif -%}
 
-{%- if page.next -%}
+{%- if page.previous -%}
 
-{%- assign doc_next = site.documents | where: "id", page.next.id -%}
+{%- assign doc_previous = site.documents | where: "id", page.previous.id -%}
 
-<aside class="pagination-aside next-aside main-aside">
-	<h1 class="aside-title">Next</h1>
+<hr class="main-rule rule-aside">
+
+<aside class="pagination-aside main-aside">
+	<h1 class="aside-title">Previous</h1>
 	<div class="aside-content">
-		{%- include list-docs.html my_docs=doc_next -%}
+		{%- include list-docs.html my_docs=doc_previous -%}
 	</div>
 </aside>
 

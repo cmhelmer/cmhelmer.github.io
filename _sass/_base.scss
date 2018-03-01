@@ -2,14 +2,7 @@
 // Default paragraph and character elements output by Markdown renderer (kramdown)
 // Extend top-level selectors to merge with reset
 
-*,
-*::before,
-*::after {
-	margin: 0;
-	padding: 0;
-}
-
-html {
+:root {
 	@include font-body;
 	@include font-size-fluid( $font-sizes );
 	line-height: $interval;
@@ -18,27 +11,68 @@ html {
 	// -moz-osx-font-smoothing: grayscale;  // if animations
 	// -webkit-font-smoothing: antialiased; // if animations
 	scroll-behavior: smooth;
+
+	// Have fun with custom properties (CSS variables)
+	// Use a responsive variable to adjust white-space between min and max "locks"
+	// Fallback to $gap set throughout
+	--gutter: #{map-get( $gutter-sizes, "min" )};
+
+	@media screen and (min-width: $width-min) {
+		--gutter: #{map-get( $gutter-sizes, "responsive" )};
+	}
+
+	@media screen and (min-width: $width-max) {
+		--gutter: #{map-get( $gutter-sizes, "max" )};
+	}
 }
 
-a,
-button {
+// Clear all block-level elements
+* {
+	margin: 0;
+	padding: 0;
+}
+
+// Block-level elements
+// Add vertical margin
+// With a few exceptions: dd, li (kramdown can add containing <p> to these)
+// And additions: audio, iframe, pre code
+address, article, aside, audio, blockquote, canvas, div, dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, iframe, nav, noscript, ol, output, p, pre, pre code, section, table, tfoot, ul, video {
+	margin: $gap 0;
+}
+
+dt {
+	margin-bottom: 0;
+}
+
+dt + dt {
+	margin-top: 0;
+}
+
+audio, iframe, pre code, video {
+	display: block;
+	width: 100%;
+}
+
+a {
 	@include box-span( transparent, inherit, true );
 	text-decoration-skip: ink;
 	text-decoration-skip-ink: auto;
+	hanging-punctuation: none; // default; if underline
 	&:hover,
 	&:focus,
 	&:active,
 	&:focus-within {
-		outline: 0; // careful to make it accessible
+		outline: 0; // check accessibility
 		text-decoration: none;
 		color: $color-bg;
 		background-color: $color-text;
 		* {
 			color: inherit;
+			fill: currentcolor; // svg
 		}
-		svg {
-			fill: currentcolor;
-		}
+	}
+	header & {
+		text-decoration: none;
 	}
 }
 
@@ -52,12 +86,6 @@ h4, h5, h6 {
 
 blockquote {
 	@include box-block;
-	& & {
-		margin-left: $gap;
-		padding: 0; // initial
-		border-radius: 0; // initial
-		background-color: transparent; // initial
-	}
 }
 
 code {
@@ -72,14 +100,13 @@ code {
 pre {
 	@include box-block( $color-code-bg );
 	@include scrolling-hints( $color-code-bg );
-	padding-top: ( $gap / 2 ); // override
-	padding-bottom: ( $gap / 2 ); // override
 	tab-size: 4;
 	word-wrap: normal;
 	word-break: normal;
 }
 
 // Custom list styles; someday use ::marker instead
+
 // Watch out for ordered lists with attributes "start" and "reversed"
 ol:not([start]):not([reversed]) {
 // 	counter-reset: ol attr(start number, 0);
@@ -91,8 +118,9 @@ ol:not([start]):not([reversed]) {
 			@include font-feature-settings( smcp, lnum, tnum ); // small-caps lining, tabular numbers (Source Sans Pro doesn't actually have small-cap tabular numbers
 			content: counters(ol, ".") "."; // concatenate all counters // bug?
 			float: left; // ugly when items more than single digit; consider absolute position, right: 100%
+			min-width: 1.25rem;
 			margin-left: ( $gap * -1 );
-			margin-right: ( $gap / 2 );
+			margin-right: ( $gap - 1.25rem ); // $gap - min-width
 		}
 	}
 }
@@ -117,6 +145,7 @@ ul {
 ol, ul {
 	header &,
 	footer & {
+		margin: 0;
 		@include list-none;
 	}
 }
@@ -136,10 +165,8 @@ dd::before {
 	margin-left: (-$gap);
 }
 
-audio, img, svg, video, figure, table, iframe {
+audio, img, svg, video, figure, table {
 	max-width: 100%;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 audio, img, svg, video {
@@ -174,7 +201,7 @@ caption {
 	font-style: italic;
 	em,
 	cite {
-		font-style: normal; // invert
+		font-style: normal; // invert (should bold?)
 	}
 }
 
@@ -205,7 +232,6 @@ th {
 }
 
 iframe {
-	display: block;
 	border: $border-width $border-style;
 	border-radius: $border-radius;
 	overflow: hidden;
@@ -249,6 +275,7 @@ address {
 
 small {
 	@include font-small;
+	@include dim;
 }
 
 abbr {
@@ -266,14 +293,21 @@ abbr {
 
 hr {
 	position: relative;
-	min-height: $gap;
+	min-height: 1px; // don't collapse
+	margin-top: ( $gap * 2 );
+	margin-bottom: ( $gap * 2 );
 	border: 0;
+	
 	&::after {
+		content: "";
 		position: absolute;
+		min-width: ( $gap * 2 );
+		width: 10%; // fallback for vw
+		width: 10vw;
 		top: 0;
-		width: 100%;
-// 		text-align: center;
-		content: "▪︎\A0\A0\A0\A0▪︎\A0\A0\A0\A0▪︎";
+		left: 0;
+// 		transform: translateY(-50%); // in case border-style is big
+		border-top: $border-width $border-style;
 	}
 }
 
@@ -296,7 +330,34 @@ button {
 
 input {
 	padding: 0 .25em;
-	caret-color: $color-focus; // a nice touch
+	caret-color: $color-focus; // nice touch
+}
+
+input[type="checkbox"] {
+	position: relative; // for pseudo-content
+	visibility: hidden; // step aside
+	vertical-align: top;
+	width: auto;
+	margin-right: ( $gap / 2 );
+
+	&::after {
+		content: "";
+		visibility: visible;
+		position: absolute;
+		top: ( $gap / 4 );
+		left: 0;
+		width: ( $gap / 2 );
+		height: ( $gap / 2 );
+		font-size: $font-size-small * 1rem;
+		line-height: .875; // tweak
+		text-align: center;
+		background: $color-code-bg;
+		border-radius: $border-radius;
+	}
+
+	&:checked::after {
+		content: "\2713"; // checkmark ✓
+	}
 }
 
 [type="search"] {
@@ -315,10 +376,10 @@ button:-moz-focusring,
 }
 
 :target,
-input:focus {
+:focus {
 	animation: target 2.5s ease forwards;
-	outline: 4px solid $color-focus;
-	outline-offset: 4px;
+	outline: ($border-width * 2) solid $color-focus;
+	outline-offset: ( $gap / 2 );
 }
 
 @keyframes target {

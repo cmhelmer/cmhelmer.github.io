@@ -11,7 +11,7 @@ Note: mimic this include in script.js search results
 {%- assign my_docs = include.my_docs -%}
 
 {%- if my_docs.size > 0 -%}
-<ol class="doc-list">
+<ul class="doc-list">
 
 	{%- for doc in my_docs -%}
 
@@ -37,8 +37,17 @@ Note: mimic this include in script.js search results
 	
 	{%- assign collection = site.collections | where_exp: "collection", "collection.label == doc.collection" | first -%}
 
+	{%- comment -%} Link relationship (space separated) {%- endcomment -%}
+
+	{%- assign doc_rel = "bookmark" -%}
+	{%- if page.previous and page.previous.url == doc.url -%}
+		{%- assign doc_rel = doc_rel | append: " prev" -%}
+	{%- elsif page.next and page.next.url == doc.url -%}
+		{%- assign doc_rel = doc_rel | append: " next" -%}
+	{%- endif -%}
+
 	<li class="doc-item {{ doc.collection }}-collection">
-		<a href="{{ doc.url | absolute_url }}" rel="bookmark">
+		<a href="{{ doc.url | absolute_url }}" rel="{{ doc_rel }}">
 			<span class="doc-preview {{ preview_class }}">{{ doc_preview }}</span>
 			<span class="doc-reference {{ reference_class }}">{{ doc_reference }}</span>
 		</a>
@@ -46,5 +55,5 @@ Note: mimic this include in script.js search results
 
 	{%- endfor -%}
 
-</ol>
+</ul>
 {%- endif -%}

@@ -1,6 +1,7 @@
 {%- comment -%}
 
 Include site header
+To start of <main>
 
 {%- endcomment -%}
 
@@ -12,7 +13,7 @@ Include site header
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<link rel="stylesheet" href="{{ '/assets/css/style.css' | absolute_url }}?{{ site.github.build_revision }}">
-	<script src="{{ '/assets/js/prefixfree.min.js' | absolute_url }}" defer></script>
+	<script src="{{ '/assets/js/vendor/prefixfree.min.js' | absolute_url }}" defer></script>
 
 	{%- include header-meta.html -%}
 
@@ -48,9 +49,9 @@ Include site header
 
 	<nav class="site-nav">
 		<ul class="nav-list">
-			<li class="nav-item"><a href="#info" class="aside-link">Info</a></li>
-			<li class="nav-item"><a href="#browse" class="aside-link">Browse</a></li>
-			<li class="nav-item"><a href="#search" class="aside-link">Search</a></li>
+			<li class="nav-item"><a href="#info">Info</a></li>
+			<li class="nav-item"><a href="#browse">Browse</a></li>
+			<li class="nav-item"><a href="#search">Search</a></li>
 		</ul>
 	</nav>
 </header>

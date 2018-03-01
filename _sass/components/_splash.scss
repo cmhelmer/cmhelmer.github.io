@@ -1,0 +1,20 @@
+.site-splash {
+	margin: ( $gap * -1 ); // fallback
+	margin: calc(var(--gutter) * -1); // revert body margin
+}
+
+.splash-hills {
+	fill: $color-bg;
+}
+
+.splash-hill-1 {
+	fill: #85b1cc;
+}
+
+.splash-hill-2 {
+	fill: #adc8d3;
+}
+
+.splash-hill-3 {
+	fill: #c8d8d7;
+}

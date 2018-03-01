@@ -142,11 +142,13 @@ layout:	default
 {%- capture unfiltered_docs_size -%}{%- include format-number.html number=unfiltered_docs.size -%}{%- endcapture -%}
 {%- assign issues_count = issues_count | plus: unfiltered_docs.size -%}
 
-<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-doc" role="document">
-	<header class="doc-header">
+<hr class="main-rule rule-article">
+
+<article id="{{ page.collection | default: 'site' }}-contents" class="{{ page.collection | default: 'site' }}-collection contents-doc main-article" role="document">
+	<header class="article-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
-	<div class="doc-content">
+	<div class="article-content">
 
 		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 

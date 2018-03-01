@@ -349,6 +349,24 @@
 				footnote_ref_a.setAttribute("href", "#" + new_ref);
 				footnote_ref.appendChild(footnote_aside_clone);
 				footnote_ref.classList.add("sup-footnote");
+
+				// Adjust position of overlays to keep within viewport
+				// Use CSS visibility: hidden not display: none to hide element
+				// Include body margin for looks
+				var aside_rect   = footnote_aside_clone.getBoundingClientRect(),
+				    client_width = document.documentElement.clientWidth,
+				    left         = 0,
+				    body_margin  = 12; // px (could be gotten by accessing styles...)
+				    
+				if (aside_rect.right > (client_width - body_margin)) {
+					left = (aside_rect.right - client_width + body_margin) * -1;
+				}
+				else if (aside_rect.left < body_margin) {
+					left = (aside_rect.left * -1) + body_margin;
+				}
+				left += "px";
+				footnote_aside_clone.style.left = left;
+				footnote_aside_clone.style.setProperty("--left", left);
 			});
 		});
 		

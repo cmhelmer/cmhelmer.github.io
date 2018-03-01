@@ -15,11 +15,13 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 {%- assign collection = site.collections | where_exp: "collection", "collection.label == page.collection" | first -%}
 
-<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-doc" role="document">
-	<header class="doc-header">
+<hr class="main-rule rule-article">
+
+<article id="{{ page.collection | default: 'site' }}-tags" class="{{ page.collection | default: 'site' }}-collection tags-doc main-article" role="document">
+	<header class="article-header">
 		<h1 class="doc-title doc-meta">{{ page.title }}</h1>
 	</header>
-	<div class="doc-content">
+	<div class="article-content">
 
 		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
 
@@ -72,9 +74,11 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 		{%- comment -%} Get tagged documents and display in sections {%- endcomment -%}
 
+		<hr>
+
 		{%- for tag in my_tags -%}
 		<section id="{{ tag | slugify }}" class="tag-details">
-			<h2 class="tag-summary"><a href="#{{ tag | slugify }}" class="tag">{{ tag }}</a></h2>
+			<h2 class="tag-summary"><span class="tag">{{ tag }}</span></h2>
 		
 			{%- assign tagged_docs = docs | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
 			{%- include list-docs.html my_docs=tagged_docs -%}

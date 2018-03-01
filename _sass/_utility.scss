@@ -1,17 +1,20 @@
-.doc-title {
-	@include font-display;
-}
-
-/*
-.doc-name{
-	@include font-lift;	
-}
-*/
-
-.doc-collection,
-.aside-title,
-.aside-link {
+.aside-title {
 	@include font-smcp;
+}
+
+.p-name {
+	white-space: nowrap;
+}
+
+ul.task-list {
+	li {
+		&::before {
+			display: none;
+		}
+	}
+	.task-list-item-checkbox {
+		margin-left: -#{$gap}; // left align; -1.125em to match default
+	}
 }
 
 .icon {
@@ -167,7 +170,7 @@ a[href$=".svn"] {}
 
 .output {
 	@include box-block( transparent );
-	border: $border-width dotted;
+	border: $border-width $border-style;
 }
 
 .poem p {
@@ -179,29 +182,32 @@ a[href$=".svn"] {}
 // Credit: Nicolas Gallagher and SUIT CSS.
 .video {
 	@include box( #000 );
-// 	display: block; // redundant
-// 	width: 100%; // redundant
 	position: relative;
 	overflow: hidden;
+
 	&::before {
 		padding-top: percentage(9 / 16);
 		display: block;
 		content: "";
 	}
+
 	&.video-square::before {
 		padding-top: percentage(1 / 1);
 	}
+
 	&.video-traditional::before {
 		padding-top: percentage(3 / 4);
 	}
+
 	&.video-wide::before {
 		padding-top: percentage(9 / 21);
 	}
+
 	> iframe {
 		position: absolute;
 		top: 0;
-		bottom: 0;
 		left: 0;
+		bottom: 0;
 		width: 100%;
 		height: 100%;
 		border: 0;
@@ -211,56 +217,42 @@ a[href$=".svn"] {}
 .-dim {
 	@include dim;
 }
-.-left {
-	float: left;
-}
-.-right {
-	float: right;
-}
 
 .more {
-	max-width: $measure;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: right;
+// 	text-align: right;
 	font-style: italic;
-	.site-main > & {
-		padding: ( $gap / 2 );         // fallback for calc
-		padding: calc(#{$gutter} / 2); // split with body
-	}
 }
 
 // H5BP
 .reader {
-	position: absolute;
+    position: absolute;
 	z-index: 10000;
 	top: 0;
 	left: 0;
-	width: 1px;
-	height: 1px;
-	margin: -1px;
-// 	padding: 0;
-	border: 0;
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	overflow: hidden;
-	white-space: nowrap;
+    width: 1px;
+    height: 1px;
+	margin: ( $gap / 2 ); // fallback
+	margin: calc(var(--gutter) / 2);
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    overflow: hidden;
 	&:active,
 	&:focus {
 		width: auto;
 		height: auto;
-		margin: ($gap / 2); // fallback for calc
-		margin: calc(#{$gutter} / 2);
 		clip: auto;
 		clip-path: none;
+	    white-space: inherit;
 		overflow: visible;
-		white-space: inherit;
 		background-color: $color-focus;
 	}
 }
 
+/*
 .-test *,
 .-test *::before,
 .-test *::after {
 	outline: 1px solid cyan;
 }
+*/
