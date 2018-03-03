@@ -2,7 +2,7 @@
 	position: relative;
 	width: 100vw;
 	height: 56.25vw; // aspect ratio
-	border-radius: ( $border-radius * 2 );
+// 	border-radius: ( $border-radius * 2 );
 	margin: ( $gap * -1 ); // fallback
 	margin: calc(var(--gutter) * -1); // revert body margin
 	overflow: hidden;
@@ -33,7 +33,7 @@
 }
 
 [data-parallax] {
-	transform: translateY(var(--translateY)); // set in script.js
+	transform: translateY(var(--translateY)); // set in inline script in splash include
 	will-change: transform;
 }
 
@@ -41,7 +41,7 @@
 	// 24 hour duration (steps will make change on the hour)
 	// Default delay half-way (noon); negative value starts from end
 	animation: 86400s steps(24) -43200s infinite;
-	animation-delay: var(--animationDelay); // inline override set in script.js
+	animation-delay: var(--animationDelay); // inline override set inline script in splash include
 	&.splash-sky {
 		animation-name: splash-sky;
 	}

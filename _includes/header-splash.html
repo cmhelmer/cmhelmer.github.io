@@ -5,7 +5,7 @@ Include site splash
 {%- endcomment -%}
 
 <div class="site-splash">
-	<svg data-parallax="1" data-sunset class="splash-sky" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+	<svg data-sunset class="splash-sky" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
 		<path d="M1280 0v720H0V0h1280z" />
 	</svg>
 	<svg data-parallax=".66666666" data-sunset class="splash-hill splash-hill-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
@@ -18,3 +18,67 @@ Include site splash
 		<path d="M1280 720c.3 0 0-67.7 0-74-30.12-.87-55.6-12.26-81.6-26.2-10.95-5.9-21.32-10.1-31.38-17.43-7.78-5.66-20.6-14.2-29.93-16-7.8-1.52-12-7.08-19.5-9.43-6-1.86-11.9-2.9-17.1-6.53-11.2-7.7-21.2-5.3-33.8-2.9-25.3 4.8-50-12.8-74.9-14.2-13.4-.7-24.3-11.4-37.4-14.1-12.7-2.5-27.1 1.3-40.3.1-25.9-2.3-54.1-8-79.9-5.1-3.8-3.7 3.7-5.7-6.4-7.7-6-1.2-12.2-1.7-18.2-3.4-6.4-1.7-11.2-6.5-17.38-8.9-6-2.3-10.9-2-16.6-5.6-9.16-5.7-27.6-5.8-38.35-8.4-16.5-3.9-31.2-7.7-48.3-9.6-13.26-1.4-37.96-1.6-49.15-8.1-5.57-3.2-15.9 2.4-21.65-1.5-2.92-2-7.73 1-11.8-.6-5.6-2.2-12-1.1-17.1-4.1-7.2-4.2-12.54-4.9-21-4.2-10.2.9-13.23-1.4-21.94-4.4-23-7.7-47.55-4.9-70.88-5.9-8.86-.4-8.26 6.8-19.3 3.3-3.8-1.2-19.9-5.4-20.5-.8-11.9-5.3-16.5 3-26.4 3.6-4.2.2-8.16 0-12.3 1.1-4.2 1.1-3-2.53-6.1-3.3-3.03-.73-16.2-4.8-17.4-.92-2.1 6.7-10.3 1.5-17.3 4.8-7.15 3.36-16 .76-23.57 1-5.4.16-8.8 4.6-13.65 4.64-5.44 1.4-11.2 2.06-16.8 3.1-12.25 2.25-16-8.2-29.2-4.43-7.4 2.1-11.58 4.06-20.1 4.57-6.3.4-7.8-5.7-14.3-7.5-7.8-2.2-11.97 4.27-16-1.94-5-7.67-16.56-3.54-24.5-4.36-10.8-1.14-20.85-2.17-31.78-1.3-3.46.3-3.9.2-6.6-2.9-4.2-4.9-7.9-1.5-13.1-1.3-6 .2-18.96 4.7-20.84-1.1-1.1-3.5-13.3-8.6-16.7-9.07-6.1-.9-10.47 12.64-15.54 5.62-3.6-5 .8-18.3-7-20.1-4.45-1.1-10.1 2.2-13.6-1.8-2.58-3-5.1-5.3-9.44-3.7-4.6 1.72-19.6-.85-21.4 2.25-3.64 6-14.24 5-20.24 5.25-7 .34-10.23.45-15.26-2-3-1.2-6.9-.2-6.9-.2v286h1280z" />
 	</svg>
 </div>
+
+<script>
+// Splash
+// Sunset: Add CSS custom property to delay animation color based on client time
+// Parallax: Add CSS custom property for transform based on scroll position
+(function() {
+
+	"use strict";
+
+	var parallaxLayers = document.querySelectorAll("[data-parallax]"),
+	    sunsetLayers   = document.querySelectorAll("[data-sunset]"),
+	    scrollY        = 0,
+	    ticking        = false,
+	    now            = new Date,
+	    animationDelay = ( 24 - now.getHours() ) * -3600; // seconds until midnight
+
+	function delayLayer(layer) {
+		// Use animation-delay: var(--animationDelay)
+		// See CSS for explanation of numbers
+		layer.style.setProperty("--animationDelay", animationDelay + "s");
+	}
+	
+	sunsetLayers.forEach(delayLayer, this);
+
+	function translateLayer(layer) {
+		var modifier   = layer.getAttribute("data-parallax"),
+		    translateY = scrollY * modifier;
+
+		// Set custom property in px for CSS to do the transform
+		// Use transform: translateY(var(--translateY))
+		layer.style.setProperty("--translateY", translateY + "px");
+	}
+	
+	function requestUpdate() {
+		ticking = false;
+		
+		for(var i = 0; i < parallaxLayers.length; i++) {
+			var layer      = parallaxLayers[i],
+			    layer_rect = layer.getBoundingClientRect();
+
+			// Repaint only visible items
+			if ( layer_rect.bottom > 0 ) {
+				translateLayer(layer);
+			}
+		}
+	}
+
+	function requestTick() {
+		// Request repaint only if it's not already scheduled
+		if(!ticking) {
+			requestAnimationFrame(requestUpdate);
+		}
+		ticking = true;
+	}
+
+	function onScroll() {
+		scrollY = window.pageYOffset; // = window.scrollY
+		requestTick();
+	}
+
+	window.addEventListener("scroll", onScroll, false);
+
+})();
+</script>

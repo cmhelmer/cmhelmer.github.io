@@ -6,68 +6,6 @@
 (function() {
 	"use strict";
 
-	// Splash
-	// Parallax: Add CSS custom property for transform
-	// Color: Add CSS custom property to delay animation
-	// Improve by writing changes only when layers are in viewport, but this is not a big deal yet...
-	function mySplash() {
-
-		var parallaxLayers = document.querySelectorAll("[data-parallax]"),
-		    sunsetLayers   = document.querySelectorAll("[data-sunset]"),
-		    scrollY        = 0,
-		    ticking        = false,
-		    date           = new Date,
-		    animationDelay = ( 24 - date.getHours() ) * -3600; // seconds until midnight
-		
-		function translateLayer(layer) {
-			var modifier   = layer.getAttribute("data-parallax"),
-			    translateY = scrollY * modifier;
-
-			// Set custom property in px for CSS to do the transform
-			// Use transform: translateY(var(--translateY))
-			layer.style.setProperty("--translateY", translateY + "px");
-		}
-		
-		function requestUpdate() {
-			ticking = false;
-			
-			for(var i = 0; i < parallaxLayers.length; i++) {
-				var layer      = parallaxLayers[i],
-				    layer_rect = layer.getBoundingClientRect();
-
-				// Repaint only visible items
-				if ( layer_rect.bottom > 0 ) {
-					translateLayer(layer);
-				}
-			}
-		}
-
-		function requestTick() {
-			// Request repaint only if it's not already scheduled
-			if(!ticking) {
-				requestAnimationFrame(requestUpdate);
-			}
-			ticking = true;
-		}
-
-		function onScroll() {
-			scrollY = window.pageYOffset; // = window.scrollY
-			requestTick();
-		}
-
-		window.addEventListener("scroll", onScroll, false);
-
-		function delayLayer(layer) {
-			// Use animation-delay: var(--animationDelay)
-			// See CSS for explanation of numbers
-			layer.style.setProperty("--animationDelay", animationDelay + "s");
-		}
-		
-		sunsetLayers.forEach(delayLayer, this);
-	}
-
-	mySplash();
-
 	// Search ready flag
 	window.searchReady = false;
 
