@@ -1,32 +1,9 @@
 // Base styles for unclassed elements
 // Default paragraph and character elements output by Markdown renderer (kramdown)
-// Extend top-level selectors to merge with reset
+// Can extend top-level selectors to merge with reset
 
-:root {
-	@include font-body;
-	@include font-size-fluid( $font-sizes );
-	line-height: $interval;
-	color: $color-text;
-	background-color: $color-bg;
-	// -moz-osx-font-smoothing: grayscale;  // if animations
-	// -webkit-font-smoothing: antialiased; // if animations
-	scroll-behavior: smooth;
+// Default block-level elements
 
-	// Have fun with custom properties (CSS variables)
-	// Use a responsive variable to adjust white-space between min and max "locks"
-	// Fallback to $gap set throughout
-	--gutter: #{map-get( $gutter-sizes, "min" )};
-
-	@media screen and (min-width: $width-min) {
-		--gutter: #{map-get( $gutter-sizes, "responsive" )};
-	}
-
-	@media screen and (min-width: $width-max) {
-		--gutter: #{map-get( $gutter-sizes, "max" )};
-	}
-}
-
-// Clear all block-level elements
 * {
 	margin: 0;
 	padding: 0;
@@ -48,9 +25,37 @@ dt + dt {
 	margin-top: 0;
 }
 
-audio, iframe, pre code, video {
+audio, iframe, video {
 	display: block;
 	width: 100%;
+}
+
+pre code {
+	display: inline-block;
+}
+
+:root {
+	@include font-body;
+	@include font-size-fluid( $font-sizes );
+	line-height: $interval;
+	color: $color-text;
+	background-color: $color-bg;
+	// -moz-osx-font-smoothing: grayscale;  // if animations
+	// -webkit-font-smoothing: antialiased; // if animations
+	scroll-behavior: smooth;
+
+	// Have fun with custom properties (CSS variables)
+	// Use a responsive variable to adjust white-space between min and max "locks"
+	// Fallback to $gap set throughout
+	--gutter: #{map-get( $gutter-sizes, "min" )};
+
+	@media screen and (min-width: #{$width-min * 1px}) {
+		--gutter: #{map-get( $gutter-sizes, "responsive" )};
+	}
+
+	@media screen and (min-width: #{$width-max * 1px}) {
+		--gutter: #{map-get( $gutter-sizes, "max" )};
+	}
 }
 
 a {
@@ -142,17 +147,17 @@ ul {
 	}
 }
 
+ol, ul, dl {
+	padding-left: $gap;
+	padding-right: $gap; // contained with narrow viewports, hangs off margin at wide
+}
+
 ol, ul {
 	header &,
 	footer & {
 		margin: 0;
 		@include list-none;
 	}
-}
-
-li,
-dd {
-	margin-left: $gap;
 }
 
 dt {
@@ -294,8 +299,8 @@ abbr {
 hr {
 	position: relative;
 	min-height: 1px; // don't collapse
-	margin-top: ( $gap * 2 );
-	margin-bottom: ( $gap * 2 );
+	margin-top: ( $gap * 1.5 );
+	margin-bottom: ( $gap * 1.5 );
 	border: 0;
 	
 	&::after {
@@ -306,8 +311,8 @@ hr {
 		width: 10vw;
 		top: 0;
 		left: 0;
-// 		transform: translateY(-50%); // in case border-style is big
 		border-top: $border-width $border-style;
+// 		transform: translateY(-50%); // in case border-style is big
 	}
 }
 

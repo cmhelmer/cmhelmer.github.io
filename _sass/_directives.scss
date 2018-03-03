@@ -107,12 +107,12 @@
 
 	font-size: $font-size-min;
 
-	@media screen and (min-width: $width-min) {
+	@media screen and (min-width: #{$width-min * 1px}) {
 		font-size: ( ( $font-size-max + $font-size-min ) / 2 ); // fallback to average of min and max
 		font-size: $font-size-responsive;
 	}
 
-	@media screen and (min-width: $width-max) {
+	@media screen and (min-width: #{$width-max * 1px}) {
 		font-size: $font-size-max;
 	}
 }
@@ -126,7 +126,7 @@
 
 // Maintain vertical rhythm
 @mixin font-size( $factor: 1, $line-height: $interval ) {
-	font-size: $factor * 1rem;
+	font-size: $factor * 1em;
 	@if $line-height < $factor {
 		line-height: 1; // floor
 	}
@@ -165,12 +165,11 @@
 
 // Remove custom base styles from ol, ul
 @mixin list-none {
-	li {
-		margin-left: 0;
+	padding-left: 0;
+	padding-right: 0;
 
-		&::before {
-			display: none;
-		}
+	li::before {
+		display: none;
 	}
 }
 

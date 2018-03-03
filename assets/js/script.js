@@ -6,6 +6,68 @@
 (function() {
 	"use strict";
 
+	// Splash
+	// Parallax: Add CSS custom property for transform
+	// Color: Add CSS custom property to delay animation
+	// Improve by writing changes only when layers are in viewport, but this is not a big deal yet...
+	function mySplash() {
+
+		var parallaxLayers = document.querySelectorAll("[data-parallax]"),
+		    sunsetLayers   = document.querySelectorAll("[data-sunset]"),
+		    scrollY        = 0,
+		    ticking        = false,
+		    date           = new Date,
+		    animationDelay = ( 24 - date.getHours() ) * -3600; // seconds until midnight
+		
+		function translateLayer(layer) {
+			var modifier   = layer.getAttribute("data-parallax"),
+			    translateY = scrollY * modifier;
+
+			// Set custom property in px for CSS to do the transform
+			// Use transform: translateY(var(--translateY))
+			layer.style.setProperty("--translateY", translateY + "px");
+		}
+		
+		function requestUpdate() {
+			ticking = false;
+			
+			for(var i = 0; i < parallaxLayers.length; i++) {
+				var layer      = parallaxLayers[i],
+				    layer_rect = layer.getBoundingClientRect();
+
+				// Repaint only visible items
+				if ( layer_rect.bottom > 0 ) {
+					translateLayer(layer);
+				}
+			}
+		}
+
+		function requestTick() {
+			// Request repaint only if it's not already scheduled
+			if(!ticking) {
+				requestAnimationFrame(requestUpdate);
+			}
+			ticking = true;
+		}
+
+		function onScroll() {
+			scrollY = window.pageYOffset; // = window.scrollY
+			requestTick();
+		}
+
+		window.addEventListener("scroll", onScroll, false);
+
+		function delayLayer(layer) {
+			// Use animation-delay: var(--animationDelay)
+			// See CSS for explanation of numbers
+			layer.style.setProperty("--animationDelay", animationDelay + "s");
+		}
+		
+		sunsetLayers.forEach(delayLayer, this);
+	}
+
+	mySplash();
+
 	// Search ready flag
 	window.searchReady = false;
 
@@ -20,7 +82,7 @@
 
 	// Set up display elements (mimic list-docs.html include)
 	var searchContent = searchAside.querySelector(".aside-content"), // to place results
-   	    searchTitle   = searchAside.querySelector(".aside-title"),   // to place results count and tooltip
+        searchTitle   = searchAside.querySelector(".aside-title"),   // to place results count and tooltip
 	    resultsList   = document.createElement("ol"),
 	    resultsCount  = document.createElement("span"),
 	    searchTooltip = document.createElement("span");
@@ -40,7 +102,7 @@
 	// Try to initialize Lunr with session cache first
 	// Or request data asynchronously
 	var lunrData = JSON.parse(sessionStorage.getItem("lunrData")),
-	    lunrIndex;
+		lunrIndex;
 
 	try {
 		lunrIndex = lunr.Index.load(JSON.parse(sessionStorage.getItem("lunrIndex")));
@@ -219,7 +281,7 @@
 	var infoModal   = document.createElement("dialog"),
 	    browseModal = document.createElement("dialog"),
 	    searchModal = document.createElement("dialog");
-	    
+		
 	// Identify modals (no support for multiple class names in classList.add in IE)
 	infoModal.classList.add("info-modal");
 	infoModal.classList.add("site-modal");
@@ -357,7 +419,7 @@
 				    client_width = document.documentElement.clientWidth,
 				    left         = 0,
 				    body_margin  = 12; // px (could be gotten by accessing styles...)
-				    
+					
 				if (aside_rect.right > (client_width - body_margin)) {
 					left = (aside_rect.right - client_width + body_margin) * -1;
 				}

@@ -5,9 +5,9 @@
 
 // TODO: Cap gutter like font-size
 
-// Widths (specify in px for devices; converted to custom property factor in mixins)
-$width-min:  320px; // mobile-first!
-$width-max: 1280px; // cap (stop responsize font-size and margins)
+// Widths (px)
+$width-min:  320; // mobile-first!
+$width-max: 1280; // cap (stop responsize font-size and margins)
 
 // Colors
 $color-bg:      #f5f2df;                  // background: body (cream)

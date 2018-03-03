@@ -1,20 +1,78 @@
 .site-splash {
+	position: relative;
+	width: 100vw;
+	height: 56.25vw; // aspect ratio
+	border-radius: ( $border-radius * 2 );
 	margin: ( $gap * -1 ); // fallback
 	margin: calc(var(--gutter) * -1); // revert body margin
+	overflow: hidden;
 }
 
-.splash-hills {
-	fill: $color-bg;
-}
-
-.splash-hill-1 {
+.splash-sky {
 	fill: #85b1cc;
 }
 
-.splash-hill-2 {
+.splash-hill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.splash-hill-1 {
 	fill: #adc8d3;
 }
 
-.splash-hill-3 {
+.splash-hill-2 {
 	fill: #c8d8d7;
+}
+
+.splash-hill-3 {
+	fill: $color-bg;
+}
+
+[data-parallax] {
+	transform: translateY(var(--translateY)); // set in script.js
+	will-change: transform;
+}
+
+[data-sunset] {
+	// 24 hour duration (steps will make change on the hour)
+	// Default delay half-way (noon); negative value starts from end
+	animation: 86400s steps(24) -43200s infinite;
+	animation-delay: var(--animationDelay); // inline override set in script.js
+	&.splash-sky {
+		animation-name: splash-sky;
+	}
+	&.splash-hill-1 {
+		animation-name: splash-hill-1;
+	}
+	&.splash-hill-2 {
+		animation-name: splash-hill-2;
+	}
+}
+
+@keyframes splash-sky {
+	 0% { fill: #85b1cc; }
+	20% { fill: #85b1cc; }
+	35% { fill: #cc858c; }
+	50% { fill: #263D4B; }
+	70% { fill: #263D4B; }
+}
+
+@keyframes splash-hill-1 {
+	 0% { fill: #adc8d3; }
+	20% { fill: #adc8d3; }
+	35% { fill: #dbacaa; }
+	50% { fill: #717e80; }
+	70% { fill: #717e80; }
+}
+
+@keyframes splash-hill-2 {
+	 0% { fill: #c8d8d7; }
+	20% { fill: #c8d8d7; }
+	35% { fill: #ebd6ca; }
+	50% { fill: #a2aaa4; }
+	70% { fill: #a2aaa4; }
 }

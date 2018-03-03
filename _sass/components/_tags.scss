@@ -1,5 +1,7 @@
 .layout-tags .main-article .article-content > p {
 	@include box-block;
+	padding-top: $gap;
+	padding-bottom: $gap;
 }
 
 .tag-list {

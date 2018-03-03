@@ -20,8 +20,9 @@
 	}
 }
 
-.rule-article {
-	@include measure( 1.5 );
+.main-rule {
+	margin-top: ( $gap * 2 );
+	margin-bottom: ( $gap * 2 );
 }
 
 .layout-home .main-rule,
@@ -38,6 +39,20 @@
 		}
 	}
 }
+
+.layout-page .rule-article {
+	@include measure( 1.5 );
+}
+
+/*
+.layout-page .rule-article {
+	margin-bottom: 0;
+}
+.page-doc,
+.page-doc .article-header {
+	margin-top: 0 !important;
+}
+*/
 
 .layout-note .rule-article {
 	margin-bottom: 0;
