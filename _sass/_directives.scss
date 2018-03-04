@@ -19,6 +19,7 @@
 	display: block;
 	padding-left: $gap;
 	padding-right: $gap;
+	clear: left; // clear @include pull
 	column-count: 1; // create block formatting context to contain child margins (someday contain: layout?)
 }
 
@@ -60,8 +61,8 @@
 @mixin font-body {
 	font-family: $font-body;
 	// font-kerning: normal;
-	// hyphens: auto;
-	// word-wrap: break-word;
+	hyphens: auto;
+	// word-wrap: break-word; // alias of overflow-wrap but with Edge support
 	hanging-punctuation: first last allow-end;
 	@include font-feature-settings( onum, pnum ); // old-style, proportional numbers
 }
@@ -107,12 +108,12 @@
 
 	font-size: $font-size-min;
 
-	@media screen and (min-width: #{$width-min * 1px}) {
+	@media screen and (min-width: $width-min) {
 		font-size: ( ( $font-size-max + $font-size-min ) / 2 ); // fallback to average of min and max
 		font-size: $font-size-responsive;
 	}
 
-	@media screen and (min-width: #{$width-max * 1px}) {
+	@media screen and (min-width: $width-max) {
 		font-size: $font-size-max;
 	}
 }
@@ -183,6 +184,29 @@
 	max-width: $width;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+// Pull block into margin
+@mixin pull {
+	max-width: 14.5rem; // to taste
+	min-width: 6.5rem; // looks
+	margin-top: 0;
+}
+
+// Pull quotes, asides towards right
+@mixin pull-quote {
+	@include pull;
+	float: right;
+	clear: right; // in case of subsequent floats
+	margin-left: $gap;
+}
+
+// Pull titles toward left margin
+@mixin pull-title {
+	@include pull;
+	float: left;
+	clear: left; // in case of subsequent floats
+	margin-right: $gap;
 }
 
 // Scrolling hints (horizontal)

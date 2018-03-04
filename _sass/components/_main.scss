@@ -20,17 +20,18 @@
 	}
 }
 
+.site-rule {
+	max-width: none;
+}
+
 .main-rule {
 	margin-top: ( $gap * 2 );
 	margin-bottom: ( $gap * 2 );
 }
 
-.layout-home .main-rule,
-.layout-post .main-rule {
-	@include measure;
-}
-
 .layout-home .main-rule {
+	@include measure;
+
 	&:last-of-type {
 		max-width: none;
 
@@ -40,21 +41,23 @@
 	}
 }
 
-.layout-page .rule-article {
-	@include measure( 1.5 );
-}
-
-/*
-.layout-page .rule-article {
+// TODO: Add body class for individual pages
+.layout-page .rule-article,
+.layout-contents .rule-article,
+.layout-tags .rule-article,
+.layout-check .rule-article {
+	@include measure(1.5);
 	margin-bottom: 0;
+	+ .main-article {
+		margin-top: 0;
+		> .article-header {
+			margin-top: 0;
+		}
+	}
 }
-.page-doc,
-.page-doc .article-header {
-	margin-top: 0 !important;
-}
-*/
 
 .layout-note .rule-article {
+	max-width: none;
 	margin-bottom: 0;
 	
 	&::after {
@@ -65,8 +68,4 @@
 	+ .main-article {
 		margin-top: 0;
 	}
-}
-
-.layout-note .rule-aside {
-	@include measure;
 }

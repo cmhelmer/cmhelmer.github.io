@@ -14,7 +14,7 @@ To start of <main>
 	
 	<link rel="stylesheet" href="{{ '/assets/css/style.css' | absolute_url }}?{{ site.github.build_revision }}">
 
-	{%- include header-meta.html -%}
+	{%- include site-meta.html -%}
 
 	{%- comment -%}
 	Preload important assets: body font (font requires crossorigin attribute regardless), search index
@@ -39,7 +39,7 @@ To start of <main>
 <body class="layout-{{ page.layout | default: 'default' }}">
 
 {%- if page.layout == "home" -%}
-{%- include header-splash.html -%}
+{%- include site-splash.html -%}
 {%- endif -%}
 
 <header class="site-header">

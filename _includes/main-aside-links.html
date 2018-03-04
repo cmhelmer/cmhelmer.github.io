@@ -1,16 +1,13 @@
 {%- comment -%}
 
-Include list of docs which link back to this page
+Include list of docs which link back to the page
 Matches reference metadata also (reference.uid or reference)
-- Pass in ID
 
 {%- endcomment -%}
 
-{%- assign my_uid = include.my_uid -%}
-
-{%- assign my_docs = site.documents | where_exp: "doc", "doc.uid != my_uid" | where_exp: "doc", "doc.content contains my_uid" -%}
-{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference == my_uid" | concat: my_docs -%}
-{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference.uid == my_uid" | concat: my_docs -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.uid != page.uid" | where_exp: "doc", "doc.content contains page.uid" -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference == page.uid" | concat: my_docs -%}
+{%- assign my_docs = site.documents | where_exp: "doc", "doc.reference.uid == page.uid" | concat: my_docs -%}
 {%- assign my_docs = my_docs | uniq | sort: "uid", "first" | reverse -%}
 
 {%- if my_docs.size > 0 -%}

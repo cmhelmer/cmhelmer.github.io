@@ -21,6 +21,7 @@ dt {
 	margin-bottom: 0;
 }
 
+img + figcaption,
 dt + dt {
 	margin-top: 0;
 }
@@ -49,11 +50,11 @@ pre code {
 	// Fallback to $gap set throughout
 	--gutter: #{map-get( $gutter-sizes, "min" )};
 
-	@media screen and (min-width: #{$width-min * 1px}) {
+	@media screen and (min-width: $width-min) {
 		--gutter: #{map-get( $gutter-sizes, "responsive" )};
 	}
 
-	@media screen and (min-width: #{$width-max * 1px}) {
+	@media screen and (min-width: $width-max) {
 		--gutter: #{map-get( $gutter-sizes, "max" )};
 	}
 }
@@ -83,10 +84,11 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
 	font-size: inherit;
+	hyphens: manual;
 }
 
-h4, h5, h6 {
-	font-weight: inherit;
+h3, h4, h5, h6 {
+	font-weight: normal;
 }
 
 blockquote {
@@ -149,7 +151,7 @@ ul {
 
 ol, ul, dl {
 	padding-left: $gap;
-	padding-right: $gap; // contained with narrow viewports, hangs off margin at wide
+	padding-right: $gap; // contained within narrow viewports, hangs off into margin at wide
 }
 
 ol, ul {
@@ -297,6 +299,7 @@ abbr {
 }
 
 hr {
+	@include measure;
 	position: relative;
 	min-height: 1px; // don't collapse
 	margin-top: ( $gap * 1.5 );

@@ -1,10 +1,14 @@
 .site-splash {
 	position: relative;
-	width: 100vw;
-	height: 56.25vw; // aspect ratio
-// 	border-radius: ( $border-radius * 2 );
-	margin: ( $gap * -1 ); // fallback
-	margin: calc(var(--gutter) * -1); // revert body margin
+// 	width: 100vw;
+// 	height: 56.25vw; // aspect ratio 16:9
+// 	margin: ( $gap * -1 ); // fallback
+// 	margin: calc(var(--gutter) * -1); // revert body margin
+	height: calc((100vw - #{$gap}) * .5625); // fallback
+	height: calc((100vw - var(--gutter)) * .5625); // aspect ratio 16:9
+	margin: ( $gap / -2 ); // fallback
+	margin: calc(var(--gutter) / -2); // revert body margin
+	border-radius: ( $border-radius * 4 );
 	overflow: hidden;
 }
 
@@ -33,15 +37,17 @@
 }
 
 [data-parallax] {
-	transform: translateY(var(--translateY)); // set in inline script in splash include
+	transform: translateY(var(--translateY)); // set via inline script in splash include
 	will-change: transform;
 }
 
 [data-sunset] {
-	// 24 hour duration (steps will make change on the hour)
+	// 24 hour duration (steps will make change on the second)
 	// Default delay half-way (noon); negative value starts from end
-	animation: 86400s steps(24) -43200s infinite;
-	animation-delay: var(--animationDelay); // inline override set inline script in splash include
+	// Just how much power does this consume?
+	animation: 86400s steps(86400) -43200s infinite;
+// 	animation-play-state: paused;
+	animation-delay: var(--animationDelay); // inline override set via inline script in splash include
 	&.splash-sky {
 		animation-name: splash-sky;
 	}
@@ -54,25 +60,28 @@
 }
 
 @keyframes splash-sky {
-	 0% { fill: #85b1cc; }
-	20% { fill: #85b1cc; }
-	35% { fill: #cc858c; }
-	50% { fill: #263D4B; }
-	70% { fill: #263D4B; }
+	0%       { fill: #263D4B; } // 12am
+	16.6666% { fill: #263D4B; } // 4am
+	33.3333% { fill: #85b1cc; } // 8am
+	66.6666% { fill: #85b1cc; } // 4pm
+    75%      { fill: #cc858c; } // 6pm
+	83.3333% { fill: #263D4B; } // 8pm
 }
 
 @keyframes splash-hill-1 {
-	 0% { fill: #adc8d3; }
-	20% { fill: #adc8d3; }
-	35% { fill: #dbacaa; }
-	50% { fill: #717e80; }
-	70% { fill: #717e80; }
+	0%       { fill: #717e80; }
+	16.6666% { fill: #717e80; }
+	33.3333% { fill: #adc8d3; }
+	66.6666% { fill: #adc8d3; }
+	75%      { fill: #dbacaa; }
+	83.3333% { fill: #717e80; }
 }
 
 @keyframes splash-hill-2 {
-	 0% { fill: #c8d8d7; }
-	20% { fill: #c8d8d7; }
-	35% { fill: #ebd6ca; }
-	50% { fill: #a2aaa4; }
-	70% { fill: #a2aaa4; }
+	0%       { fill: #a2aaa4; }
+	16.6666% { fill: #a2aaa4; }
+	33.3333% { fill: #c8d8d7; }
+	66.6666% { fill: #c8d8d7; }
+	75%      { fill: #ebd6ca; }
+	83.3333% { fill: #a2aaa4; }
 }

@@ -1,29 +1,22 @@
 {%- comment -%}
 
 Include post/blog article
-- Pass in document
 
 {%- endcomment -%}
 
-{%- assign my_doc = include.my_doc -%}
+{%- capture page_date -%}{%- include filter-date.html my_doc=page -%}{%- endcapture -%}
 
-{%- capture doc_date -%}{%- include filter-date.html my_doc=my_doc -%}{%- endcapture -%}
-
-{%- capture doc_date -%}<time datetime="{{ doc_date }}">{{ doc_date | date: site.date_format }}</time>:{%- endcapture -%}
-
-{%- if page.url != my_doc.url -%}
-{%- capture doc_date -%}<a href="{{ my_doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
-{%- endif -%}
+{%- capture page_date -%}<a href="{{ page.url | absolute_url }}" rel="bookmark"><time datetime="{{ page_date }}" title="{{ page_date | date_to_rfc822 }}">{{ page_date | date: site.date_format }}</time></a>:{%- endcapture -%}
 
 <hr class="main-rule rule-article">
 
-<article id="post-{{ my_doc.slug }}" class="post-doc main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+<article id="post-{{ page.slug }}" class="post-doc main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="article-header">
-		<div class="doc-date doc-meta">{{ doc_date }}</div>
+		<div class="doc-date doc-meta">{{ page_date }}</div>
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+		{%- capture content -%}{%- include content.html my_doc=page -%}{%- endcapture -%}
 
 		{{- content -}}
 

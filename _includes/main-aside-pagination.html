@@ -1,0 +1,35 @@
+{%- comment -%}
+
+Include pagination to previous and next posts
+
+{%- endcomment -%}
+
+{%- if page.next -%}
+
+{%- assign page_next = "" | split: "," | push: page.next -%}
+
+<hr class="main-rule rule-aside">
+
+<aside class="pagination-aside main-aside">
+	<h1 class="aside-title">Next</h1>
+	<div class="aside-content">
+		{%- include list-docs.html my_docs=page_next -%}
+	</div>
+</aside>
+
+{%- endif -%}
+
+{%- if page.previous -%}
+
+{%- assign page_previous = "" | split: "," | push: page.previous -%}
+
+<hr class="main-rule rule-aside">
+
+<aside class="pagination-aside main-aside">
+	<h1 class="aside-title">Previous</h1>
+	<div class="aside-content">
+		{%- include list-docs.html my_docs=page_previous -%}
+	</div>
+</aside>
+
+{%- endif -%}

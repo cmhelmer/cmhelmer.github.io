@@ -1,17 +1,14 @@
 {%- comment -%}
 
 Include page article
-- Pass in page
 
 {%- endcomment -%}
 
-{%- assign my_page = include.my_page -%}
-
-{%- capture page_title -%}{%- include filter-title.html my_doc=my_page -%}{%- endcapture -%}
+{%- capture page_title -%}{%- include filter-title.html my_doc=page -%}{%- endcapture -%}
 
 <hr class="main-rule rule-article">
 
-<article id="page-{{ my_page.title | slugify }}" class="page-doc main-article h-entry" role="document">
+<article id="page-{{ page.title | slugify }}" class="page-doc main-article h-entry" role="document">
 	<header class="article-header">
 		<h1 class="doc-title doc-meta">{{ page_title }}</h1>
 	</header>
@@ -19,9 +16,9 @@ Include page article
 
 		{%- comment -%} Pages need content rendered {%- endcomment -%}
 
-		{%- assign my_content = my_page.content | markdownify -%}
+		{%- assign page_content = page.content | markdownify -%}
 
-		{%- capture content -%}{%- include filter-content.html my_content=my_content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include filter-content.html my_content=page_content -%}{%- endcapture -%}
 
 		{{- content -}}
 

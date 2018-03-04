@@ -3,38 +3,10 @@
 layout:	default
 ---
 
-{%- comment -%} Get corresponding documents for consistency {%- endcomment -%}
+{%- include article-post.html -%}
 
-{%- assign my_doc = site.documents | where: "id", page.id | first -%}
+{%- include main-aside-links.html -%}
 
-{%- include article-post.html my_doc=my_doc -%}
+{%- include main-aside-tags.html -%}
 
-{%- if page.next -%}
-
-{%- assign doc_next = site.documents | where: "id", page.next.id -%}
-
-<hr class="main-rule rule-aside">
-
-<aside class="pagination-aside main-aside">
-	<h1 class="aside-title">Next</h1>
-	<div class="aside-content">
-		{%- include list-docs.html my_docs=doc_next -%}
-	</div>
-</aside>
-
-{%- endif -%}
-
-{%- if page.previous -%}
-
-{%- assign doc_previous = site.documents | where: "id", page.previous.id -%}
-
-<hr class="main-rule rule-aside">
-
-<aside class="pagination-aside main-aside">
-	<h1 class="aside-title">Previous</h1>
-	<div class="aside-content">
-		{%- include list-docs.html my_docs=doc_previous -%}
-	</div>
-</aside>
-
-{%- endif -%}
+{%- include main-aside-pagination.html -%}

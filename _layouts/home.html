@@ -3,8 +3,6 @@
 layout:	default
 ---
 
-{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
-
 {{- content -}}
 
 {%- assign limit = 5 -%}
@@ -15,8 +13,8 @@ layout:	default
 
 {%- if site_posts.size > 0 -%}
 
-{%- for post in site_posts limit: limit -%}
-	{%- include article-post.html my_doc=post -%}
+{%- for page in site_posts limit: limit -%}
+	{%- include article-post.html -%}
 {%- endfor -%}
 
 {%- if site_posts.size > limit -%}

@@ -89,22 +89,53 @@
 }
 
 .article-content {
-	// Set max-width on article children for flexibility: allows pull quotes, etc.
+	@include measure( 1.5 ); // catch floated elements
+	
+	// Set measure on article children for flexibility: allows pull quotes, etc.
 	> * {
 		@include measure;
 	}
 
 	h1 {
-		@include font-size( 1.25 );
-	}
-
-	h2 {
 		@include font-size( 1.125 );
 	}
 
-	h3 {
+	h2 {
 		@include font-size( 1.0625 );
 	}
+	
+	> h1,
+	> h2,
+	> h3 {
+		@include pull-title;
+		margin-top: .375rem; // align border with top of text
+		border-top: $border-width $border-style;
+		padding-top: ( $gap - $border-width - .375rem ); // $gap - border-width - margin-top
+	}
+
+/*
+	// TODO: Add pull headings to sections ?
+	> h1,
+	> h2,
+	> h3 {
+		@include pull-title;
+	}
+
+	// Add border if pull-title isn't preceded by <hr>
+	> :not(hr) + h1,
+	> :not(hr):not(h1) + h2 {
+		padding-top: ( $gap - $border-width );
+		border-top: $border-width $border-style;
+		
+		// Add white space before next block element because header is pulled but meant to be visual break in content
+		margin-top: $gap;
+		+ *:not(h2):not(h3),
+		+ h2 + *:not(h3),
+		+ h3 + * {
+			margin-top: ( $gap * 2 );
+		}
+	}
+*/
 
 	figure,
 	table {
@@ -115,20 +146,14 @@
 		@include measure( 1.5 );
 		width: 100%;
 	}
-}
-
-// kramdown syntax highlighter output (Rouge)
-.highlighter-rouge {
-	max-width: ( $measure + ( $gap * 2 ) );
-	.highlight {
-		margin-top: 0;
-		margin-bottom: 0;
+	
+	aside:not(.aside-footnote) {
+// 		@include pull-quote; // interfering with footnotes
 	}
 }
 
 // Style .output which follows pre with flow-chart arrow
-// pre + .output,
-.highlighter-rouge + .output {
+pre + .output {
 	border: $border-width $border-style;
 	position: relative;
 
@@ -145,7 +170,6 @@
 		border: inherit;
 		border-top: 0;
 		border-left: 0;
-// 		border-radius: $border-radius;
 	}
 
 	&::after {
@@ -161,17 +185,22 @@
 
 // Document references prepended to content with "reference" metadata
 .doc-ref {
+	padding-left: $gap;
+	padding-right: $gap; // contained within narrow viewports, hangs off into margin at wide
 	a {
 		display: inline-block;
+		* {
+			fill: $color-text; // override a:hover * because svg .icon is hanging outside of <a>
+		}
 	}
 
 	.icon {
 		float: left;
+		margin-left: ( $gap * -1 );
 	}
 
 	.ref {
 		display: block;
-		margin: 0 0 0 $gap;
 		font-style: normal; // override cite
 	}
 }
