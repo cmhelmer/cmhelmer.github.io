@@ -8,16 +8,16 @@ Note: mimic this include in script.js search results
 
 {%- endcomment -%}
 
-{%- assign my_docs = include.my_docs -%}
+{%- assign docs = include.docs -%}
 
-{%- if my_docs.size > 0 -%}
+{%- if docs.size > 0 -%}
 <ul class="doc-list">
 
-	{%- for doc in my_docs -%}
+	{%- for doc in docs -%}
 
-	{%- capture doc_preview -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
+	{%- capture doc_preview -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
 
-	{%- comment -%} Pick preview class based on logic in filter-title.html... hacky {%- endcomment -%}
+	{%- comment -%} Pick preview class based on logic in doc-title.html... hacky {%- endcomment -%}
 
 	{%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip -%}
 	{%- if doc_title_slug == doc.slug -%}
@@ -27,7 +27,7 @@ Note: mimic this include in script.js search results
 	{%- endif -%}
 
 	{%- if doc.collection == "posts" -%}
-		{%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
+		{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_reference = doc_date | date: site.date_format -%}
 		{%- assign reference_class = "doc-date" -%}
 	{%- else -%}

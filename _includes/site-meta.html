@@ -8,7 +8,7 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 {%- endcomment -%}
 
 {%- if page.title -%}
-{%- capture page_title -%}{%- include filter-title.html my_doc=page -%}{%- endcapture -%}
+{%- capture page_title -%}{%- include doc-title.html -%}{%- endcapture -%}
 {%- endif -%}
 {%- capture meta_title -%}
 	{%- if page_title -%}
@@ -22,7 +22,7 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 {%- endif -%}
 <meta property="og:site_name" content="{{ site.title }}">
 
-{%- capture page_description -%}{%- include filter-excerpt.html my_doc=page -%}{%- endcapture -%}
+{%- capture page_description -%}{%- include doc-excerpt.html -%}{%- endcapture -%}
 <meta name="description" content="{{ page_description | default: site.description | escape }}">
 <meta property="og:description" content="{{ page_description | default: site.description | escape }}">
 
@@ -36,14 +36,15 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 <meta property="og:locale" content="{{ page.lang | default: site.lang | default: 'en' | replace:'-','_' }}">
 
 {%- if page.date and page.date != site.time -%}
-{%- capture page_date -%}{%- include filter-date.html my_doc=page -%}{%- endcapture -%}
+{%- capture page_date -%}{%- include doc-date.html -%}{%- endcapture -%}
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="{{ page_date }}">
 {%- endif -%}
 
 {%- if page.updated -%}
-<meta name="revised" content="{{ page.updated | date_to_xmlschema }}">
-<meta name="og:updated_time" content="{{ page.updated | date_to_xmlschema }}">
+{%- assign page_updated = page.updated | date_to_xmlschema -%}
+<meta name="revised" content="{{ page_updated }}">
+<meta name="og:updated_time" content="{{ page_updated }}">
 {%- endif -%}
 
 {%- if page.tags -%}

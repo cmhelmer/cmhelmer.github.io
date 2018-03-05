@@ -1,8 +1,10 @@
 {%- comment -%}
 
-Filter content
+Include document content
 
-Order of filters in config takes precedence in conflict (if two overlap). Splits content by blank lines: "\n\n" (kramdown "block boundary") and ignores other kramdown "block boundaries" (EOB marker "\n^\n" and block inline attribute list "{: ...}").
+Extend kramdown with custom markdown filters.
+Split content by blank lines: "\n\n" (a kramdown "block boundary") and ignore other kramdown "block boundaries" (EOB marker "\n^\n" and block inline attribute list "{: ...}").
+Order of filters in config takes precedence in conflict (if two overlap).
 
 This is maddening without functions and regular expressions.
 
@@ -10,13 +12,13 @@ This is maddening without functions and regular expressions.
 - Set in `_config.yml`:
 	content_filters:
 	- wiki
-	- mark
+	- highlight
 	- figure
 
-To extend:
-- Add needles variable
-- Add needles as a `when` condition to site_needles (when set in config)
-- Add the custom filter handling and output in the loop as a `when` condition in "The filters"
+To extend further:
+- Add markdown variable
+- Add markdown as a `when` condition to site_markdown (when set in config)
+- Add the custom filter handling and output in the loop as a "when" condition in "The filters"
 
 TODO:
 - Check if part being replaced contains any open html elements
@@ -27,39 +29,39 @@ TODO:
 	- Video and audio links?
 	- File transclusion
 	- Inline hashtags as links to tags
-	
+
 {%- endcomment -%}
 
 {%- assign my_content = include.my_content -%}
 
-{%- assign figure_needles = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
-{%- assign mark_needles   = '::...::' | split: '...' -%}
-{%- assign wiki_needles   = '[[...]]' | split: '...' -%}
+{%- assign figure_markdown    = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
+{%- assign highlight_markdown = '::...::' | split: '...' -%}
+{%- assign wiki_markdown      = '[[...]]' | split: '...' -%}
 
-{%- assign site_needles = '' | split: ',' -%}
+{%- assign site_markdown = '' | split: ',' -%}
 {%- for content_filter in site.content_filters -%}
 	{%- comment -%} If this filter exists in config {%- endcomment -%}
 	{%- case content_filter -%}
-	{%- when 'figure' -%}
-		{%- assign site_needles = site_needles | push: figure_needles -%}
-	{%- when 'mark' -%}
-		{%- assign site_needles = site_needles | push: mark_needles -%}
 	{%- when 'wiki' -%}
-		{%- assign site_needles = site_needles | push: wiki_needles -%}
+		{%- assign site_markdown = site_markdown | push: wiki_markdown -%}
+	{%- when 'highlight' -%}
+		{%- assign site_markdown = site_markdown | push: highlight_markdown -%}
+	{%- when 'figure' -%}
+		{%- assign site_markdown = site_markdown | push: figure_markdown -%}
 	{%- endcase -%}
 {%- endfor -%}
 
-{%- if site_needles.size > 0 -%}
+{%- if site_markdown.size > 0 -%}
 
 	{%- comment -%} Basic check for match in content {%- endcomment -%}
-	{%- assign content_needles = '' | split: ',' -%}
-	{%- for needle in site_needles -%}
-		{%- if my_content contains needle.first -%}
-			{%- assign content_needles = content_needles | push: needle -%}
+	{%- assign content_markdown = '' | split: ',' -%}
+	{%- for markdown in site_markdown -%}
+		{%- if my_content contains markdown.first -%}
+			{%- assign content_markdown = content_markdown | push: markdown -%}
 		{%- endif -%}
 	{%- endfor -%}
 
-	{%- if content_needles.size > 0 -%}
+	{%- if content_markdown.size > 0 -%}
 
 		{%- comment -%} Block boundary is 2 newlines (a blank line) {%- endcomment -%}
 		{%- assign block_boundary = "
@@ -71,31 +73,31 @@ TODO:
 		{%- comment -%} Walk through blocks to make it more robust and avoid accidental inline elements spanning blocks {%- endcomment -%}
 		{%- for block in content_blocks -%}
 
-			{%- assign block_needles = '' | split: ',' -%}
+			{%- assign block_markdown = '' | split: ',' -%}
 			{%- assign filtered_block = block -%}
 
-			{%- for needle in content_needles -%}
+			{%- for markdown in content_markdown -%}
 
 				{%- comment -%}
 				Basic check for match in block
-				Check for both opening and closing needles to prevent false positives
+				Check for both opening and closing markdown to prevent false positives
 				{%- endcomment -%}
-				{%- if block contains needle.first and block contains needle.last -%}
-					{%- assign block_needles = block_needles | push: needle -%}
+				{%- if block contains markdown.first and block contains markdown.last -%}
+					{%- assign block_markdown = block_markdown | push: markdown -%}
 				{%- endif -%}
 
 			{%- endfor -%}
 
-			{%- if block_needles.size > 0 -%}
+			{%- if block_markdown.size > 0 -%}
 
-				{%- for needle in block_needles -%}
+				{%- for markdown in block_markdown -%}
 
 					{%- comment -%}
-					Split on first needle
+					Split on opening markdown
 					Skip empty item added by Liquid split filter on string-initial match
 					{%- endcomment -%}
 
-					{%- assign block_parts = filtered_block | split: needle.first | compact -%}
+					{%- assign block_parts = filtered_block | split: markdown.first | compact -%}
 
 					{%- comment -%} Keep past parts for open `<code>` check {%- endcomment -%}
 					{%- assign previous_parts = '' | split: ',' -%}
@@ -104,7 +106,7 @@ TODO:
 
 						{%- comment -%}
 						Check if part is nested in code (previous open `<code>` but no closing `</code>`)
-						Any markup demarcated by code tag is not intended for rendering
+						Any markdown demarcated by code tag is not intended for rendering
 						Must check all previous content because `pre > code` can contain an unknown number of blocks
 						{%- endcomment -%}
 
@@ -141,43 +143,43 @@ TODO:
 
 						{%- endif -%}
 
-						{%- comment -%} Split again on closing needle (redundant for identical needles like mark {%- endcomment -%}
-						{%- assign fragment = part | split: needle.last | first -%}
+						{%- comment -%} Split again on closing markdown (redundant for identical opening and closing markdown like highlight {%- endcomment -%}
+						{%- assign fragment = part | split: markdown.last | first -%}
 
 						{%- comment -%} Check that we captured something useful {%- endcomment -%}
 						{%- if fragment.size > 0 -%}
 
 							{%- comment -%}
 							TODO: Check if part contains any open or unmatched html elements without closing tag
-							Replacements may overlap; priority goes to the first needle
+							Replacements may overlap; priority goes to the first markdown
 							{%- endcomment -%}
 
 							{%- comment -%} Assemble matched content string {%- endcomment -%}
-							{%- assign content_find = fragment | prepend: needle.first | append: needle.last -%}
+							{%- assign content_find = fragment | prepend: markdown.first | append: markdown.last -%}
 							{%- assign content_replace = content_find -%}
 
 							{%- comment -%} The filters {%- endcomment -%}
 
-							{%- case needle -%}
+							{%- case markdown -%}
 
-							{%- when figure_needles -%}
+							{%- when figure_markdown -%}
 
 								{%- comment -%}
 								
 								Figure filter
 
-								Split on remaining needles: closing src with opening alt attribute, and closing alt attribute
+								Split on remaining markdown: closing src with opening alt attribute, and closing alt attribute
 								Keep whatever extra attributes may have been added to image 
 								Relies on consistent output of kramdown 
 								Avoids multiple inline images
 								
 								{%- endcomment -%}
 
-								{%- assign image_fragments_one = fragment | split: figure_needles[1] -%}
+								{%- assign image_fragments_one = fragment | split: figure_markdown[1] -%}
 								{%- assign image_src           = image_fragments_one | first -%}
-								{%- assign image_fragments_two = image_fragments_one | shift | join: figure_needles[1] | split: figure_needles[2] -%}
+								{%- assign image_fragments_two = image_fragments_one | shift | join: figure_markdown[1] | split: figure_markdown[2] -%}
 								{%- assign image_alt           = image_fragments_two | first -%}
-								{%- assign image_attributes    = image_fragments_two | shift | join: figure_needles[2] | split: figure_needles.last | first -%}
+								{%- assign image_attributes    = image_fragments_two | shift | join: figure_markdown[2] | split: figure_markdown.last | first -%}
 
 								{%- comment -%} Assume that no description means no figure intended {%- endcomment -%}
 								{%- if image_src.size > 0 and image_alt.size > 0 -%}
@@ -190,11 +192,11 @@ TODO:
 
 								{%- endif -%}
 
-							{%- when mark_needles -%}
+							{%- when highlight_markdown -%}
 
 								{%- comment -%}
 								
-								Mark (highlight) filter
+								Highlight (mark) filter
 
 								That's it.
 								
@@ -206,7 +208,7 @@ TODO:
 
 								{%- endcapture -%}
 
-							{%- when wiki_needles -%}
+							{%- when wiki_markdown -%}
 
 								{%- comment -%}
 								
@@ -238,7 +240,7 @@ TODO:
 
 							{%- comment -%}
 							And replace. 
-							Use replace instead of concatenation so that we continue to iterate over same block with all needles
+							Use replace instead of concatenation so that we continue to iterate over same block with all markdown
 							{%- endcomment -%}
 							{%- assign filtered_block = filtered_block | replace: content_find, content_replace -%}
 

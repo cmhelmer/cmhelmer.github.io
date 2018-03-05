@@ -169,7 +169,11 @@
 			// Display results count if there is a real search
 			resultsCount.innerHTML = "";
 			if (searchInput.value.length) {
-				resultsCount.innerHTML = "Results: " + results.length;
+				var resultsCountText = results.length + " result";
+				if (results.length !== 1 ) {
+					resultsCountText = resultsCountText + "s";
+				}
+				resultsCount.innerHTML = resultsCountText;
 			}
 	
 			// Set content

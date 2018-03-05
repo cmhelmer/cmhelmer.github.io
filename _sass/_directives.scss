@@ -8,9 +8,9 @@
 
 // Consistent box styles
 @mixin box( $background-color: $color-text-bg, $color: inherit ) {
-	border-radius: $border-radius;
-	background-color: $background-color;
 	color: $color;
+	background-color: $background-color;
+	border-radius: $border-radius;
 }
 
 // Block-level boxes (blockquote, pre, etc.)
@@ -19,7 +19,7 @@
 	display: block;
 	padding-left: $gap;
 	padding-right: $gap;
-	clear: left; // clear @include pull
+// 	clear: left; // clear @include pull
 	column-count: 1; // create block formatting context to contain child margins (someday contain: layout?)
 }
 
@@ -207,6 +207,21 @@
 	float: left;
 	clear: left; // in case of subsequent floats
 	margin-right: $gap;
+}
+
+@mixin rule {
+	position: relative;
+
+	&::after {
+		content: "";
+		position: absolute;
+		min-width: ( $gap * 2 );
+		width: 10%; // fallback for vw
+		width: 10vw;
+		top: 0;
+		left: 0;
+		border-top: $border-width $border-style;
+	}
 }
 
 // Scrolling hints (horizontal)

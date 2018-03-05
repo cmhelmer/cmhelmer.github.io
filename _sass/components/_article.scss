@@ -104,21 +104,14 @@
 		@include font-size( 1.0625 );
 	}
 	
-	> h1,
-	> h2,
-	> h3 {
-		@include pull-title;
-		margin-top: .375rem; // align border with top of text
-		border-top: $border-width $border-style;
-		padding-top: ( $gap - $border-width - .375rem ); // $gap - border-width - margin-top
-	}
-
 /*
 	// TODO: Add pull headings to sections ?
 	> h1,
 	> h2,
 	> h3 {
 		@include pull-title;
+		@include rule;
+		padding-top: $gap;
 	}
 
 	// Add border if pull-title isn't preceded by <hr>

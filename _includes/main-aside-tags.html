@@ -8,7 +8,7 @@ Doesn't display tags which only match one document (this one)
 {%- assign useful_tags = "" | split: "," -%}
 
 {%- for tag in page.tags -%}
-	{%- assign docs = site.documents | where_exp: "doc", "doc.tags contains tag" -%}
+	{%- assign docs = site.documents | where_exp: "document", "document.tags contains tag" -%}
 	{%- if docs.size > 1 -%}
 		{%- assign useful_tags = useful_tags | push: tag -%}
 	{%- endif -%}
@@ -22,7 +22,7 @@ Doesn't display tags which only match one document (this one)
 <aside class="doc-tags main-aside" role="complementary">
 	<h2 class="aside-title">More On…</h2>
 	<div class="aside-content">
-		{%- include list-tags.html my_tags=useful_tags -%}
+		{%- include list-tags.html tags=useful_tags rel=true -%}
 	</div>
 </aside>
 

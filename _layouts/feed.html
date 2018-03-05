@@ -27,7 +27,7 @@ Ignores any passed in content
       {{- " " -}}
       {{ site.title_separator | default: "|" }}
       {{- " " -}}
-      {{- page.title -}}
+      {{ page.title }}
     {%- endif -%}
   {%- endcapture -%}
   <title type="html">{{ feed_title | smartify | xml_escape }}</title>
@@ -51,22 +51,22 @@ Ignores any passed in content
   {%- comment -%} Get list of docs; sort by ID, unless posts {%- endcomment -%}
 
   {%- if page.collection -%}
-    {%- assign my_docs = site.documents | where: "collection", page.collection -%}
+    {%- assign docs = site.documents | where: "collection", page.collection -%}
   {%- else -%}
-    {%- assign my_docs = site.documents -%}
+    {%- assign docs = site.documents -%}
   {%- endif -%}
 
   {%- unless page.collection == "posts" -%}
-    {%- assign my_docs = my_docs | where_exp: "doc", "doc.uid" | sort: "uid", "first" -%}
+    {%- assign docs = docs | where_exp: "document", "document.uid != nil" | sort: "uid", "first" -%}
   {%- endunless -%}
 
   {%- comment -%} Reverse to show recent first {%- endcomment -%}
-  {%- assign my_docs = my_docs | reverse -%}
+  {%- assign docs = docs | reverse -%}
 
-  {%- for doc in my_docs limit: 20 -%}
+  {%- for doc in docs limit: 20 -%}
 
-  {%- capture doc_title -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
-  {%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
+  {%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
+  {%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
   
   {%- comment -%} Use referenced link if available {%- endcomment -%}
   {%- assign doc_url = doc.reference.url | default: doc.url -%}
@@ -95,19 +95,19 @@ Ignores any passed in content
   <entry{%- if doc.lang -%}{{ " " }}xml:lang="{{ doc.lang }}"{%- endif -%}>
     <title type="html">{{ doc_title | xml_escape }}</title>
     <link href="{{ doc_url | absolute_url }}" rel="alternate" type="text/html" title="{{ doc_title | xml_escape }}" />
-    <published>{{ doc_date | date_to_xmlschema }}</published>
+    <published>{{ doc_date }}</published>
     <updated>{{ doc.updated | default: doc_date | date_to_xmlschema }}</updated>
     <id>{{ doc.url | absolute_url | xml_escape }}</id>
     <content type="html" xml:base="{{ doc.url | absolute_url }}">
 
       {%- comment -%} Include featured image {%- endcomment -%}
-      {%- capture image_content -%}{%- include content-image.html my_doc=doc -%}{%- endcapture -%}
+      {%- capture image_content -%}{%- include content-image.html doc=doc -%}{%- endcapture -%}
       {{- image_content | xml_escape -}}
 
-      {%- capture content -%}{%- include content.html my_doc=my_doc -%}{%- endcapture -%}
+      {%- capture content -%}{%- include content.html doc=doc -%}{%- endcapture -%}
       {{- content | xml_escape -}}
 
-      {%- comment -%} Include links to enclosures (backup) {%- endcomment -%}
+      {%- comment -%} Include links to enclosures (fallback) {%- endcomment -%}
       {%- if doc_enclosures.size > 0 -%}
       {%- capture enclosure_content -%}
       <hr />
@@ -162,7 +162,7 @@ Ignores any passed in content
     <category term="{{ tag | xml_escape }}" />
     {%- endfor -%}
 
-    {%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
+    {%- capture doc_excerpt -%}{%- include doc-excerpt.html doc=doc -%}{%- endcapture -%}
     <summary type="html">{{ doc_excerpt | xml_escape }}</summary>
 
     {%- if doc.image -%}

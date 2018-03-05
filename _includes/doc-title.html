@@ -1,34 +1,38 @@
 {%- comment -%}
 
-Filter title
+Include document title
 
 Modify titles if title is not explicitly set
 Default titles: explicit title, reference title, reduced excerpt (in that order) (ignores filename)
 Convert quotes to typographer's (curly) quotes
 
-Advanced: Avoid typographical orphans and widows and provide way to style titles and subtitles (split on colon)
-
-- Pass in full document (page)
+- Pass in document (optional)
+- Pass in boolean filter (optional)
 
 TODO:
 - Add ordinals filter
 
 {%- endcomment -%}
 
-{%- assign my_doc = include.my_doc -%}
-{%- assign my_title = my_doc.title | strip_html | normalize_whitespace | strip -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
+
+{%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip -%}
 
 {%- comment -%}
 Title defaults to avoid slug-for-a-title
 {%- endcomment -%}
 
-{%- assign my_title_slug = my_title | slugify -%}
-{%- if my_title_slug == my_doc.slug -%}
-	{%- capture my_title -%}
-		{%- if my_doc.reference.title -%}
-			“{{ my_doc.reference.title }}”
+{%- assign doc_title_slug = doc_title | slugify -%}
+{%- if doc_title_slug == doc.slug -%}
+	{%- capture doc_title -%}
+		{%- if doc.reference.title -%}
+			“{{ doc.reference.title }}”
 		{%- else -%}
-			{%- include filter-excerpt.html my_doc=my_doc excerpt_length=70 -%}
+			{%- include doc-excerpt.html doc=doc excerpt_length=70 -%}
 		{%- endif -%}
 	{%- endcapture -%}
 {%- endif -%}
@@ -37,13 +41,17 @@ Title defaults to avoid slug-for-a-title
 Quotes treatment
 {%- endcomment -%}
 
-{%- assign my_title = my_title | smartify -%}
+{%- assign doc_title = doc_title | smartify -%}
 
 {%- comment -%}
-Advanced filters
+
+Filters:
+- Avoid typographical orphans and widows
+- Add span tags around titles and subtitles (split on colon)
+
 {%- endcomment -%}
 
-{%- if include.advanced -%}
+{%- if include.filter == true -%}
 
 	{%- comment -%}
 	Orphans and widows treatment
@@ -52,9 +60,9 @@ Advanced filters
 	{%- assign orphans = 3 -%}
 	{%- assign widows = 3 -%}
 	
-	{%- if my_title contains " " -%}
+	{%- if doc_title contains " " -%}
 	
-		{%- assign title_parts = my_title | split: " " -%}
+		{%- assign title_parts = doc_title | split: " " -%}
 		{%- assign new_title = title_parts | first -%}
 	
 		{%- for part in title_parts offset: 1 -%}
@@ -76,7 +84,7 @@ Advanced filters
 	
 		{%- endfor -%}
 	
-		{%- assign my_title = new_title -%}
+		{%- assign doc_title = new_title -%}
 	
 	{%- endif -%}
 	
@@ -86,12 +94,12 @@ Advanced filters
 	
 	{%- assign subtitle_demarcator = ": " -%}
 	
-	{%- if my_title contains subtitle_demarcator -%}
+	{%- if doc_title contains subtitle_demarcator -%}
 	
-		{%- assign title_parts = my_title | split: subtitle_demarcator -%}
+		{%- assign title_parts = doc_title | split: subtitle_demarcator -%}
 		{%- assign previous_parts = "" | split: "," | push: title_parts.first -%}
 		{%- assign remaining_parts = title_parts | shift -%}
-		{%- assign subtitle = "" -%}
+		{%- assign subtitle_part = "" -%}
 	
 		{%- for part in title_parts offset: 1 -%}
 	
@@ -101,11 +109,11 @@ Advanced filters
 	
 			{%- if previous_content contains '‘' or previous_content contains '“' -%}
 	
-				{%- assign quotes_opened_one = previous_content | split: '‘' | shift | size -%}
-				{%- assign quotes_opened_two = previous_content | split: '“' | shift | size -%}
+				{%- assign single_quote_opened = previous_content | split: '‘' | shift | size -%}
+				{%- assign double_quote_opened = previous_content | split: '“' | shift | size -%}
 				
-				{%- assign quotes_closed_one = previous_content | split: '’' | shift | size -%}
-				{%- assign quotes_closed_two = previous_content | split: '”' | shift | size -%}
+				{%- assign single_quote_closed = previous_content | split: '’' | shift | size -%}
+				{%- assign double_quote_closed = previous_content | split: '”' | shift | size -%}
 	
 				{%- comment -%}
 				Check if string ends with quotes to get accurate count
@@ -114,12 +122,12 @@ Advanced filters
 	
 				{%- assign last_character = previous_content | split: '' | last -%}
 				{%- if last_character == '’' -%}
-					{%- assign quotes_closed_one = quotes_closed_one | plus: 1 -%}
+					{%- assign single_quote_closed = single_quote_closed | plus: 1 -%}
 				{%- elsif last_character == "”" -%}
-					{%- assign quotes_closed_two = quotes_closed_two | plus: 1 -%}
+					{%- assign double_quote_closed = double_quote_closed | plus: 1 -%}
 				{%- endif -%}
 	
-				{%- unless (quotes_opened_one <= quotes_closed_one) and (quotes_opened_two <= quotes_closed_two) -%}
+				{%- unless (single_quote_opened <= single_quote_closed) and (double_quote_opened <= double_quote_closed) -%}
 					{%- assign previous_parts = previous_parts | push: part -%}
 					{%- assign remaining_parts = remaining_parts | shift -%}
 					{%- continue -%}
@@ -127,21 +135,21 @@ Advanced filters
 	
 			{%- endif -%}
 	
-			{%- assign my_title = previous_parts | join: subtitle_demarcator -%}
-			{%- assign subtitle = remaining_parts | join: subtitle_demarcator -%}
+			{%- assign doc_title = previous_parts | join: subtitle_demarcator -%}
+			{%- assign subtitle_part = remaining_parts | join: subtitle_demarcator -%}
 			{%- break -%}
 	
 		{%- endfor -%}
 	
-		{%- if subtitle != empty -%}
-			{%- assign subtitle = subtitle | prepend: '<span class="subtitle">' | append: '</span>' -%}
-			{%- assign my_title = my_title | prepend: '<span class="title">' | append: '</span>' -%}
-			{%- assign my_title = my_title | append: '<span class="title-separator">' | append: subtitle_demarcator | append: '</span>' -%}
-			{%- assign my_title = my_title | append: subtitle -%}
+		{%- if subtitle_part != empty -%}
+			{%- assign subtitle_part = subtitle_part | prepend: '<span class="subtitle">' | append: '</span>' -%}
+			{%- assign doc_title = doc_title | prepend: '<span class="title">' | append: '</span>' -%}
+			{%- assign doc_title = doc_title | append: '<span class="title-separator">' | append: subtitle_demarcator | append: '</span>' -%}
+			{%- assign doc_title = doc_title | append: subtitle_part -%}
 		{%- endif -%}
 	
 	{%- endif -%}
 
 {%- endif -%}
 
-{{- my_title -}}
+{{- doc_title -}}

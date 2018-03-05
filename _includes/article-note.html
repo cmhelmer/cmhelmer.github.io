@@ -1,28 +1,35 @@
 {%- comment -%}
 
 Include note article
+- Pass in document (optional)
 
 {%- endcomment -%}
 
-{%- assign page_image        = page.image.path | default: page.image -%}
-{%- assign page_author       = page.author | default: page.authors.first | default: site.author -%}
-{%- assign page_author_name  = page_author.name | default: page_author -%}
-{%- assign page_author_email = page_author.email | default: site.email -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
+
+{%- assign doc_image        = doc.image.path | default: doc.image -%}
+{%- assign doc_author       = doc.author | default: doc.authors.first | default: site.author -%}
+{%- assign doc_author_name  = doc_author.name | default: doc_author -%}
+{%- assign doc_author_email = doc_author.email | default: site.email -%}
 
 <hr class="main-rule rule-article">
 
-<article id="note-{{ page.uid }}" class="note-doc {{ page.collection }}-collection main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+<article id="note-{{ doc.uid }}" class="note-doc {{ doc.collection }}-collection main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="article-header">
 
 		<div class="doc-index">
 
 			{%- comment -%} Display collection, with link if collection "index" page exists {%- endcomment -%}
 
-			{%- if page.collection != "posts" -%}
+			{%- if doc.collection != "posts" -%}
 
-			{%- assign collection = site.collections | where: "label", page.collection | first -%}
-			{%- assign collection_name = collection.title | default: page.collection -%}
-			{%- assign index = site.pages | where_exp: "page", "page.collection == page.collection" | where_exp: "page", "page.layout == 'contents'" | first -%}
+			{%- assign collection = site.collections | where: "label", doc.collection | first -%}
+			{%- assign collection_name = collection.title | default: doc.collection -%}
+			{%- assign index = site.pages | where_exp: "page", "page.collection == doc.collection" | where_exp: "page", "page.layout == 'contents'" | first -%}
 
 			{%- capture collection_meta -%}
 			{%- if index.url -%}
@@ -35,29 +42,29 @@ Include note article
 			<span class="doc-collection doc-meta">{{ collection_meta }}</span>{{" "}}
 			{%- endif -%}
 
-			{%- capture page_date -%}{%- include filter-date.html my_doc=page -%}{%- endcapture -%}
-			<time class="doc-id doc-meta" datetime="{{ page_date }}" title="{{ page_date | date_to_rfc822 }}">{{ page.uid }}</time>
+			{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
+			<time class="doc-id doc-meta" datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}">{{ doc.uid }}</time>
 
 		</div>
 
-	    {%- if page_image -%}
-	    {%- unless page_image contains "://" -%}
-	    {%- assign page_image = page_image | absolute_url -%}
+	    {%- if doc_image -%}
+	    {%- unless doc_image contains "://" -%}
+	    {%- assign doc_image = doc_image | absolute_url -%}
 	    {%- endunless -%}
-		<figure class="doc-image doc-meta"><img src="{{ page_image }}" alt="{{ page.image.description | escape }}" class="u-featured">{%- if page.image.description -%}<figcaption>{{ page.image.description }}</figcaption>{%- endif -%}</figure>
+		<figure class="doc-image doc-meta"><img src="{{ doc_image }}" alt="{{ doc.image.description | escape }}" class="u-featured">{%- if doc.image.description -%}<figcaption>{{ doc.image.description }}</figcaption>{%- endif -%}</figure>
 		{%- endif -%}
 
-		{%- comment -%} Don't display title if none explicitly set {%- endcomment -%}
-		{%- assign page_title_slug = page.title | slugify -%}
-		{%- unless page_title_slug == page.slug -%}
-		{%- capture page_title -%}{%- include filter-title.html my_doc=page -%}{%- endcapture -%}
-		<h1 class="doc-title doc-meta">{{ page_title }}</h1>
+		{%- comment -%} Get title but don't display unless it was explicitly set {%- endcomment -%}
+		{%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
+		{%- assign doc_title_slug = doc.title | slugify -%}
+		{%- unless doc_title_slug == doc.slug -%}
+		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
 		{%- endunless -%}
 		
 		<div class="doc-byline">
 
 			{%- comment -%} Even if single author site, output author for scrapers {%- endcomment -%}
-			<div class="doc-author doc-meta">By {{ page_author_name }}</div>
+			<div class="doc-author doc-meta">By {{ doc_author_name }}</div>
 	
 			{%- comment -%}
 			Reading time
@@ -66,21 +73,21 @@ Include note article
 			Add 1 min. to time to make it more accurate and to avoid 0 ("divided_by" filter is integer division)
 			{%- endcomment -%}
 
-			{%- assign page_readtime = page.content | number_of_words | divided_by: 200 | plus: 1 -%}
-			{% if page_readtime > 1 %}
-			<div class="doc-readtime doc-meta">{{ page_readtime }} min. read</div>
+			{%- assign doc_readtime = doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
+			{% if doc_readtime > 1 %}
+			<div class="doc-readtime doc-meta">{{ doc_readtime }} min. read</div>
 			{%- endif -%}
 
-			{%- if page.updated -%}
-			<div class="doc-updated doc-meta">Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: site.date_format }}</time></div>
+			{%- if doc.updated -%}
+			<div class="doc-updated doc-meta">Updated <time datetime="{{ doc.updated | date_to_xmlschema }}">{{ doc.updated | date: site.date_format }}</time></div>
 			{%- endif -%}
 	
 		</div>
 		
-		{%- if page.location and site.google_static_maps -%}
+		{%- if doc.location and site.google_static_maps -%}
 		{%- comment -%} No check of location; Google parses addresses and coordinates {%- endcomment -%}
 		<div class="doc-location doc-meta">
-			<img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ page.location | url_encode }}&zoom=6&size=640x274&scale=2&key={{ site.google_static_maps }}" alt="Located at {{ page.location | escape }}">
+			<img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ doc.location | url_encode }}&zoom=6&size=640x274&scale=2&key={{ site.google_static_maps }}" alt="Located at {{ doc.location | escape }}">
 		</div>
 		{%- endif -%}
 
@@ -88,25 +95,23 @@ Include note article
 
 	<div class="article-content">
 
-		{%- capture content -%}{%- include content.html my_doc=page -%}{%- endcapture -%}
-
-		{{- content -}}
+		{%- include content.html doc=doc -%}
 
 	</div>
 	
 	<footer class="article-footer">
 
 		{%- comment -%} Reply by email {%- endcomment -%}
-		{%- if page_author_email -%}
+		{%- if doc_author_email -%}
 		<div class="doc-reply doc-meta">
-			<p><a href="mailto:{{ page_author_email }}?subject=Re: {{ page.title | strip_html | normalize_whitespace | escape }}"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></p>
+			<p><a href="mailto:{{ doc_author_email }}?subject=Re: {{ doc_title | escape }}"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Reply</a></p>
 		</div>
 		{%- endif -%}
 
 		{%- comment -%} Link to GitHub history {%- endcomment -%}
 		{%- if site.author.github -%}
 		<div class="doc-history doc-meta">
-			<p><a href="{{ site.github.repository_url }}/commits/master/{{ page.path }}"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a>
+			<p><a href="{{ site.github.repository_url }}/commits/master/{{ doc.path }}"><svg class="icon icon-github" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#github' | absolute_url }}"></use></svg>History</a>
 			</p>
 		</div>
 		{%- endif -%}

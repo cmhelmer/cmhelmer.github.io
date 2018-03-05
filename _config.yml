@@ -30,7 +30,7 @@ excerpt_length: 140
 
 content_filters:
 - wiki
-- mark
+- highlight
 - figure
 
 permalink: /:slug

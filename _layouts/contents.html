@@ -19,7 +19,7 @@ Builds a table of contents (list) for site documents or the current collection
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 
@@ -37,12 +37,12 @@ Builds a table of contents (list) for site documents or the current collection
 			{%- if page.collection -%}
 				{%- assign docs = site.documents | where: "collection", page.collection -%}
 			{%- else -%}
-				{%- assign docs = site.documents | where_exp: "doc", "doc.collection != 'posts'" -%}
+				{%- assign docs = site.documents | where_exp: "document", "document.collection != 'posts'" -%}
 			{%- endif -%}
-			{%- assign docs = docs | where_exp: "doc", "doc.uid" | sort: "uid" | reverse -%}
+			{%- assign docs = docs | where_exp: "document", "document.uid != nil" | sort: "uid" | reverse -%}
 		{%- endif -%}
 
-		{%- include list-docs.html my_docs=docs -%}
+		{%- include list-docs.html docs=docs -%}
 
 	</div>
 </article>

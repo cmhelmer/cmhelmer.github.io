@@ -1,14 +1,18 @@
 {%- comment -%}
 
 Include custom content for documents
-- Pass in document
+- Pass in document (optional)
 
 {%- endcomment -%}
 
-{%- assign my_doc = include.my_doc -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
 
-{%- include content-reference.html my_ref=my_doc.reference -%}
+{%- include content-reference.html reference=doc.reference -%}
 
-{%- assign my_content = my_doc.content -%}
+{%- assign my_content = doc.content -%}
 
-{%- include filter-content.html my_content=my_content -%}
+{%- include doc-content.html my_content=my_content -%}

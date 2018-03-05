@@ -1,24 +1,33 @@
 {%- comment -%}
 
 Include post/blog article
+- Pass in document (optional)
 
 {%- endcomment -%}
 
-{%- capture page_date -%}{%- include filter-date.html my_doc=page -%}{%- endcapture -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
 
-{%- capture page_date -%}<a href="{{ page.url | absolute_url }}" rel="bookmark"><time datetime="{{ page_date }}" title="{{ page_date | date_to_rfc822 }}">{{ page_date | date: site.date_format }}</time></a>:{%- endcapture -%}
+{%- comment -%} Build date, adding permalink if this page is not it {%- endcomment -%}
+
+{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
+{%- capture doc_date -%}<time datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}">{{ doc_date | date: site.date_format }}</time>:{%- endcapture -%}
+{%- if doc.url != page.url -%}
+	{%- capture doc_date -%}<a href="{{ doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
+{%- endif -%}
 
 <hr class="main-rule rule-article">
 
-<article id="post-{{ page.slug }}" class="post-doc main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
+<article id="post-{{ doc.slug }}" class="post-doc main-article h-entry" role="document" itemscope itemtype="http://schema.org/BlogPosting">
 	<header class="article-header">
-		<div class="doc-date doc-meta">{{ page_date }}</div>
+		<div class="doc-date doc-meta">{{ doc_date }}</div>
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include content.html my_doc=page -%}{%- endcapture -%}
-
-		{{- content -}}
+		{%- include content.html doc=doc -%}
 
 	</div>
 </article>

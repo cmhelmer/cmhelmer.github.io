@@ -23,19 +23,19 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 
 		{%- comment -%} Get list of unique tags for site or collection {%- endcomment -%}
 
 		{%- if page.collection -%}
-			{%- assign docs = site.documents | where: "collection", page.collection -%}
+			{%- assign documents = site.documents | where: "collection", page.collection -%}
 		{%- else -%}
-			{%- assign docs = site.documents -%}
+			{%- assign documents = site.documents -%}
 		{%- endif -%}
 
-		{%- assign tags = docs | map: "tags" | compact | uniq | sort_natural -%}
+		{%- assign tags = documents | map: "tags" | compact | uniq | sort_natural -%}
 
 		{%- comment -%}
 		Subset list of tags to those in data set
@@ -56,8 +56,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 		{%- else -%}
 
 		{%- comment -%}
-		TEMP...
-		Exclude list of Scripture tags in data set
+		TEMP: Exclude list of Scripture tags in data set
 		{%- endcomment -%}
 
 		{%- assign sub_tags = "" | split: "," -%}
@@ -70,20 +69,22 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 		{%- endif -%}
 
-		{%- include list-tags.html my_tags=tags -%}
+		{%- include list-tags.html tags=tags -%}
 
 		{%- comment -%} Get tagged documents and display in sections {%- endcomment -%}
 
+		{%- for tag in tags -%}
+
 		<hr>
 
-		{%- for tag in my_tags -%}
 		<section id="{{ tag | slugify }}" class="tag-details">
 			<h2 class="tag-summary"><span class="tag">{{ tag }}</span></h2>
 		
-			{%- assign tagged_docs = docs | where_exp: "doc", "doc.tags contains tag" | sort: "uid", "first" | reverse -%}
-			{%- include list-docs.html my_docs=tagged_docs -%}
+			{%- assign tagged_docs = documents | where_exp: "document", "document.tags contains tag" | sort: "uid", "first" | reverse -%}
+			{%- include list-docs.html docs=tagged_docs -%}
 		
 		</section>
+
 		{%- endfor -%}
 
 	</div>

@@ -300,22 +300,15 @@ abbr {
 
 hr {
 	@include measure;
+	@include rule;
 	position: relative;
-	min-height: 1px; // don't collapse
-	margin-top: ( $gap * 1.5 );
-	margin-bottom: ( $gap * 1.5 );
+	height: $gap; // don't collapse
+	margin-top: $gap;
+	margin-bottom: $gap;
 	border: 0;
-	
 	&::after {
-		content: "";
-		position: absolute;
-		min-width: ( $gap * 2 );
-		width: 10%; // fallback for vw
-		width: 10vw;
-		top: 0;
-		left: 0;
-		border-top: $border-width $border-style;
-// 		transform: translateY(-50%); // in case border-style is big
+		top: 50%; // override
+// 		transform: translateY(-50%); // vertically align border-width
 	}
 }
 

@@ -13,8 +13,6 @@ permalink:	/data/corpus.json
 
 	{%- for doc in docs -%}
 
-		{%- assign fields = "" | split: "," -%}
-
 		{%- comment -%}
 
 		Build data for Lunr, matching fields added to lunr function in script.js
@@ -26,15 +24,17 @@ permalink:	/data/corpus.json
 
 		{%- endcomment -%}
 
+		{%- assign fields = "" | split: "," -%}
+
 		{%- assign doc_uid = doc.uid | strip -%}
 		{%- assign doc_uid = doc_uid | jsonify | prepend: '"uid":' -%}
 		{%- assign fields = fields | push: doc_uid -%}
 
-		{%- capture doc_title -%}{%- include filter-title.html my_doc=doc -%}{%- endcapture -%}
+		{%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_title = doc_title | jsonify | prepend: '"title":' -%}
 		{%- assign fields = fields | push: doc_title -%}
 
-		{%- capture doc_content -%}{%- include content.html my_doc=doc -%}{%- endcapture -%}
+		{%- capture doc_content -%}{%- include content.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_content = doc_content | newline_to_br | replace: "<br />", " " | strip_html | strip_newlines | normalize_whitespace -%}
 		{%- assign doc_content = doc_content | jsonify | prepend: '"content":' -%}
 		{%- assign fields = fields | push: doc_content -%}
@@ -48,7 +48,7 @@ permalink:	/data/corpus.json
 		{%- assign doc_tags = doc_tags | jsonify | prepend: '"tag":' -%}
 		{%- assign fields = fields | push: doc_tags -%}
 
-		{%- capture doc_date -%}{%- include filter-date.html my_doc=doc -%}{%- endcapture -%}
+		{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_date = doc_date | date: site.date_format -%}
 		{%- assign doc_date = doc_date | jsonify | prepend: '"date":' -%}
 		{%- assign fields = fields | push: doc_date -%}
@@ -65,7 +65,7 @@ permalink:	/data/corpus.json
 		{%- assign doc_author = doc_author | jsonify | prepend: '"author":' -%}
 		{%- assign fields = fields | push: doc_author -%}
 		
-		{%- capture doc_excerpt -%}{%- include filter-excerpt.html my_doc=doc -%}{%- endcapture -%}
+		{%- capture doc_excerpt -%}{%- include doc-excerpt.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_excerpt = doc_excerpt | jsonify | prepend: '"excerpt":' -%}
 		{%- assign fields = fields | push: doc_excerpt -%}
 

@@ -1,23 +1,33 @@
 {%- comment -%}
 
 Include tag list
-- Pass in tags
+- Pass in tags (optional)
+- Pass in boolean if tags are related to this page (optional)
 
 {%- endcomment -%}
 
-{%- assign my_tags = include.my_tags -%}
-
-{%- if my_tags.size > 0 -%}
-
-{%- comment -%} Determine if this is individual document or tags list {%- endcomment -%}
-{%- assign is_doc = false -%}
-{%- if page.layout == "page" or page.layout == "post" or page.layout == "note" -%}
-{%- assign is_doc = true -%}
+{%- if include.tags -%}
+	{%- assign tags = include.tags -%}
+{%- else -%}
+	{%- assign tags = page.tags -%}
 {%- endif -%}
 
+{%- if tags.size > 0 -%}
+
 <ul class="tag-list">
-	{%- for tag in my_tags -%}
-	<li class="tag-item"><a href="{%- if is_doc -%}/tags/{%- endif -%}#{{ tag | slugify }}" class="tag"{%- if is_doc -%}{{ " " }}rel="tag"{%- endif -%}>{{ tag }}</a></li>
+	{%- comment -%}
+	NOTE: Tags page url is hard-coded here...
+	Also Scripture tags hard-coded here...
+	{%- endcomment -%}
+
+	{%- for tag in tags -%}
+	{%- if site.data.scripture contains tag -%}
+		{%- assign tag_url = site.html_pages | where: "layout", "tags" | where_exp: "html_page", "html_page.collection == nil" | where: "data", "scripture" | map: "url" | first -%}
+	{%- else -%}
+		{%- assign tag_url = site.html_pages | where: "layout", "tags" | where_exp: "html_page", "html_page.collection == nil" | where_exp: "html_page", "html_page.data == nil" | map: "url" | first -%}
+	{%- endif -%}
+	
+	<li class="tag-item"><a href="{{ tag_url | absolute_url }}#{{ tag | slugify }}" class="tag"{%- if include.rel == true -%}{{ " " }}rel="tag"{%- endif -%}>{{ tag }}</a></li>
 	{%- endfor -%}
 </ul>
 

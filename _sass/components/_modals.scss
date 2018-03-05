@@ -34,6 +34,7 @@ dialog {
 		column-width: 12rem; // to taste
 		column-gap: $gap; // fallback
 		column-gap: var(--gutter);
+
 		> * {
 			-webkit-column-break-inside: avoid;
 			page-break-inside: avoid;
@@ -46,6 +47,7 @@ dialog {
 	max-width: ( $measure + ( $gap * 2 ) ); // fallback
 	max-width: calc(#{$measure} + (var(--gutter) * 2)); // override; include children padding
 	padding: 0; // override; defer to children
+
 	.aside-header,
 	.aside-content {
 		padding: $gap; // fallback
@@ -53,8 +55,10 @@ dialog {
 		margin: 0; // padding instead
 		border-radius: ( $border-radius * 2 );
 	}
+
 	.aside-header {
 		@include sticky;
+
 		&::after {
 			content: "";
 			position: absolute;
@@ -71,12 +75,15 @@ dialog {
 			background-position: top;
 		}
 	}
+
 	.aside-content {
 		padding-top: $gap; // override
+
 		&:empty {
 			display: none;
 		}
 	}
+
 	input[type="search"] {
 		padding-right: 6rem; // for .results-count
 	}

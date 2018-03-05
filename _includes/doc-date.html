@@ -1,16 +1,15 @@
 {%- comment -%}
 
-Filter date
+Include document date
 
-Use date if not site build time or time set to 0
-(Collection documents don't have dates by default)
-(Jekyll defaults to site build time)
-(Posts have date but no time unless set in metadata)
-Parse datetime from ID, because we can, and to avoid redundant metadata
+Use dates that are set explicitly (in metadata) and implicitly (post filenames)
+Use uid to replace dates that set to site build time (default for pages, collections)
+Use uid to replace times that are 0 (such as implicitly set posts) unless date differs from uid
+Datetime can be parsed from uid to avoid redundant metadata
+Assume 12-digit uid string (YYYYMMDDhhmm or %Y%m%d%H%M)
 Format date to ISO8601 standard for feeds and html "datetime" attribute
 
-- Pass in full document (page)
-- Assume 12-digit uid string (YYYYMMDDhhmm or %Y%m%d%H%M)
+- Pass in document (optional)
 
 TODO:
 - Remove date_to_xmlschema from other places
@@ -18,13 +17,17 @@ TODO:
 
 {%- endcomment -%}
 
-{%- assign my_doc = include.my_doc -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
 
-{%- if my_doc.uid != nil -%}
+{%- if doc.uid != nil -%}
 
 	{%- comment -%} Parse datetime from uid {%- endcomment -%}
 
-	{%- assign doc_uid = my_doc.uid | strip -%}
+	{%- assign doc_uid = doc.uid | strip -%}
 
 	{%- assign uid_year   = doc_uid | slice:  0, 4 -%}
 	{%- assign uid_month  = doc_uid | slice:  4, 2 -%}
@@ -41,12 +44,12 @@ TODO:
 
 	{%- assign uid_date = uid_datetime | date: "%Y-%m-%d" -%}
 	{%- assign uid_time = uid_datetime | date: "%H:%M" -%}
-	{%- assign my_date = my_doc.date | date: "%Y-%m-%d" -%}
-	{%- assign my_time = my_doc.date | date: "%H:%M" -%}
+	{%- assign doc_date = doc.date | date: "%Y-%m-%d" -%}
+	{%- assign doc_time = doc.date | date: "%H:%M" -%}
 
 	{%- comment -%} Use uid datetime for docs without dates (default site build time) {%- endcomment -%}
 
-	{%- if my_doc.date == site.time -%}
+	{%- if doc.date == site.time -%}
 
 		{%- assign doc_datetime = uid_datetime -%}
 
@@ -56,19 +59,19 @@ TODO:
 	Comparing dates for edge case of explicitly set date different from uid with time of midnight
 	{%- endcomment -%}
 
-	{%- elsif my_time == "00:00" and my_date == uid_date -%}
+	{%- elsif doc_time == "00:00" and doc_date == uid_date -%}
 	
-		{%- assign doc_datetime = my_date | append: " " | append: uid_time -%}
+		{%- assign doc_datetime = doc_date | append: " " | append: uid_time -%}
 
 	{%- else -%}
 	
-		{%- assign doc_datetime = my_doc.date -%}
+		{%- assign doc_datetime = doc.date -%}
 
 	{%- endif -%}
 
 {%- else -%}
 
-	{%- assign doc_datetime = my_doc.date -%}
+	{%- assign doc_datetime = doc.date -%}
 
 {%- endif -%}
 

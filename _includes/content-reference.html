@@ -2,59 +2,83 @@
 
 Include reference if present in metadata
 Gets reference metadata of another document by uid
-- Pass in reference metadata
+- Pass in reference metadata (optional)
 
 {%- endcomment -%}
 
-{%- assign my_ref = include.my_ref -%}
+{%- if include.reference -%}
+	{%- assign reference = include.reference -%}
+{%- else -%}
+	{%- assign reference = page.reference -%}
+{%- endif -%}
 
-{%- if my_ref != nil -%}
+{%- if reference != nil -%}
 
 	{%- comment -%} Try to get referenced reference by uid {%- endcomment -%}
 
-	{%- assign ref_uid = my_ref.uid | default: my_ref -%}
+	{%- assign ref_uid = reference.uid | default: reference -%}
 	{%- assign ref_ref = "" -%}
 	{%- if ref_uid != nil -%}
 
-		{%- assign ref_doc = site.documents | where: "uid", ref_uid | where_exp: "doc", "doc.reference != nil" | first -%}
+		{%- assign ref_doc = site.documents | where: "uid", ref_uid | where_exp: "document", "document.reference != nil" | first -%}
 		{%- assign ref_ref = ref_doc.reference -%}
 
 	{%- endif -%}
 
 	{%- comment -%} Let this doc's metadata override referenced doc {%- endcomment -%}
 
-	{%- assign ref_title       = my_ref.title       | default: ref_ref.title       | strip -%}
-	{%- assign ref_author      = my_ref.author      | default: ref_ref.author      | strip -%}
-	{%- assign ref_publication = my_ref.publication | default: ref_ref.publication | strip -%}
-	{%- assign ref_date        = my_ref.date        | default: ref_ref.date        | strip -%}
-	{%- assign ref_accessed    = my_ref.accessed    | default: ref_ref.accessed    | strip -%}
-	{%- assign ref_pages       = my_ref.pages       | default: ref_ref.pages       | strip -%}
-	{%- assign ref_url         = my_ref.url         | default: ref_ref.url         | strip -%}
+	{%- assign ref_title       = reference.title       | default: ref_ref.title       | strip -%}
+	{%- assign ref_author      = reference.author      | default: ref_ref.author      | strip -%}
+	{%- assign ref_publication = reference.publication | default: ref_ref.publication | strip -%}
+	{%- assign ref_date        = reference.date        | default: ref_ref.date        | strip -%}
+	{%- assign ref_accessed    = reference.accessed    | default: ref_ref.accessed    | strip -%}
+	{%- assign ref_pages       = reference.pages       | default: ref_ref.pages       | strip -%}
+	{%- assign ref_url         = reference.url         | default: ref_ref.url         | strip -%}
 
 	{%- comment -%} Informal bibliographic reference {%- endcomment -%}
+
+	{%- assign doc_ref = "" | split: "," -%}
+
+	{%- if ref_author != "" -%}
+		{%- capture ref_author -%}
+			<span class="ref-author">{{ ref_author }}</span>
+		{%- endcapture -%}
+		{%- assign doc_ref = doc_ref | push: ref_author -%}
+	{%- endif -%}
+
+	{%- if ref_title != "" -%}
+		{%- capture ref_title -%}
+			“<span class="ref-title">{{ ref_title | default: ref }}</span>”
+		{%- endcapture -%}
+		{%- assign doc_ref = doc_ref | push: ref_title -%}
+	{%- endif -%}
+
+	{%- if ref_publication != "" -%}
+		{%- capture ref_publication -%}
+			<i class="ref-publication">{{ ref_publication }}</i>
+		{%- endcapture -%}
+		{%- assign doc_ref = doc_ref | push: ref_publication -%}
+	{%- endif -%}
+
+	{%- if ref_date != "" -%}
+		{%- capture ref_date -%}
+			(<time class="ref-date" datetime="{{ ref_date | date_to_xmlschema }}">{{ ref_date | date: site.date_format }}</time>)
+		{%- endcapture -%}
+		{%- assign doc_ref = doc_ref | push: ref_date -%}
+	{%- endif -%}
+
+	{%- if ref_pages != "" -%}
+		{%- capture ref_pages -%}
+			<span class="ref-pages">{{ ref_pages }}</span>
+		{%- endcapture -%}
+		{%- assign doc_ref = doc_ref | push: ref_pages -%}
+	{%- endif -%}
 
 	{%- capture doc_ref -%}
 
 		<cite class="ref">
-		
-		{%- if ref_author != "" -%}
-			<span class="ref-author">{{ ref_author }}</span>{{", "}}
-		{%- endif -%}
-
-		“<span class="ref-title">{{ ref_title | default: ref }}</span>{%- if ref_publication != "" or ref_pages != "" -%},{%- endif -%}{{"”"}}
-
-		{%- if ref_publication != "" -%}
-			{{" "}}<i class="ref-publication">{{ ref_publication }}</i>
-		{%- endif -%}
-
-		{%- if ref_date != "" -%}
-			{{" ("}}<time class="ref-date" datetime="{{ ref_date | date_to_xmlschema }}">{{ ref_date | date: site.date_format }}</time>{{") "}}{%- if ref_pages != "" -%},{%- endif -%}
-		{%- endif -%}
-
-		{%- if ref_pages != "" -%}
-			{{" "}}<span class="ref-pages">{{ ref_pages }}</span>
-		{%- endif -%}
-
+			{%- comment -%} Clean up punctuation {%- endcomment -%}
+			{{- doc_ref | join: ", " | replace: "”,", ",”" | replace: ", (", " (" -}}
 		</cite>
 
 	{%- endcapture -%}

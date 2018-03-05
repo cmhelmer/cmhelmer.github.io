@@ -6,12 +6,12 @@ Builds out list with media preview
 
 {%- endcomment -%}
 
-{%- assign my_files = include.my_files -%}
+{%- assign files = include.files -%}
 
-{%- if my_files.size > 0 -%}
+{%- if files.size > 0 -%}
 <ol class="file-list">
 
-	{%- for file in my_files -%}
+	{%- for file in files -%}
 
 	<li class="file-item">
 		<a href="{{ file.path | absolute_url }}">

@@ -1,0 +1,41 @@
+{%- comment -%}
+
+Include document excerpt
+
+Roll our own excerpt in order to use custom metadata and content filters
+Prefer "description" set in metadata (not "excerpt", which is set by Jekyll and not useful to us)
+
+- Pass in document (optional)
+
+{%- endcomment -%}
+
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
+{%- else -%}
+	{%- assign doc = page -%}
+{%- endif -%}
+
+{%- capture doc_excerpt -%}
+
+{%- if doc.description != nil -%}
+
+	{{ doc.description }}
+
+{%- else -%}
+
+	{%- comment -%} Render and strip {%- endcomment -%}
+	{%- assign my_content = doc.content | markdownify | strip_html | strip -%}
+	
+	{%- comment -%} Trim to string before first separator {%- endcomment -%}
+	{%- assign my_excerpt = my_content | split: site.excerpt_separator | first -%}
+	
+	{%- comment -%} Filter as content to remove custom markup {%- endcomment -%}
+	{%- include doc-content.html my_content=my_excerpt -%}
+	
+{%- endif -%}
+
+{%- endcapture -%}
+
+{% assign excerpt_length = site.excerpt_length | default: include.excerpt_length | default: 140 %}
+
+{{- doc_excerpt | strip_html | normalize_whitespace | strip | truncate: excerpt_length -}}

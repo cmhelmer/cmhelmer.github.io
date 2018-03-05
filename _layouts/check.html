@@ -9,7 +9,7 @@ layout:	default
 {%- assign issues_count = 0 -%}
 {%- assign word_count = 0 -%}
 {%- if page.collection -%}
-	{%- assign documents = site.documents | where_exp: "doc", "doc.collection == page.collection" -%}
+	{%- assign documents = site.documents | where_exp: "document", "document.collection == page.collection" -%}
 	{%- assign collections = page.collection -%}
 {%- else -%}
 	{%- assign documents = site.documents -%}
@@ -43,12 +43,12 @@ layout:	default
 {%- capture dup_uids_size -%}{%- include format-number.html number=dup_uids.size -%}{%- endcapture -%}
 {%- assign issues_count = issues_count | plus: dup_uids.size -%}
 
-{%- assign no_uid_docs = documents | where_exp: "doc", "doc.uid == nil" -%}
+{%- assign no_uid_docs = documents | where_exp: "document", "document.uid == nil" -%}
 {%- capture no_uid_docs_size -%}{%- include format-number.html number=no_uid_docs.size -%}{%- endcapture -%}
 {%- assign issues_count = issues_count | plus: no_uid_docs.size -%}
 
 {%- assign misdated_docs = "" | split: "," -%}
-{%- assign dated_docs = documents | where_exp: "doc", "doc.uid" | where_exp: "doc", "doc.date != site.time" -%}
+{%- assign dated_docs = documents | where_exp: "document", "document.uid != nil" | where_exp: "document", "document.date != site.time" -%}
 {%- for doc in dated_docs -%}
 	{%- assign doc_uid = doc.uid | strip -%}
 	{%- assign doc_uid_truncated = doc_uid | slice: 0, 8 -%}
@@ -66,7 +66,7 @@ layout:	default
 {%- assign issues_count = issues_count | plus: misdated_docs.size -%}
 
 {%- assign misnamed_docs = "" | split: "," -%}
-{%- assign uid_docs = documents | where_exp: "doc", "doc.uid != nil" -%}
+{%- assign uid_docs = documents | where_exp: "document", "document.uid != nil" -%}
 {%- for doc in uid_docs -%}
 	{%- assign doc_uid = doc.uid | strip -%}
 	{%- if doc.slug != doc_uid -%}
@@ -133,7 +133,7 @@ layout:	default
 
 {%- assign unfiltered_docs = "" | split: "," -%}
 {%- for doc in documents -%}
-	{%- capture doc_content -%}{%- include filter-content.html my_content=doc.content -%}{%- endcapture -%}
+	{%- capture doc_content -%}{%- include doc-content.html my_content=doc.content -%}{%- endcapture -%}
 	{%- assign doc_content = doc_content | strip_html | normalize_whitespace | strip -%}
 	{%- if doc_content contains "[[" and doc_content contains "]]" -%}
 		{%- assign unfiltered_docs = unfiltered_docs | push: doc -%}
@@ -150,7 +150,7 @@ layout:	default
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include filter-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 
@@ -181,7 +181,7 @@ layout:	default
 		<p><code>{{ no_uid_docs_size }}</code> document{%- unless no_uid_docs.size == 1 -%}s{%- endunless -%}{{" "}}with no <code>uid</code> metadata{%- if no_uid_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if no_uid_docs.size > 0 -%}
-		{%- capture no_uid_docs_list -%}{%- include list-docs.html my_docs=no_uid_docs -%}{%- endcapture -%}
+		{%- capture no_uid_docs_list -%}{%- include list-docs.html docs=no_uid_docs -%}{%- endcapture -%}
 		{{ no_uid_docs_list }}
 		{%- endif -%}
 
@@ -190,7 +190,7 @@ layout:	default
 		<p><code>{{ misdated_docs_size }}</code> document{%- unless misdated_docs.size == 1 -%}s{%- endunless -%}{{" "}}with <code>date</code> and <code>uid</code> that do not match{%- if misdated_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if misdated_docs.size > 0 -%}
-		{%- capture misdated_docs_list -%}{%- include list-docs.html my_docs=misdated_docs -%}{%- endcapture -%}
+		{%- capture misdated_docs_list -%}{%- include list-docs.html docs=misdated_docs -%}{%- endcapture -%}
 		{{ misdated_docs_list }}
 		{%- endif -%}
 
@@ -199,7 +199,7 @@ layout:	default
 		<p><code>{{ misnamed_docs_size }}</code> document{%- unless misnamed_docs.size == 1 -%}s{%- endunless -%}{{" "}}with <code>slug</code> and <code>uid</code> that do not match{%- if misnamed_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if misnamed_docs.size > 0 -%}
-		{%- capture misnamed_docs_list -%}{%- include list-docs.html my_docs=misnamed_docs -%}{%- endcapture -%}
+		{%- capture misnamed_docs_list -%}{%- include list-docs.html docs=misnamed_docs -%}{%- endcapture -%}
 		{{ misnamed_docs_list }}
 		{%- endif -%}
 
@@ -244,7 +244,7 @@ layout:	default
 		<p><code>{{ unfiltered_docs_size }}</code> document{%- unless unfiltered_docs.size == 1 -%}s{%- endunless -%}{{" "}}{%- if unfiltered_docs.size == 1 -%}has{%- else -%}have{%- endif -%}{{" "}}unrendered markup (<code>[[</code> and <code>]]</code>){%- if unfiltered_docs.size > 0 -%}:{%- else -%}.{%- endif -%}</p>
 
 		{%- if unfiltered_docs.size > 0 -%}
-		{%- capture unfiltered_docs_list -%}{%- include list-docs.html my_docs=unfiltered_docs -%}{%- endcapture -%}
+		{%- capture unfiltered_docs_list -%}{%- include list-docs.html docs=unfiltered_docs -%}{%- endcapture -%}
 		{{ unfiltered_docs_list }}
 		{%- endif -%}
 
