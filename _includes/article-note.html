@@ -43,7 +43,7 @@ Include note article
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
-			<time class="doc-id doc-meta" datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}">{{ doc.uid }}</time>
+			<time class="doc-id doc-meta" datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}" class="dt-published u-uid">{{ doc.uid }}</time>
 
 		</div>
 
@@ -58,13 +58,13 @@ Include note article
 		{%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_title_slug = doc.title | slugify -%}
 		{%- unless doc_title_slug == doc.slug -%}
-		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
+		<h1 class="doc-title doc-meta p-name">{{ doc_title }}</h1>
 		{%- endunless -%}
 		
 		<div class="doc-byline">
 
 			{%- comment -%} Even if single author site, output author for scrapers {%- endcomment -%}
-			<div class="doc-author doc-meta">By {{ doc_author_name }}</div>
+			<div class="doc-author doc-meta p-author">By {{ doc_author_name }}</div>
 	
 			{%- comment -%}
 			Reading time
@@ -74,26 +74,26 @@ Include note article
 			{%- endcomment -%}
 
 			{%- assign doc_readtime = doc.content | number_of_words | divided_by: 200 | plus: 1 -%}
-			{% if doc_readtime > 1 %}
+			{%- if doc_readtime > 1 -%}
 			<div class="doc-readtime doc-meta">{{ doc_readtime }} min. read</div>
 			{%- endif -%}
 
 			{%- if doc.updated -%}
-			<div class="doc-updated doc-meta">Updated <time datetime="{{ doc.updated | date_to_xmlschema }}">{{ doc.updated | date: site.date_format }}</time></div>
+			<div class="doc-updated doc-meta">Updated <time datetime="{{ doc.updated | date_to_xmlschema }}" class="dt-updated">{{ doc.updated | date: site.date_format }}</time></div>
 			{%- endif -%}
 	
 		</div>
 		
 		{%- if doc.location and site.google_static_maps -%}
 		{%- comment -%} No check of location; Google parses addresses and coordinates {%- endcomment -%}
-		<div class="doc-location doc-meta">
+		<div class="doc-location doc-meta p-geo">
 			<img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ doc.location | url_encode }}&zoom=6&size=640x274&scale=2&key={{ site.google_static_maps }}" alt="Located at {{ doc.location | escape }}">
 		</div>
 		{%- endif -%}
 
 	</header>
 
-	<div class="article-content">
+	<div class="article-content e-content">
 
 		{%- include content.html doc=doc -%}
 

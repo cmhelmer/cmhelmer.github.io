@@ -2,7 +2,8 @@
 
 Feed layout
 
-Generates feed for site or current collection
+Generates feed for site or current collection (including posts)
+Posts collection treated as "micro" blog: no titles
 Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
 Ignores any passed in content
@@ -93,7 +94,11 @@ Ignores any passed in content
   {%- endif -%}
 
   <entry{%- if doc.lang -%}{{ " " }}xml:lang="{{ doc.lang }}"{%- endif -%}>
-    <title type="html">{{ doc_title | xml_escape }}</title>
+    <title type="html">
+        {%- unless page.collection == "posts" -%}
+		{{ doc_title | xml_escape }}
+		{%- endunless -%}
+	</title>
     <link href="{{ doc_url | absolute_url }}" rel="alternate" type="text/html" title="{{ doc_title | xml_escape }}" />
     <published>{{ doc_date }}</published>
     <updated>{{ doc.updated | default: doc_date | date_to_xmlschema }}</updated>

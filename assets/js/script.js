@@ -1,6 +1,6 @@
 // TODO: 
 // - Cut the mustard somewhere (is using DOMContentLoaded good for IE 9+?...
-// - Extend for other modals (This is all a bit hacky...)
+// - Extend for other modals (This is all a hack job...)
 // - Fix search results to use custom query (current Safari bug on some wildcard searches: https://github.com/olivernn/lunr.js/issues/279)
 
 (function() {
@@ -240,6 +240,11 @@
 		dialogPolyfill.registerDialog(infoModal);
 		dialogPolyfill.registerDialog(browseModal);
 		dialogPolyfill.registerDialog(searchModal);
+		
+		// Upgrade dialog to retain focus and restore it when closed
+		registerFocusRestoreDialog(infoModal);
+		registerFocusRestoreDialog(browseModal);
+		registerFocusRestoreDialog(searchModal);
 	
 		// Remove site asides
 		infoAside.parentNode.removeChild(infoAside);

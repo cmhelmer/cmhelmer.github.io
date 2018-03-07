@@ -6,7 +6,7 @@ Extend kramdown with custom markdown filters.
 Split content by blank lines: "\n\n" (a kramdown "block boundary") and ignore other kramdown "block boundaries" (EOB marker "\n^\n" and block inline attribute list "{: ...}").
 Order of filters in config takes precedence in conflict (if two overlap).
 
-This is maddening without functions and regular expressions.
+This is a circus without functions and regular expressions.
 
 - Pass in rendered content
 - Set in `_config.yml`:
@@ -15,7 +15,7 @@ This is maddening without functions and regular expressions.
 	- highlight
 	- figure
 
-To extend further:
+To extend:
 - Add markdown variable
 - Add markdown as a `when` condition to site_markdown (when set in config)
 - Add the custom filter handling and output in the loop as a "when" condition in "The filters"
@@ -29,10 +29,11 @@ TODO:
 	- Video and audio links?
 	- File transclusion
 	- Inline hashtags as links to tags
+	- Section/page separator: `+++`
 
 {%- endcomment -%}
 
-{%- assign my_content = include.my_content -%}
+{%- assign doc_content = include.doc_content -%}
 
 {%- assign figure_markdown    = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
 {%- assign highlight_markdown = '::...::' | split: '...' -%}
@@ -42,12 +43,12 @@ TODO:
 {%- for content_filter in site.content_filters -%}
 	{%- comment -%} If this filter exists in config {%- endcomment -%}
 	{%- case content_filter -%}
-	{%- when 'wiki' -%}
-		{%- assign site_markdown = site_markdown | push: wiki_markdown -%}
-	{%- when 'highlight' -%}
-		{%- assign site_markdown = site_markdown | push: highlight_markdown -%}
 	{%- when 'figure' -%}
 		{%- assign site_markdown = site_markdown | push: figure_markdown -%}
+	{%- when 'highlight' -%}
+		{%- assign site_markdown = site_markdown | push: highlight_markdown -%}
+	{%- when 'wiki' -%}
+		{%- assign site_markdown = site_markdown | push: wiki_markdown -%}
 	{%- endcase -%}
 {%- endfor -%}
 
@@ -56,7 +57,7 @@ TODO:
 	{%- comment -%} Basic check for match in content {%- endcomment -%}
 	{%- assign content_markdown = '' | split: ',' -%}
 	{%- for markdown in site_markdown -%}
-		{%- if my_content contains markdown.first -%}
+		{%- if doc_content contains markdown.first -%}
 			{%- assign content_markdown = content_markdown | push: markdown -%}
 		{%- endif -%}
 	{%- endfor -%}
@@ -67,7 +68,7 @@ TODO:
 		{%- assign block_boundary = "
 
 " -%}
-		{%- assign content_blocks = my_content | split: block_boundary -%}
+		{%- assign content_blocks = doc_content | split: block_boundary -%}
 		{%- assign filtered_blocks = '' | split: ',' -%}
 
 		{%- comment -%} Walk through blocks to make it more robust and avoid accidental inline elements spanning blocks {%- endcomment -%}
@@ -221,18 +222,18 @@ TODO:
 								
 								{%- endcomment -%}
 
-								{%- assign my_uid = fragment | slice: 0, 12 -%}
-								{%- assign my_phrase = fragment | replace_first: my_uid, '' | lstrip -%}
-								{%- assign my_doc = site.documents | where: "uid", my_uid  | first -%}
+								{%- assign ref_uid = fragment | slice: 0, 12 -%}
+								{%- assign ref_phrase = fragment | replace_first: ref_uid, '' | lstrip -%}
+								{%- assign ref_doc = site.documents | where: "uid", ref_uid  | first -%}
 
-								{%- if my_doc.url == nil -%}
+								{%- if ref_doc.url == nil -%}
 									{%- assign previous_parts = previous_parts | push: part -%}
 									{%- continue -%}
 								{%- endif -%}
 
 								{%- capture content_replace -%}
 
-									<a href="{{ my_doc.url | absolute_url }}" class="doc-link" title="{{ my_doc.title }}">{{ my_phrase | default: my_doc.title }}</a>
+									<a href="{{ ref_doc.url | absolute_url }}" class="doc-link" title="{{ ref_doc.title }}">{{ ref_phrase | default: ref_doc.title }}</a>
 
 								{%- endcapture -%}
 
@@ -260,10 +261,10 @@ TODO:
 		{%- endfor -%}
 
 		{%- comment -%} Reassemble with empty lines again {%- endcomment -%}
-		{%- assign my_content = filtered_blocks | join: block_boundary -%}
+		{%- assign doc_content = filtered_blocks | join: block_boundary -%}
 
 	{%- endif -%}
 
 {%- endif -%}
 
-{{- my_content -}}
+{{- doc_content -}}

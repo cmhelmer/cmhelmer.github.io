@@ -1,7 +1,7 @@
 ---
 permalink:	/about/
-# menu:
-#   order:	1
+menu:
+  order:	9
 ---
 
 # About

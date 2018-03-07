@@ -2,6 +2,8 @@
 layout:	contents
 collection:	notes
 permalink:	/notes/
+menu:
+  order: 11
 ---
 
 # Notes

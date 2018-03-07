@@ -302,21 +302,18 @@ hr {
 	@include measure;
 	@include rule;
 	position: relative;
-	height: $gap; // don't collapse
-	margin-top: $gap;
-	margin-bottom: $gap;
+	height: 1px; // don't collapse
+	margin-top: ( $gap * 1.5 ); // subtract height?
+	margin-bottom: ( $gap * 1.5 );
 	border: 0;
-	&::after {
-		top: 50%; // override
-// 		transform: translateY(-50%); // vertically align border-width
-	}
 }
 
 button,
 input {
 	@include font-feature-settings( lnum ); // lining numbers
+	color: inherit;
 	line-height: inherit;
-	min-height: 1.5em;
+	height: $gap;
 	border-radius: $border-radius;
 	border: 0;
 }
@@ -336,28 +333,50 @@ input {
 
 input[type="checkbox"] {
 	position: relative; // for pseudo-content
-	visibility: hidden; // step aside
-	vertical-align: top;
-	width: auto;
+// 	visibility: hidden; // step aside
+	width: ( $gap / 2 );
+	height: ( $gap / 2 );
 	margin-right: ( $gap / 2 );
+	border: $border-width solid;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	// Increase hit area of checkbox
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: ( $gap / -4 );
+	}
 
+	// Custom checkbox content
 	&::after {
 		content: "";
 		visibility: visible;
 		position: absolute;
-		top: ( $gap / 4 );
+		top: 0;
 		left: 0;
-		width: ( $gap / 2 );
-		height: ( $gap / 2 );
-		font-size: $font-size-small * 1rem;
-		line-height: .875; // tweak
+		right: 0;
+		bottom: 0;
+		font-size: ( $font-size-small * 1rem );
+		font-weight: 600; // faux bold
+		line-height: .7; // tweak
 		text-align: center;
 		background: $color-code-bg;
-		border-radius: $border-radius;
 	}
 
 	&:checked::after {
 		content: "\2713"; // checkmark ✓
+	}
+	
+	&:disabled {
+// 		@include dim;
+		color: $color-text;
+		border-color: $color-code-bg;
 	}
 }
 

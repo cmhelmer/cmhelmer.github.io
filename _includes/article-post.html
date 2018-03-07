@@ -14,9 +14,9 @@ Include post/blog article
 {%- comment -%} Build date, adding permalink if this page is not it {%- endcomment -%}
 
 {%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
-{%- capture doc_date -%}<time datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}">{{ doc_date | date: site.date_format }}</time>:{%- endcapture -%}
+{%- capture doc_date -%}<time datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}" class="dt-published">{{ doc_date | date: site.date_format }}</time>:{%- endcapture -%}
 {%- if doc.url != page.url -%}
-	{%- capture doc_date -%}<a href="{{ doc.url | absolute_url }}" rel="bookmark">{{ doc_date }}</a>{%- endcapture -%}
+	{%- capture doc_date -%}<a href="{{ doc.url | absolute_url }}" rel="bookmark" class="u-url">{{ doc_date }}</a>{%- endcapture -%}
 {%- endif -%}
 
 <hr class="main-rule rule-article">
@@ -25,7 +25,7 @@ Include post/blog article
 	<header class="article-header">
 		<div class="doc-date doc-meta">{{ doc_date }}</div>
 	</header>
-	<div class="article-content">
+	<div class="article-content e-content">
 
 		{%- include content.html doc=doc -%}
 

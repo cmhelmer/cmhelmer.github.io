@@ -1,13 +1,12 @@
 /*! Subset with fonttools (https://github.com/fonttools/fonttools) */
 
 // - Bypassed Google Fonts to use OpenType features, additional glyphs and long cache (through CDN).
-// - Using css font-display as progressive enhancement, not loading fonts with js.
-// - Unicode ranges unless otherwise specified: "0020-007F,2000-2027"
-// - OpenType features enabled (not all are available in all fonts): "smcp","c2sc","unic","cpsp","case","ital","ordn","lnum","onum","pnum","tnum","subs","sups","calt","liga","ccmp","kern","mark","mkmk","opbd","lfbd","rtbd"
+// - Using css font-display as progressive enhancement (not loading fonts with js)
+// - Unicode ranges specified to subset (fonts subset with pyftsubset of fontTools)
+// - OpenType features kept in subset fonts (not all are available in all fonts): "smcp","c2sc","unic","cpsp","case","ital","ordn","lnum","onum","pnum","tnum","subs","sups","calt","liga","ccmp","kern","mark","mkmk","opbd","lfbd","rtbd"
 
 // Display / Title fonts
 
-// Black weight font is subset to "C. M. Helmer"
 @font-face {
 	font-family: "Source Serif Title";
 	src: local("Source Serif Pro Black"),
@@ -16,6 +15,7 @@
 	font-weight: 900;
 	font-style: normal;
 	font-display: block;
+	unicode-range: U+0020, U+002E, U+0043, U+0048, U+004D, U+0065, U+006C-006D, U+0072; // C. M. Helmer
 }
 
 @font-face {
@@ -26,6 +26,7 @@
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 @font-face {
@@ -36,11 +37,11 @@
 	font-weight: 700;
 	font-style: normal;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 // Body fonts
 
-// Source Sans Regular Extended Unicode ranges: "00A0-00FF,0250-02FF,0391-03C9,1F00-1FFF,0590-05FF,0900-097F,2032-2034,2043,2103,2105,2109,2116,2122,2190-2195,21A9,21E5,2303,2318,2325,232B,238B,25AA-25AB,2605,2610-2612,266D,266F,2691,2713,FB01-FB02"
 @font-face {
 	font-family: "Source Sans";
 	src: local("Source Sans Pro Regular"),
@@ -49,6 +50,7 @@
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 @font-face {
@@ -59,6 +61,7 @@
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
+	unicode-range: U+00A0-00FF, U+0250-02FF, U+0391-03C9, U+1F00-1FFF, U+0590-05FF, U+0900-097F, U+2032-2034, U+2043, U+2103, U+2105, U+2109, U+2116, U+2122, U+2190-2195, U+21A9, U+21E5, U+2303, U+2318, U+2325, U+232B, U+238B, U+25AA-25AB, U+2605, U+2610-2612, U+266D, U+266F, U+2691, U+2713, U+FB01-FB02;
 }
 
 @font-face {
@@ -69,6 +72,7 @@
 	font-weight: 400;
 	font-style: italic;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 @font-face {
@@ -79,6 +83,7 @@
 	font-weight: 700;
 	font-style: normal;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 @font-face {
@@ -89,6 +94,7 @@
 	font-weight: 700;
 	font-style: italic;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }
 
 // Fixed-width font
@@ -101,4 +107,5 @@
 	font-weight: 400;
 	font-style: normal;
 	font-display: fallback;
+	unicode-range: U+0020-007F, U+2000-2027;
 }

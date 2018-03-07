@@ -1,6 +1,7 @@
 {%- comment -%}
 
 Include custom content for documents
+Appends reference
 - Pass in document (optional)
 
 {%- endcomment -%}
@@ -13,6 +14,4 @@ Include custom content for documents
 
 {%- include content-reference.html reference=doc.reference -%}
 
-{%- assign my_content = doc.content -%}
-
-{%- include doc-content.html my_content=my_content -%}
+{%- include doc-content.html doc_content=doc.content -%}

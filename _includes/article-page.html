@@ -15,7 +15,7 @@ Include page article
 
 <hr class="main-rule rule-article">
 
-<article id="page-{{ doc.title | slugify }}" class="page-doc main-article h-entry" role="document">
+<article id="page-{{ doc.title | slugify }}" class="page-doc main-article" role="document">
 	<header class="article-header">
 		<h1 class="doc-title doc-meta">{{ doc_title }}</h1>
 	</header>
@@ -24,7 +24,7 @@ Include page article
 		{%- comment -%} Pages need content rendered {%- endcomment -%}
 
 		{%- assign doc_content = doc.content | markdownify -%}
-		{%- include doc-content.html my_content=doc_content -%}
+		{%- include doc-content.html doc_content=doc_content -%}
 
 	</div>
 </article>

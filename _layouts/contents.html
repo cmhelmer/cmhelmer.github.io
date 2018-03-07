@@ -19,7 +19,7 @@ Builds a table of contents (list) for site documents or the current collection
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html doc_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 

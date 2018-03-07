@@ -21,6 +21,14 @@
 	padding-right: $gap;
 // 	clear: left; // clear @include pull
 	column-count: 1; // create block formatting context to contain child margins (someday contain: layout?)
+
+	@if $background-color != transparent {
+		background:
+			radial-gradient(circle 1px, $background-color 50%, transparent 0),
+			radial-gradient(circle 1px, $background-color 50%, transparent 0);
+		background-size: 2px 2px;
+		background-position: 0 0, 1px 1px;
+	}
 }
 
 // Span-level boxes (code, mark, etc.)
@@ -61,7 +69,7 @@
 @mixin font-body {
 	font-family: $font-body;
 	// font-kerning: normal;
-	hyphens: auto;
+	// hyphens: auto;
 	// word-wrap: break-word; // alias of overflow-wrap but with Edge support
 	hanging-punctuation: first last allow-end;
 	@include font-feature-settings( onum, pnum ); // old-style, proportional numbers
@@ -220,11 +228,18 @@
 		width: 10vw;
 		top: 0;
 		left: 0;
-		border-top: $border-width $border-style;
+		border-top: $border-width $border-style; // border-image?
+// 		transform: translateY(-50%); // vertically align border-width
+/*
+		height: ( $border-width * 2 );
+		background-image: radial-gradient(circle $border-width, $color-text 50%, transparent 0);
+		background-size: ( $border-width * 2 ) ( $border-width * 2 );
+		background-position: 0 0;
+*/
 	}
 }
 
-// Scrolling hints (horizontal)
+// Horizontal scrolling hints
 // Bug in iOS?
 @mixin scrolling-hints( $color: $color-bg ) {
 	overflow-x: auto;
@@ -242,23 +257,13 @@
 
 // Position sticky headers
 @mixin sticky {
-	position: -webkit-sticky; // not picked up by prefixfree.js
-	position: sticky;
-	z-index: 10000;
-	top: 0;
-	background-color: $color-bg;
-/*
-	&::before { // avoid Safari layering bug (it's still happening...)
-		content: "";
-		position: absolute;
-		z-index: -1;
+	@supports (position: sticky) or (position: -webkit-sticky) {
+		position: -webkit-sticky; // not picked up by prefixfree.js
+		position: sticky;
+		z-index: 10000;
 		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
 		background-color: $color-bg;
 	}
-*/
 }
 
 // Inline (text) overflow

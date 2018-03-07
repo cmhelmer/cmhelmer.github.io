@@ -24,18 +24,18 @@ Prefer "description" set in metadata (not "excerpt", which is set by Jekyll and 
 {%- else -%}
 
 	{%- comment -%} Render and strip {%- endcomment -%}
-	{%- assign my_content = doc.content | markdownify | strip_html | strip -%}
+	{%- assign plain_content = doc.content | markdownify | strip_html | strip -%}
 	
 	{%- comment -%} Trim to string before first separator {%- endcomment -%}
-	{%- assign my_excerpt = my_content | split: site.excerpt_separator | first -%}
+	{%- assign plain_excerpt = plain_content | split: site.excerpt_separator | first -%}
 	
 	{%- comment -%} Filter as content to remove custom markup {%- endcomment -%}
-	{%- include doc-content.html my_content=my_excerpt -%}
+	{%- include doc-content.html doc_content=plain_excerpt -%}
 	
 {%- endif -%}
 
 {%- endcapture -%}
 
-{% assign excerpt_length = site.excerpt_length | default: include.excerpt_length | default: 140 %}
+{%- assign excerpt_length = site.excerpt_length | default: include.excerpt_length | default: 140 -%}
 
 {{- doc_excerpt | strip_html | normalize_whitespace | strip | truncate: excerpt_length -}}

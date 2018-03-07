@@ -15,16 +15,18 @@ Include lists of site pages, collections, archives
 	{%- comment -%}
 
 	Pages with "menu" metadata
+
+	Exclude collection pages
 	Use "menu.label" or default to page title
 	Use "menu.order" or sort last
 
 	{%- endcomment -%}
 	
-	{%- assign html_pages = site.html_pages | where_exp: "page", "page.menu" | sort: "menu.order", "last" -%}
+	{%- assign html_pages = site.html_pages | where_exp: "page", "page.collection == nil" | where_exp: "page", "page.menu" | sort: "menu.order", "last" -%}
 
 	{%- if html_pages.size > 0 -%}
 	<section class="browse-pages aside-section">
-		<h2 class="aside-title">Browse:</h2>
+		<h2 class="aside-title">Pages:</h2>
 		<div class="aside-content">
 			<ul>
 				{%- for html_page in html_pages -%}
@@ -33,9 +35,9 @@ Include lists of site pages, collections, archives
 	
 				<li>
 					{%- if html_page.url == page.url -%}
-					<span class="doc-name -current">{{ menu_label }}</span>
+					<span class="doc-name -current" title="html_page.title">{{ menu_label }}</span>
 					{%- else -%}
-					<a href="{{ html_page.url | absolute_url }}" class="doc-name" rel="bookmark">{{ menu_label }}</a>
+					<a href="{{ html_page.url | absolute_url }}" class="doc-name" rel="bookmark" title="html_page.title">{{ menu_label }}</a>
 					{%- endif -%}
 				</li>
 	
@@ -47,24 +49,32 @@ Include lists of site pages, collections, archives
 
 	{%- comment -%}
 
-		Collections
+	Collection pages with "menu" metadata
 
-		Include collections with output and an index, and exclude hard-coded "posts"
+	Use "menu.label" metadata, collection.title or default to page title
+	Use "menu.order" or sort last
 
 	{%- endcomment -%}
 
-	{%- assign collections = site.collections | where_exp: "collection", "collection.label != 'posts'" | where: "output", true | sort: "order", "last" -%}
+	{%- assign collection_pages = site.html_pages | where_exp: "page", "page.collection != nil" | where_exp: "page", "page.menu" | sort: "menu.order", "last" -%}
 
-	{%- if collections.size > 0 -%}
+	{%- if collection_pages.size > 0 -%}
 	<section class="browse-collections aside-section">
 		<h2 class="aside-title">Collections:</h2>
 		<div class="aside-content">
 			<ul>
-				{%- for collection in collections -%}
-	
-				{%- assign index = site.pages | where_exp: "page", "page.collection == collection.label" | where_exp: "page", "page.layout == 'contents'" | first -%}
-	
-				<li><a href="{{ index.url | absolute_url }}" class="doc-name">{{ collection.title | default: collection.label }}</a></li>
+				{%- for collection_page in collection_pages -%}
+				
+				{%- assign collection_title = site.collections | where: "label", collection_page.collection | map: "title" | first -%}
+				{%- assign menu_label = collection_page.menu.label | default: collection_title | default: collection_page.title -%}
+
+				<li>
+					{%- if collection_page.url == page.url -%}
+					<span class="doc-name -current" title="{{ collection_page.title }}">{{ menu_label }}</span>
+					{%- else -%}
+					<a href="{{ collection_page.url | absolute_url }}" class="doc-name" rel="bookmark" title="{{ collection_page.title }}">{{ menu_label }}</a>
+					{%- endif -%}
+				</li>
 	
 				{%- endfor -%}
 			</ul>

@@ -24,7 +24,7 @@ Only shows files with metadata "attachment" set to true (static files are assume
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html doc_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 

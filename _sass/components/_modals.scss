@@ -27,6 +27,9 @@ dialog {
 
 .site-modal {
 	width: auto;
+	input:focus {
+		outline: none; // modal itself is enough focus
+	}
 }
 
 .info-modal {
@@ -58,26 +61,20 @@ dialog {
 
 	.aside-header {
 		@include sticky;
-
-		&::after {
-			content: "";
-			position: absolute;
-			top: 100%;
-			left: ( $gap / 2 );
-			right: ( $gap / 2 );
-			height: ( $gap / 2 );
-
-			// Scrolling hints
-			background-image:
-				radial-gradient( at top, $color-text-bg, rgba( $color-text-bg, 0 ) 70% );
-			background-repeat: no-repeat;
-			background-size: 100%;
-			background-position: top;
-		}
 	}
 
 	.aside-content {
 		padding-top: $gap; // override
+
+		@supports ((position: sticky) or (position: -webkit-sticky)) and (background-attachment: fixed) {
+			// Scrolling hints
+			background-image: linear-gradient( $color-text-bg, rgba( $color-text-bg, 0 ) 50% );
+			background-repeat: no-repeat;
+			background-size: 100% $gap;
+			background-position: center ( $gap * 5 ); // fallback
+			background-position: center calc((var(--gutter) * 2) + #{$gap * 3}); // fixed height of sticky .aside-header; nice touch, but fickle!
+			background-attachment: fixed;
+		}
 
 		&:empty {
 			display: none;

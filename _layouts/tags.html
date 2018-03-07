@@ -23,7 +23,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include doc-content.html my_content=content -%}{%- endcapture -%}
+		{%- capture content -%}{%- include doc-content.html doc_content=content -%}{%- endcapture -%}
 
 		{{- content -}}
 
@@ -39,7 +39,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 		{%- comment -%}
 		Subset list of tags to those in data set
-		Loop through data set instead of tags to maintain its order
+		Loop through data set instead of tags to maintain order
 		{%- endcomment -%}
 
 		{%- if page.data -%}
