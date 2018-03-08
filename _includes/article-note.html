@@ -58,7 +58,7 @@ Include note article
 		{%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_title_slug = doc.title | slugify -%}
 		{%- unless doc_title_slug == doc.slug -%}
-		<h1 class="doc-title doc-meta p-name">{{ doc_title }}</h1>
+		<h1 class="doc-title doc-meta p-entry-title">{{ doc_title }}</h1>
 		{%- endunless -%}
 		
 		<div class="doc-byline">
