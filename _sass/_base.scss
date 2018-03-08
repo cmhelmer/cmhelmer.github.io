@@ -39,6 +39,10 @@ pre code {
 	@include font-body;
 	@include font-size-fluid( $font-sizes );
 	line-height: $interval;
+	// font-kerning: normal;
+	// hyphens: auto;
+	// word-wrap: break-word; // alias of overflow-wrap but with Edge support
+	hanging-punctuation: first last allow-end;
 	color: $color-text;
 	background-color: $color-bg;
 	// -moz-osx-font-smoothing: grayscale;  // if animations
