@@ -21,13 +21,14 @@
 	padding-right: $gap;
 // 	clear: left; // clear @include pull
 	column-count: 1; // create block formatting context to contain child margins (someday contain: layout?)
-
+/*
 	@if $background-color != transparent {
 		background:
 			radial-gradient(circle 1px, $background-color 50%, transparent 0),
 			radial-gradient(circle 1px, $background-color 50%, transparent 0);
 		background-size: 2px 2px;
 		background-position: 0 0, 1px 1px;
+*/
 	}
 }
 
@@ -68,10 +69,6 @@
 // Font treatment for body
 @mixin font-body {
 	font-family: $font-body;
-	// font-kerning: normal;
-	// hyphens: auto;
-	// word-wrap: break-word; // alias of overflow-wrap but with Edge support
-	hanging-punctuation: first last allow-end;
 	@include font-feature-settings( onum, pnum ); // old-style, proportional numbers
 }
 
