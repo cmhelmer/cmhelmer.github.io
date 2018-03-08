@@ -3,7 +3,7 @@
 Feed layout
 
 Generates feed for site or current collection (including posts)
-Posts collection treated as "micro" blog: no titles
+"Posts" collection treated as micro blog: no titles (empty tag) and url will be set to any reference url
 Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
 Ignores any passed in content
@@ -69,8 +69,11 @@ Ignores any passed in content
   {%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
   {%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
   
-  {%- comment -%} Use referenced link if available {%- endcomment -%}
-  {%- assign doc_url = doc.reference.url | default: doc.url -%}
+  {%- comment -%} Use referenced link for posts if available {%- endcomment -%}
+  {%- assign doc_url = default: doc.url -%}
+  {%- if doc.collection == "posts" -%}
+  {%- assign doc_url = doc.reference.url | default: doc_url -%}
+  {%- endif -%}
 
   {%- comment -%}
   Enclosures
@@ -95,7 +98,7 @@ Ignores any passed in content
 
   <entry{%- if doc.lang -%}{{ " " }}xml:lang="{{ doc.lang }}"{%- endif -%}>
     <title type="html">
-        {%- unless page.collection == "posts" -%}
+        {%- unless doc.collection == "posts" -%}
 		{{ doc_title | xml_escape }}
 		{%- endunless -%}
 	</title>

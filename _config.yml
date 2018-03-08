@@ -117,8 +117,8 @@ kramdown:
 feed:
 - title: ""
   url: /feed.xml
-- title: "Micro Blog"
-  url: /posts/feed.xml
+# - title: "Micro Blog"
+#   url: /posts/feed.xml
 
 # Not jekyll-seo-tag plugin
 # Adds to header meta
