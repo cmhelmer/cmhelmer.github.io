@@ -4,6 +4,23 @@
 layout:	default
 ---
 
+{%- comment -%}
+
+Site checks
+- Duplicate UIDs
+- Unidentified Documents
+- Misdated Documents
+- Misnamed Documents
+- Missing Attachments
+- Orphaned Attachments
+- Unspecified Attachment
+- Unfiltered Documents
+
+TODO:
+- Check unicode-range of each page to see which pages require which fonts (if lots of pages require a character from an extended range, add those characters those to basic webfont)
+
+{%- endcomment -%}
+
 {%- assign media_dir = "/media/" -%}
 
 {%- assign issues_count = 0 -%}
@@ -15,8 +32,9 @@ layout:	default
 	{%- assign documents = site.documents -%}
 	{%- assign collections = site.collections -%}
 {%- endif -%}
-{%- assign attachments = site.static_files | where_exp: "file", "file.attachment" -%}
+{%- assign documents = documents | sort: "uid", "first" | reverse -%}
 {%- assign tags = documents | map: "tags" | compact | uniq -%}
+{%- assign attachments = site.static_files | where_exp: "file", "file.attachment" -%}
 
 {%- for doc in documents -%}
 	{%- assign word_count = doc.content | number_of_words | plus: word_count -%}
@@ -150,9 +168,7 @@ layout:	default
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include doc-content.html doc_content=content -%}{%- endcapture -%}
-
-		{{- content -}}
+		{%- include doc-content.html -%}
 
 		<ul>
 			<li><code>{{ word_count_size }}</code> word{%- unless word_count == 1 -%}s{%- endunless -%}</li>

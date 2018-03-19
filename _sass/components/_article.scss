@@ -104,31 +104,14 @@
 		@include font-size( 1.0625 );
 	}
 	
-/*
-	// TODO: Add pull headings to sections ?
-	> h1,
-	> h2,
-	> h3 {
-		@include pull-title;
-		@include rule;
-		padding-top: $gap;
-	}
-
-	// Add border if pull-title isn't preceded by <hr>
-	> :not(hr) + h1,
-	> :not(hr):not(h1) + h2 {
-		padding-top: ( $gap - $border-width );
-		border-top: $border-width $border-style;
-		
-		// Add white space before next block element because header is pulled but meant to be visual break in content
-		margin-top: $gap;
-		+ *:not(h2):not(h3),
-		+ h2 + *:not(h3),
-		+ h3 + * {
-			margin-top: ( $gap * 2 );
+	.section-break {
+		max-width: none;
+		+ h1,
+		+ h2,
+		+ h3 {
+			@include pull-title;
 		}
 	}
-*/
 
 	figure,
 	table {

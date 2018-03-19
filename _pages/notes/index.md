@@ -1,7 +1,7 @@
 ---
-layout:	contents
-collection:	notes
-permalink:	/notes/
+layout: contents
+collection: notes
+permalink: /notes/
 menu:
   order: 11
 ---

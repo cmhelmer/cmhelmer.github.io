@@ -16,7 +16,7 @@ Include site info
 		<ul>
 
 			{%- if site.author.email or site.email -%}
-			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email" class="u-email"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Email</a></li>
+			<li><a href="mailto:{{ site.author.email | default: site.email }}" title="Email" rel="me" class="u-email"><svg class="icon icon-email" width="16" height="16" role="presentation"><use xlink:href="{{ '/assets/img/icons.svg#email' | absolute_url }}"></use></svg>Email</a></li>
 			{%- endif -%}
 
 			{%- if site.author.microblog -%}

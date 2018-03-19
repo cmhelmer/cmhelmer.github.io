@@ -1,7 +1,7 @@
 ---
-layout:	contents
-collection:	lifted
-permalink:	/lifted/
+layout: contents
+collection: lifted
+permalink: /lifted/
 menu:
   order: 13
 ---

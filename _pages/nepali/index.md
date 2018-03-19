@@ -1,9 +1,9 @@
 ---
-layout:	contents
-collection:	nepali
-permalink:	/nepali/
+layout: contents
+collection: nepali
+permalink: /nepali/
 menu:
-  order:	14
+  order: 14
 ---
 
 # Nepali

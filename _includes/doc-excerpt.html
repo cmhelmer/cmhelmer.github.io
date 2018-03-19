@@ -29,7 +29,7 @@ Prefer "description" set in metadata (not "excerpt", which is set by Jekyll and 
 	{%- comment -%} Trim to string before first separator {%- endcomment -%}
 	{%- assign plain_excerpt = plain_content | split: site.excerpt_separator | first -%}
 	
-	{%- comment -%} Filter as content to remove custom markup {%- endcomment -%}
+	{%- comment -%} Filter as content to render custom markdown {%- endcomment -%}
 	{%- include doc-content.html doc_content=plain_excerpt -%}
 	
 {%- endif -%}

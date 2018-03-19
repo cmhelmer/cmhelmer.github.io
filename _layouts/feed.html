@@ -70,7 +70,7 @@ Ignores any passed in content
   {%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
   
   {%- comment -%} Use referenced link for posts if available {%- endcomment -%}
-  {%- assign doc_url = default: doc.url -%}
+  {%- assign doc_url = doc.url -%}
   {%- if doc.collection == "posts" -%}
   {%- assign doc_url = doc.reference.url | default: doc_url -%}
   {%- endif -%}

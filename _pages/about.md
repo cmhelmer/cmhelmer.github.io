@@ -1,7 +1,7 @@
 ---
-permalink:	/about/
+permalink: /about/
 menu:
-  order:	9
+  order: 9
 ---
 
 # About

@@ -1,8 +1,8 @@
 ---
-layout:	attachments
-permalink:	/media/
+layout: attachments
+permalink: /media/
 # menu:
-#  order:	5
+#  order: 5
 ---
 
 # Attachments

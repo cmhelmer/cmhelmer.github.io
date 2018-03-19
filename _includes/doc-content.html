@@ -3,21 +3,24 @@
 Include document content
 
 Extend kramdown with custom markdown filters.
-Split content by blank lines: "\n\n" (a kramdown "block boundary") and ignore other kramdown "block boundaries" (EOB marker "\n^\n" and block inline attribute list "{: ...}").
-Order of filters in config takes precedence in conflict (if two overlap).
+Split content by blank lines: "\n\n" (a kramdown "block boundary").
+Only replace content contained within single block.
+Order of filters in config takes precedence in conflict (if two replacements overlap).
 
-This is a circus without functions and regular expressions.
+(This is a circus without the functions and regular expressions of a plugin.)
 
-- Pass in rendered content
-- Set in `_config.yml`:
+- Pass in rendered content (optional)
+- Set filters in `_config.yml` (in order of priority):
 	content_filters:
 	- wiki
 	- highlight
 	- figure
+	- break
 
-To extend:
-- Add markdown variable
-- Add markdown as a `when` condition to site_markdown (when set in config)
+To extend with new filters:
+- Add markdown name to content_filters in config.yml
+- Add *_markdown variable, an array of any number of text to capture
+- Push *_markdown as a "when" condition to site_markdown (as named in config)
 - Add the custom filter handling and output in the loop as a "when" condition in "The filters"
 
 TODO:
@@ -29,20 +32,26 @@ TODO:
 	- Video and audio links?
 	- File transclusion
 	- Inline hashtags as links to tags
-	- Section/page separator: `+++`
 
 {%- endcomment -%}
 
-{%- assign doc_content = include.doc_content -%}
+{%- if include.doc_content -%}
+	{%- assign doc_content = include.doc_content -%}
+{%- else -%}
+	{%- assign doc_content = content -%}
+{%- endif -%}
 
+{%- assign break_markdown     = '<p>+++</p>'                            | split: '...' -%}
 {%- assign figure_markdown    = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
-{%- assign highlight_markdown = '::...::' | split: '...' -%}
-{%- assign wiki_markdown      = '[[...]]' | split: '...' -%}
+{%- assign highlight_markdown = '::...::'                               | split: '...' -%}
+{%- assign wiki_markdown      = '[[...]]'                               | split: '...' -%}
 
 {%- assign site_markdown = '' | split: ',' -%}
 {%- for content_filter in site.content_filters -%}
 	{%- comment -%} If this filter exists in config {%- endcomment -%}
 	{%- case content_filter -%}
+	{%- when 'break' -%}
+		{%- assign site_markdown = site_markdown | push: break_markdown -%}
 	{%- when 'figure' -%}
 		{%- assign site_markdown = site_markdown | push: figure_markdown -%}
 	{%- when 'highlight' -%}
@@ -55,6 +64,7 @@ TODO:
 {%- if site_markdown.size > 0 -%}
 
 	{%- comment -%} Basic check for match in content {%- endcomment -%}
+
 	{%- assign content_markdown = '' | split: ',' -%}
 	{%- for markdown in site_markdown -%}
 		{%- if doc_content contains markdown.first -%}
@@ -65,25 +75,36 @@ TODO:
 	{%- if content_markdown.size > 0 -%}
 
 		{%- comment -%} Block boundary is 2 newlines (a blank line) {%- endcomment -%}
+
 		{%- assign block_boundary = "
 
 " -%}
 		{%- assign content_blocks = doc_content | split: block_boundary -%}
-		{%- assign filtered_blocks = '' | split: ',' -%}
+		{%- assign new_blocks = '' | split: ',' -%}
 
-		{%- comment -%} Walk through blocks to make it more robust and avoid accidental inline elements spanning blocks {%- endcomment -%}
+		{%- comment -%} Walk through blocks to make filter more robust and avoid inline elements illegally spanning blocks {%- endcomment -%}
+
 		{%- for block in content_blocks -%}
 
 			{%- assign block_markdown = '' | split: ',' -%}
-			{%- assign filtered_block = block -%}
+			{%- assign new_block = block -%}
 
 			{%- for markdown in content_markdown -%}
 
 				{%- comment -%}
 				Basic check for match in block
-				Check for both opening and closing markdown to prevent false positives
+				Check for all marks in markdown to prevent false positives
 				{%- endcomment -%}
-				{%- if block contains markdown.first and block contains markdown.last -%}
+
+				{%- assign block_match = true -%}
+				{%- for mark in markdown -%}
+					{%- unless block contains mark -%}
+						{%- assign block_match = false -%}
+						{%- break -%}
+					{%- endunless -%}
+				{%- endfor -%}
+				
+				{%- if block_match -%}
 					{%- assign block_markdown = block_markdown | push: markdown -%}
 				{%- endif -%}
 
@@ -94,24 +115,47 @@ TODO:
 				{%- for markdown in block_markdown -%}
 
 					{%- comment -%}
-					Split on opening markdown
-					Skip empty item added by Liquid split filter on string-initial match
+					
+					First split
+
+					Remove empty item added by Liquid split filter on string-initial match
+
 					{%- endcomment -%}
 
-					{%- assign block_parts = filtered_block | split: markdown.first | compact -%}
+					{%- assign block_parts = new_block | split: markdown.first | compact -%}
+					
+					{%- comment -%} Get number of parts, explicitly set to 1 if block matched entirely (empty parts cannot be sized) {%- endcomment -%}
 
-					{%- comment -%} Keep past parts for open `<code>` check {%- endcomment -%}
+					{%- assign block_parts_size = block_parts.size -%}
+					{%- if block == markdown.first -%}
+						{%- assign block_parts_size = 1 -%}
+					{%- endif -%}
+
+					{%- comment -%} Keep past parts for Code check {%- endcomment -%}
+
 					{%- assign previous_parts = '' | split: ',' -%}
 
-					{%- for part in block_parts -%}
+					{%- for i in (1..block_parts_size) -%}
+
+						{%- comment -%} Allow empty parts (entirely matched blocks) {%- endcomment -%}
+
+						{%- if new_block == markdown.first -%}
+							{%- assign part = '' -%}
+						{%- else -%}
+							{%- assign part = block_parts[forloop.index0] -%}
+						{%- endif -%}
 
 						{%- comment -%}
+						
+						Code check
+						
 						Check if part is nested in code (previous open `<code>` but no closing `</code>`)
 						Any markdown demarcated by code tag is not intended for rendering
 						Must check all previous content because `pre > code` can contain an unknown number of blocks
+
 						{%- endcomment -%}
 
-						{%- assign previous_content = filtered_blocks | concat: previous_parts | join: '' -%}
+						{%- assign previous_content = new_blocks | concat: previous_parts | join: '' -%}
 
 						{%- if previous_content contains '<code>' or previous_content contains '<code ' -%}
 
@@ -128,12 +172,12 @@ TODO:
 							- '</code>': 7
 							{%- endcomment -%}
 
-							{%- assign end_code_opened = previous_content | slice: -6, 6 -%}
-							{%- assign end_code_closed = previous_content | slice: -7, 7 -%}
+							{%- assign code_opened_end = previous_content | slice: -6, 6 -%}
+							{%- assign code_closed_end = previous_content | slice: -7, 7 -%}
 
-							{%- if end_code_opened == '<code>' or end_code_opened == '<code ' -%}
+							{%- if code_opened_end == '<code>' or code_opened_end == '<code ' -%}
 								{%- assign code_opened = code_opened | plus: 1 -%}
-							{%- elsif end_code_closed == '</code>' -%}
+							{%- elsif code_closed_end == '</code>' -%}
 								{%- assign code_closed = code_closed | plus: 1 -%}
 							{%- endif -%}
 
@@ -144,22 +188,52 @@ TODO:
 
 						{%- endif -%}
 
-						{%- comment -%} Split again on closing markdown (redundant for identical opening and closing markdown like highlight {%- endcomment -%}
-						{%- assign fragment = part | split: markdown.last | first -%}
+						{%- comment -%}
+						
+						Second split
+						
+						Redundant for identical opening and closing marks like highlight
+						Ignore if only one mark in markdown (like "break")
+						Leave subsequent splits for individual filters
+						
+						{%- endcomment -%}
 
-						{%- comment -%} Check that we captured something useful {%- endcomment -%}
-						{%- if fragment.size > 0 -%}
+						{%- assign fragment = part -%}
+						{%- unless markdown.size == 1 or markdown.first == markdown.last -%}
+							{%- assign fragment = fragment | split: markdown.last | first -%}
+						{%- endunless -%}
+						
+						{%- comment -%} Continue if we've captured something or the entire block {%- endcomment -%}
+
+						{%- if fragment.size > 0 or new_block == markdown.first -%}
 
 							{%- comment -%}
-							TODO: Check if part contains any open or unmatched html elements without closing tag
-							Replacements may overlap; priority goes to the first markdown
+							
+							TODO: HTML check
+							
+							Check if part contains any open or unmatched html elements without closing tag
+							
+							To avoid overlapping replacements (and illegal nesting), priority goes to order of markdown set in config
+						
 							{%- endcomment -%}
 
 							{%- comment -%} Assemble matched content string {%- endcomment -%}
-							{%- assign content_find = fragment | prepend: markdown.first | append: markdown.last -%}
+
+							{%- assign content_find = fragment | prepend: markdown.first -%}
+
+							{%- unless markdown.size == 1 -%}
+								{%- assign content_find = content_find | append: markdown.last -%}
+							{%- endunless -%}
+
+							{%- comment -%} Fallback to replace identical string {%- endcomment -%}
+
 							{%- assign content_replace = content_find -%}
 
-							{%- comment -%} The filters {%- endcomment -%}
+							{%- comment -%}
+							
+							The filters
+							
+							{%- endcomment -%}
 
 							{%- case markdown -%}
 
@@ -169,10 +243,10 @@ TODO:
 								
 								Figure filter
 
-								Split on remaining markdown: closing src with opening alt attribute, and closing alt attribute
+								Split on remaining marks: closing src with opening alt attribute, and closing alt attribute
 								Keep whatever extra attributes may have been added to image 
-								Relies on consistent output of kramdown 
-								Avoids multiple inline images
+								Rely on predictable output of kramdown 
+								Avoid multiple inline images
 								
 								{%- endcomment -%}
 
@@ -182,7 +256,8 @@ TODO:
 								{%- assign image_alt           = image_fragments_two | first -%}
 								{%- assign image_attributes    = image_fragments_two | shift | join: figure_markdown[2] | split: figure_markdown.last | first -%}
 
-								{%- comment -%} Assume that no description means no figure intended {%- endcomment -%}
+								{%- comment -%} Assume that no description means figure wasn't intended {%- endcomment -%}
+
 								{%- if image_src.size > 0 and image_alt.size > 0 -%}
 
 									{%- capture content_replace -%}
@@ -197,7 +272,7 @@ TODO:
 
 								{%- comment -%}
 								
-								Highlight (mark) filter
+								Highlight (<mark>) filter
 
 								That's it.
 								
@@ -209,6 +284,22 @@ TODO:
 
 								{%- endcapture -%}
 
+							{%- when break_markdown -%}
+
+								{%- comment -%}
+								
+								Break filter
+
+								Replace paragraph block with <hr> with custom class for section breaks
+								
+								{%- endcomment -%}
+
+								{%- capture content_replace -%}
+
+									<hr class="section-break">
+
+								{%- endcapture -%}
+
 							{%- when wiki_markdown -%}
 
 								{%- comment -%}
@@ -216,15 +307,15 @@ TODO:
 								Wiki filter
 
 								Assume note IDs are first 12 digits
-								Keep any remaining text for link
+								Keep any remaining text after ID for optional link text
 								Get referenced note url and title
-								Skip if reference not found
+								Skip if referenced note not found
 								
 								{%- endcomment -%}
 
-								{%- assign ref_uid = fragment | slice: 0, 12 -%}
+								{%- assign ref_uid    = fragment | slice: 0, 12 -%}
 								{%- assign ref_phrase = fragment | replace_first: ref_uid, '' | lstrip -%}
-								{%- assign ref_doc = site.documents | where: "uid", ref_uid  | first -%}
+								{%- assign ref_doc    = site.documents | where: "uid", ref_uid  | first -%}
 
 								{%- if ref_doc.url == nil -%}
 									{%- assign previous_parts = previous_parts | push: part -%}
@@ -240,10 +331,14 @@ TODO:
 							{%- endcase -%}
 
 							{%- comment -%}
+
 							And replace. 
+
 							Use replace instead of concatenation so that we continue to iterate over same block with all markdown
+
 							{%- endcomment -%}
-							{%- assign filtered_block = filtered_block | replace: content_find, content_replace -%}
+
+							{%- assign new_block = new_block | replace: content_find, content_replace -%}
 
 						{%- endif -%}
 						
@@ -256,12 +351,14 @@ TODO:
 			{%- endif -%}
 
 			{%- comment -%} Assemble content blocks {%- endcomment -%}
-			{%- assign filtered_blocks = filtered_blocks | push: filtered_block -%}
+
+			{%- assign new_blocks = new_blocks | push: new_block -%}
 
 		{%- endfor -%}
 
-		{%- comment -%} Reassemble with empty lines again {%- endcomment -%}
-		{%- assign doc_content = filtered_blocks | join: block_boundary -%}
+		{%- comment -%} Reassemble with empty lines {%- endcomment -%}
+
+		{%- assign doc_content = new_blocks | join: block_boundary -%}
 
 	{%- endif -%}
 

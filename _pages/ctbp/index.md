@@ -1,9 +1,9 @@
 ---
-layout:	contents
-collection:	ctbp
-permalink:	/ctbp/
+layout: contents
+collection: ctbp
+permalink: /ctbp/
 menu:
-  order:	12
+  order: 12
 ---
 
 # Church Translating Bible Planters

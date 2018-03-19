@@ -65,14 +65,6 @@ Some ideas taken from "jekyll-seo-tag" plugin by Ben Balter
 {%- endif -%}
 {%- endif -%}
 
-{%- if page.audio -%}
-<meta property="og:image" content="{{ page.audio.path | default: page.audio }}">
-{%- endif -%}
-
-{%- if page.video -%}
-<meta property="og:image" content="{{ page.video.path | default: page.video }}">
-{%- endif -%}
-
 {%- if page.author.twitter or page.authors.first.twitter or site.author.twitter -%}
 <meta name="twitter:site" content="@{{ site.author.twitter | replace:"@","" }}">
 <meta name="twitter:creator" content="@{{ page.author.twitter | default: page.authors.first.twitter | default: site.author.twitter | replace:"@","" }}">

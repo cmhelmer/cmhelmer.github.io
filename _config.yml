@@ -32,6 +32,7 @@ content_filters:
 - wiki
 - highlight
 - figure
+- break
 
 permalink: /:slug
 

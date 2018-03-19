@@ -23,9 +23,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 	</header>
 	<div class="article-content">
 
-		{%- capture content -%}{%- include doc-content.html doc_content=content -%}{%- endcapture -%}
-
-		{{- content -}}
+		{%- include doc-content.html -%}
 
 		{%- comment -%} Get list of unique tags for site or collection {%- endcomment -%}
 

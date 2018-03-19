@@ -1,8 +1,8 @@
 ---
-layout:	tags
-permalink:	/tags/
+layout: tags
+permalink: /tags/
 menu:
-  order:	4
+  order: 4
 ---
 
 # Tags

@@ -1,9 +1,9 @@
 ---
-layout:	contents
-collection:	crossroads
-permalink:	/crossroads/
+layout: contents
+collection: crossroads
+permalink: /crossroads/
 menu:
-  order:	15
+  order: 15
 ---
 
 # Crossroads to the Nations Church

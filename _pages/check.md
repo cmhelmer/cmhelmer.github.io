@@ -1,6 +1,6 @@
 ---
-layout:	check
-permalink:	/check
+layout: check
+permalink: /check
 ---
 
 # Site Checks

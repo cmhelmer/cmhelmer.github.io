@@ -176,6 +176,10 @@ dd::before {
 	margin-left: (-$gap);
 }
 
+li, dd {
+	hanging-punctuation: none; // list marker is already hanging
+}
+
 audio, img, svg, video, figure, table {
 	max-width: 100%;
 }
