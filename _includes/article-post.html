@@ -9,7 +9,7 @@ Include post/blog article
 	{%- assign doc = include.doc -%}
 {%- else -%}
 	{%- comment -%} Fetch page in site.pages to coerce rendered content {%- endcomment -%}
-	{%- assign doc = site.pages | where: "permalink", page.permalink | first -%}
+	{%- assign doc = site.pages | where: "url", page.url | first | default: page -%}
 {%- endif -%}
 
 {%- comment -%} Build date, adding permalink if this page is not it {%- endcomment -%}

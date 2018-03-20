@@ -9,7 +9,7 @@ Include note article
 	{%- assign doc = include.doc -%}
 {%- else -%}
 	{%- comment -%} Fetch page in site.pages to coerce rendered content {%- endcomment -%}
-	{%- assign doc = site.pages | where: "permalink", page.permalink | first -%}
+	{%- assign doc = site.pages | where: "url", page.url | first | default: page -%}
 {%- endif -%}
 
 {%- assign doc_image        = doc.image.path | default: doc.image -%}

@@ -10,7 +10,7 @@ Matches reference metadata also (reference.uid or reference)
 	{%- assign doc = include.doc -%}
 {%- else -%}
 	{%- comment -%} Fetch page in site.pages to coerce rendered content {%- endcomment -%}
-	{%- assign doc = site.pages | where: "permalink", page.permalink | first -%}
+	{%- assign doc = site.pages | where: "url", page.url | first | default: page -%}
 {%- endif -%}
 
 {%- assign docs = site.documents | where_exp: "document", "document.uid != doc.uid" | where_exp: "document", "document.content contains doc.uid" -%}
