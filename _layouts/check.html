@@ -21,7 +21,7 @@ TODO:
 
 {%- endcomment -%}
 
-{%- assign media_dir = "/media/" -%}
+{%- assign media_dir = "/media/" | prepend: site.baseurl | prepend: site.url -%}
 
 {%- assign issues_count = 0 -%}
 {%- assign word_count = 0 -%}

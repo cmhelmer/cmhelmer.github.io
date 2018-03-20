@@ -7,11 +7,15 @@
 .tag-list {
 	@include list-none;
 	.article-content & {
-		column-width: 8.5rem; // 2-up @320px
+		max-width: none;
+		column-width: 7.75rem; // 2-up @320px, 5-up @960px
 		column-gap: $gap;
-	}
-	+ .tag-details {
-		border-top: $border-width $border-style;
+		+ hr {
+			max-width: none;
+			&::after {
+				width: 100%;
+			}
+		}
 	}
 }
 
