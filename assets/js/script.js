@@ -363,13 +363,20 @@
 	
 			footnotes.forEach(function(footnote) {
 				// Can be multiple backlinks in a footnote if referenced in content multiple times
-				var backlinks = footnote.querySelectorAll("[href^='#fnref:']"),
+				var backlinks = footnote.querySelectorAll("[href*='#fnref:']"),
 				    backlinksParent = backlinks[0].parentNode,
 				    backlinksRefs = [];
 	
 				backlinks.forEach(function(backlink) {
 					// Get reference(s) to footnote
-					backlinksRefs.push(backlink.getAttribute("href").slice(1));
+					var backlinkHref = backlink.getAttribute("href"),
+					    backlinkRef  = backlinkHref.substring(backlinkHref.lastIndexOf("#") + 1);
+					    
+					console.log(backlinkRef);
+					
+					if (backlinkRef) {
+						backlinksRefs.push(backlinkRef);
+					}
 	
 					// Remove backlink from footnote
 					backlink.parentNode.removeChild(backlink);

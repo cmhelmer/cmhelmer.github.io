@@ -3,10 +3,13 @@
 Feed layout
 
 Generates feed for site or current collection (including posts)
-"Posts" collection treated as micro blog: no titles (empty tag) and url will be set to any reference url
+If page.micro set, "posts" collection treated as micro blog: no titles (empty tag) and url will be set to any reference url
 Based on feed.xml of "jekyll-feed" plugin by Ben Balter
 
 Ignores any passed in content
+
+TODO:
+- For micro feeds, truncate all posts to 280 characters including url but retain html...
 
 {%- endcomment -%}
 
@@ -69,9 +72,9 @@ Ignores any passed in content
   {%- capture doc_title -%}{%- include doc-title.html doc=doc -%}{%- endcapture -%}
   {%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
   
-  {%- comment -%} Use referenced link for posts if available {%- endcomment -%}
+  {%- comment -%} If micro blog, use referenced link for posts if available {%- endcomment -%}
   {%- assign doc_url = doc.url -%}
-  {%- if doc.collection == "posts" -%}
+  {%- if doc.collection == "posts" and page.micro -%}
   {%- assign doc_url = doc.reference.url | default: doc_url -%}
   {%- endif -%}
 
@@ -98,7 +101,7 @@ Ignores any passed in content
 
   <entry{%- if doc.lang -%}{{ " " }}xml:lang="{{ doc.lang }}"{%- endif -%}>
     <title type="html">
-        {%- unless doc.collection == "posts" -%}
+        {%- unless doc.collection == "posts" and page.micro -%}
 		{{ doc_title | xml_escape }}
 		{%- endunless -%}
 	</title>
@@ -109,13 +112,20 @@ Ignores any passed in content
     <content type="html" xml:base="{{ doc.url | absolute_url }}">
 
       {%- comment -%} Include featured image {%- endcomment -%}
+
       {%- capture image_content -%}{%- include content-image.html doc=doc -%}{%- endcapture -%}
       {{- image_content | xml_escape -}}
 
-      {%- capture content -%}{%- include content.html doc=doc -%}{%- endcapture -%}
+      {%- comment -%} Include reference {%- endcomment -%}
+
+      {%- capture reference_content -%}{%- include content-reference.html reference=doc.reference -%}{%- endcapture -%}
+      {{- reference_content | xml_escape -}}
+
+      {%- capture content -%}{%- include doc-content.html doc=doc -%}{%- endcapture -%}
       {{- content | xml_escape -}}
 
       {%- comment -%} Include links to enclosures (fallback) {%- endcomment -%}
+
       {%- if doc_enclosures.size > 0 -%}
       {%- capture enclosure_content -%}
       <hr />

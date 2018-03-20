@@ -23,15 +23,14 @@ Prefer "description" set in metadata (not "excerpt", which is set by Jekyll and 
 
 {%- else -%}
 
-	{%- comment -%} Render and strip {%- endcomment -%}
-	{%- assign plain_content = doc.content | markdownify | strip_html | strip -%}
-	
-	{%- comment -%} Trim to string before first separator {%- endcomment -%}
-	{%- assign plain_excerpt = plain_content | split: site.excerpt_separator | first -%}
-	
-	{%- comment -%} Filter as content to render custom markdown {%- endcomment -%}
-	{%- include doc-content.html doc_content=plain_excerpt -%}
-	
+	{%- comment -%} Get content to render custom markdown {%- endcomment -%}
+
+	{%- capture doc_content -%}{%- include doc-content.html doc=doc render=true -%}{%- endcapture-%}
+
+	{%- comment -%} Strip and trim to string before first separator {%- endcomment -%}
+
+	{{ doc_content | strip_html | strip | split: site.excerpt_separator | first }}
+
 {%- endif -%}
 
 {%- endcapture -%}

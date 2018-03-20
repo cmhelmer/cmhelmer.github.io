@@ -184,7 +184,7 @@ pre + .output {
 // Footnotes
 .footnotes {
 	@include font-small;
-	@extend hr;
+	@include rule;
 	margin-top: ( $gap * 3 );
 
 	&::after {

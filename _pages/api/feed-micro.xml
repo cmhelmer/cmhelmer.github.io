@@ -1,0 +1,8 @@
+---
+# Micro Posts/Blog Feed
+# Micro feed intended for Micro.blog or auto-posting service
+title:	Micro Blog
+micro: true
+layout: feed
+permalink:	/micro.xml
+---

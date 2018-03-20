@@ -9,10 +9,13 @@ Order of filters in config takes precedence in conflict (if two replacements ove
 
 (This is a circus without the functions and regular expressions of a plugin.)
 
-- Pass in rendered content (optional)
-- Set filters in `_config.yml` (in order of priority):
+- Pass in document (optional)
+- Pass in boolean render to markdownify content (optional)
+- Pass in boolean reference to prepend reference include (optional)
+- Set filters in `_config.yml` (in order of priority), for example:
 	content_filters:
 	- wiki
+	- href
 	- highlight
 	- figure
 	- break
@@ -27,23 +30,30 @@ TODO:
 - Check if part being replaced contains any open html elements
 - Find another way to express block boundary besides literal newlines?
 - Provide a way to short-circuit the loop once enough matches have been replaced
-- Match wiki-links to note titles (regardless of ID) as secondary option
 - Other filter ideas:
 	- Video and audio links?
-	- File transclusion
-	- Inline hashtags as links to tags
+	- File transclusion (MMD style or iA Writer?)
+	- Inline hashtags as links to tags (split on space; wrap space-separated tag phrases in # or quotes?)
 
 {%- endcomment -%}
 
-{%- if include.doc_content -%}
-	{%- assign doc_content = include.doc_content -%}
+{%- if include.doc -%}
+	{%- assign doc = include.doc -%}
 {%- else -%}
-	{%- assign doc_content = content -%}
+	{%- assign doc = page -%}
+{%- endif -%}
+{%- assign doc_content = doc.content -%}
+
+{%- comment -%} Render content (necessary for some documents like pages) {%- endcomment -%}
+
+{%- if include.render -%}
+	{%- assign doc_content = doc_content | markdownify -%}
 {%- endif -%}
 
 {%- assign break_markdown     = '<p>+++</p>'                            | split: '...' -%}
 {%- assign figure_markdown    = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}
 {%- assign highlight_markdown = '::...::'                               | split: '...' -%}
+{%- assign href_markdown      = '<a href="...">'                        | split: '...' -%}
 {%- assign wiki_markdown      = '[[...]]'                               | split: '...' -%}
 
 {%- assign site_markdown = '' | split: ',' -%}
@@ -56,6 +66,8 @@ TODO:
 		{%- assign site_markdown = site_markdown | push: figure_markdown -%}
 	{%- when 'highlight' -%}
 		{%- assign site_markdown = site_markdown | push: highlight_markdown -%}
+	{%- when 'href' -%}
+		{%- assign site_markdown = site_markdown | push: href_markdown -%}
 	{%- when 'wiki' -%}
 		{%- assign site_markdown = site_markdown | push: wiki_markdown -%}
 	{%- endcase -%}
@@ -237,6 +249,22 @@ TODO:
 
 							{%- case markdown -%}
 
+							{%- when break_markdown -%}
+
+								{%- comment -%}
+								
+								Break filter
+
+								Replace paragraph block with <hr> with custom class for section breaks
+								
+								{%- endcomment -%}
+
+								{%- capture content_replace -%}
+
+									<hr class="section-break">
+
+								{%- endcapture -%}
+
 							{%- when figure_markdown -%}
 
 								{%- comment -%}
@@ -284,19 +312,35 @@ TODO:
 
 								{%- endcapture -%}
 
-							{%- when break_markdown -%}
+							{%- when href_markdown -%}
 
 								{%- comment -%}
 								
-								Break filter
-
-								Replace paragraph block with <hr> with custom class for section breaks
+								Href filter
+								
+								Replace all <a> href relative URLs with absolute URLs
+								Syndicated content will then contain valid links back to original post
+								(Jekyll's `absolute_url` filter works but causes errors here)
 								
 								{%- endcomment -%}
 
+								{%- if fragment contains '://' -%}
+									{%- continue -%}
+								{%- endif -%}
+
+								{%- assign absolute_fragment = fragment -%}
+								{%- assign absolute_url      = site.url | append: site.baseurl -%}
+								{%- assign fragment_start    = fragment | slice: 0, 1 -%}
+
+								{%- unless fragment_start == '/' -%}
+									{%- assign absolute_fragment = absolute_fragment | prepend: '/' | prepend: doc.url -%}
+								{%- endunless -%}
+
+								{%- assign absolute_fragment = absolute_fragment | prepend: absolute_url -%}
+
 								{%- capture content_replace -%}
 
-									<hr class="section-break">
+									<a href="{{ absolute_fragment }}">
 
 								{%- endcapture -%}
 
@@ -309,6 +353,7 @@ TODO:
 								Assume note IDs are first 12 digits
 								Keep any remaining text after ID for optional link text
 								Get referenced note url and title
+								If no ID match, try to match by title
 								Skip if referenced note not found
 								
 								{%- endcomment -%}
@@ -318,8 +363,19 @@ TODO:
 								{%- assign ref_doc    = site.documents | where: "uid", ref_uid  | first -%}
 
 								{%- if ref_doc.url == nil -%}
-									{%- assign previous_parts = previous_parts | push: part -%}
-									{%- continue -%}
+
+									{%- comment -%} Plan B: try to match by title {%- endcomment -%}
+								
+									{%- assign ref_phrase = fragment -%}
+									{%- assign ref_doc = site.documents | where: "title", fragment | first -%}
+
+									{%- comment -%} Ditch if still no match {%- endcomment -%}
+
+									{%- if ref_doc.url == nil -%}
+										{%- assign previous_parts = previous_parts | push: part -%}
+										{%- continue -%}
+									{%- endif -%}
+								
 								{%- endif -%}
 
 								{%- capture content_replace -%}

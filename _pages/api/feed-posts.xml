@@ -1,10 +1,8 @@
 ---
 # Posts/Blog Feed
-# Content will be ignored
-# Jekyll does not like pages inside _posts
-# So set collection here in metadata
+# Jekyll does not like pages inside _posts so set collection here in metadata
 # Title can distinguish feeds from one another
-title:	Micro Blog
+title:	Blog
 collection:	posts
 layout: feed
 permalink:	/posts/feed.xml

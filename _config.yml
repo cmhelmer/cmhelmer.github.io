@@ -30,6 +30,7 @@ excerpt_length: 140
 
 content_filters:
 - wiki
+- href
 - highlight
 - figure
 - break

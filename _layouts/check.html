@@ -151,7 +151,7 @@ TODO:
 
 {%- assign unfiltered_docs = "" | split: "," -%}
 {%- for doc in documents -%}
-	{%- capture doc_content -%}{%- include doc-content.html doc_content=doc.content -%}{%- endcapture -%}
+	{%- capture doc_content -%}{%- include doc-content.html doc=doc -%}{%- endcapture -%}
 	{%- assign doc_content = doc_content | strip_html | normalize_whitespace | strip -%}
 	{%- if doc_content contains "[[" and doc_content contains "]]" -%}
 		{%- assign unfiltered_docs = unfiltered_docs | push: doc -%}

@@ -34,7 +34,7 @@ permalink:	/data/corpus.json
 		{%- assign doc_title = doc_title | jsonify | prepend: '"title":' -%}
 		{%- assign fields = fields | push: doc_title -%}
 
-		{%- capture doc_content -%}{%- include content.html doc=doc -%}{%- endcapture -%}
+		{%- capture doc_content -%}{%- include doc-content.html doc=doc -%}{%- endcapture -%}
 		{%- assign doc_content = doc_content | newline_to_br | replace: "<br />", " " | strip_html | strip_newlines | normalize_whitespace -%}
 		{%- assign doc_content = doc_content | jsonify | prepend: '"content":' -%}
 		{%- assign fields = fields | push: doc_content -%}

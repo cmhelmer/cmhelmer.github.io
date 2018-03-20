@@ -27,7 +27,9 @@ Include post/blog article
 	</header>
 	<div class="article-content e-content">
 
-		{%- include content.html doc=doc -%}
+		{%- include content-reference.html reference=doc.reference -%}
+
+		{%- include doc-content.html doc=doc -%}
 
 	</div>
 </article>

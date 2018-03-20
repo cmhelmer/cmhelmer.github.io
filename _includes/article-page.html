@@ -21,10 +21,7 @@ Include page article
 	</header>
 	<div class="article-content">
 
-		{%- comment -%} Pages need content rendered {%- endcomment -%}
-
-		{%- assign doc_content = doc.content | markdownify -%}
-		{%- include doc-content.html doc_content=doc_content -%}
+		{%- include doc-content.html doc=doc render=true -%}
 
 	</div>
 </article>
