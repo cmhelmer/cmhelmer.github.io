@@ -10,8 +10,6 @@ Order of filters in config takes precedence in conflict (if two replacements ove
 (This is a circus without the functions and regular expressions of a plugin.)
 
 - Pass in document (optional)
-- Pass in boolean render to markdownify content (optional)
-- Pass in boolean reference to prepend reference include (optional)
 - Set filters in `_config.yml` (in order of priority), for example:
 	content_filters:
 	- wiki
@@ -40,15 +38,10 @@ TODO:
 {%- if include.doc -%}
 	{%- assign doc = include.doc -%}
 {%- else -%}
-	{%- assign doc = page -%}
+	{%- comment -%} Fetch page in site.pages to coerce rendered content {%- endcomment -%}
+	{%- assign doc = site.pages | where: "permalink", page.permalink | first -%}
 {%- endif -%}
 {%- assign doc_content = doc.content -%}
-
-{%- comment -%} Render content (necessary for some documents like pages) {%- endcomment -%}
-
-{%- if include.render -%}
-	{%- assign doc_content = doc_content | markdownify -%}
-{%- endif -%}
 
 {%- assign break_markdown     = '<p>+++</p>'                            | split: '...' -%}
 {%- assign figure_markdown    = '<p><img src="..." alt="..."... /></p>' | split: '...' -%}

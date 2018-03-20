@@ -8,7 +8,8 @@ Include featured image (intended for feeds)
 {%- if include.doc -%}
 	{%- assign doc = include.doc -%}
 {%- else -%}
-	{%- assign doc = page -%}
+	{%- comment -%} Fetch page in site.pages to coerce rendered content {%- endcomment -%}
+	{%- assign doc = site.pages | where: "permalink", page.permalink | first -%}
 {%- endif -%}
 
 {%- if doc.image -%}
