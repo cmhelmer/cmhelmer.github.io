@@ -78,7 +78,7 @@ Gets reference metadata of another document by uid
 
 		<cite class="ref">
 			{%- comment -%} Clean up punctuation {%- endcomment -%}
-			{{- doc_ref | join: ", " | replace: "”,", ",”" | replace: ", (", " (" -}}
+			{{- doc_ref | join: ", " | replace: ", (", " (" | replace: ".”,", ".”" | replace: "?”,", "?”" | replace: "!”,", "!”" | replace: "”,", ",”" -}}
 		</cite>
 
 	{%- endcapture -%}
