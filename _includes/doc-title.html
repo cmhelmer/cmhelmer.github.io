@@ -7,7 +7,7 @@ Default titles: explicit title, reference title, reduced excerpt (in that order)
 Convert quotes to typographer's (curly) quotes
 
 - Pass in document (optional)
-- Pass in boolean filter (optional)
+- Pass in boolean "filter" (optional)
 
 TODO:
 - Add ordinals filter
@@ -24,7 +24,7 @@ TODO:
 {%- assign doc_title = doc.title | strip_html | normalize_whitespace | strip -%}
 
 {%- comment -%}
-Title defaults to avoid slug-for-a-title
+Default titles to avoid slug-for-a-title
 {%- endcomment -%}
 
 {%- assign doc_title_slug = doc_title | slugify -%}

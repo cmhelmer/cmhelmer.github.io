@@ -279,9 +279,9 @@
 		});
 	
 		// Connect all nav links with modals
-		var infoLinks   = document.querySelectorAll("a[href='#info']"),
-		    browseLinks = document.querySelectorAll("a[href='#browse']"),
-		    searchLinks = document.querySelectorAll("a[href='#search']");
+		var infoLinks   = document.querySelectorAll("a[href$='#info']"),
+		    browseLinks = document.querySelectorAll("a[href$='#browse']"),
+		    searchLinks = document.querySelectorAll("a[href$='#search']");
 	
 		// Open modals on click of nav links
 		// TODO: Add just one listener to parent

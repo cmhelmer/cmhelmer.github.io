@@ -321,19 +321,9 @@ TODO:
 									{%- continue -%}
 								{%- endif -%}
 
-								{%- assign absolute_fragment = fragment -%}
-								{%- assign absolute_url      = site.url | append: site.baseurl -%}
-								{%- assign fragment_start    = fragment | slice: 0, 1 -%}
-
-								{%- unless fragment_start == '/' -%}
-									{%- assign absolute_fragment = absolute_fragment | prepend: '/' | prepend: doc.url -%}
-								{%- endunless -%}
-
-								{%- assign absolute_fragment = absolute_fragment | prepend: absolute_url -%}
-
 								{%- capture content_replace -%}
 
-									<a href="{{ absolute_fragment }}">
+									<a href="{{ fragment | prepend: doc.url | prepend: site.baseurl | prepend: site.url }}">
 
 								{%- endcapture -%}
 
@@ -371,9 +361,11 @@ TODO:
 								
 								{%- endif -%}
 
+								{%- capture ref_title -%}{%- include doc-title.html doc=ref_doc -%}{%- endcapture -%}
+
 								{%- capture content_replace -%}
 
-									<a href="{{ ref_doc.url | absolute_url }}" class="doc-link" title="{{ ref_doc.title }}">{{ ref_phrase | default: ref_doc.title }}</a>
+									<a href="{{ ref_doc.url | absolute_url }}" class="doc-link" title="{{ ref_title }}">{{ ref_phrase | default: ref_title }}</a>
 
 								{%- endcapture -%}
 

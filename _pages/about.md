@@ -8,7 +8,7 @@ menu:
 
 C. M. Helmer works abroad as a web developer, student teacher and Christian missionary.
 
-Personal writings on past websites are on this site as <a href="#browse">collections</a>.
+Personal writings on past websites are on this site as [collections](#browse).
 
 ----
 

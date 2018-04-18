@@ -24,13 +24,13 @@ Prefer "description" set in metadata (not "excerpt", which is set by Jekyll and 
 
 {%- else -%}
 
-	{%- comment -%} Get content to render custom markdown {%- endcomment -%}
+	{%- comment -%}
+	Strip and trim to string before first separator
+	Does not strip custom markup
+	Not running this through doc-content.html to render custom markup because it will be endless loop
+	{%- endcomment -%}
 
-	{%- capture doc_content -%}{%- include doc-content.html doc=doc -%}{%- endcapture-%}
-
-	{%- comment -%} Strip and trim to string before first separator {%- endcomment -%}
-
-	{{ doc_content | strip_html | strip | split: site.excerpt_separator | first }}
+	{{ doc.content | strip_html | strip | split: site.excerpt_separator | first }}
 
 {%- endif -%}
 
