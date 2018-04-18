@@ -1,0 +1,9 @@
+{%- comment -%}
+
+Format quotes
+Add angled quotation marks and reverse nested marks
+- Pass in text
+
+{%- endcomment -%}
+
+{{- "“" -}}{{ include.text | replace: "“", "‘" | replace: "”", "’" }}{{- "”" -}}

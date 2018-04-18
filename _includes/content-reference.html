@@ -47,8 +47,9 @@ Gets reference metadata of another document by uid
 	{%- endif -%}
 
 	{%- if ref_title != "" -%}
+		{%- assign ref_title = ref_title | default: ref -%}
 		{%- capture ref_title -%}
-			“<span class="ref-title">{{ ref_title | default: ref }}</span>”
+			<span class="ref-title">{%- include format-quotes.html text=ref_title -%}</span>
 		{%- endcapture -%}
 		{%- assign doc_ref = doc_ref | push: ref_title -%}
 	{%- endif -%}

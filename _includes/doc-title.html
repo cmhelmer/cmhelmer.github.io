@@ -31,8 +31,7 @@ Default titles to avoid slug-for-a-title
 {%- if doc_title_slug == doc.slug -%}
 	{%- capture doc_title -%}
 		{%- if doc.reference.title -%}
-			{%- comment -%} Add quotes and reverse existing quotes {%- endcomment -%}
-			“{{ doc.reference.title | replace: "“", "‘" | replace: "”", "’" }}”
+			{%- include format-quotes.html text=doc.reference.title -%}
 		{%- else -%}
 			{%- include doc-excerpt.html doc=doc excerpt_length=70 -%}
 		{%- endif -%}
