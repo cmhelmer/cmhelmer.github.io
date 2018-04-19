@@ -25,7 +25,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 
 		{%- include doc-content.html -%}
 
-		{%- comment -%} Get list of tags for site or collection {%- endcomment -%}
+		{%- comment -%} Get list of unique tags for site or collection {%- endcomment -%}
 
 		{%- if page.collection -%}
 			{%- assign documents = site.documents | where: "collection", page.collection -%}
@@ -33,11 +33,7 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			{%- assign documents = site.documents -%}
 		{%- endif -%}
 
-		{%- assign all_tags = documents | map: "tags" | compact -%}
-
-		{%- comment -%} Get only unique tags {%- endcomment -%}
-		
-		{%- assign tags = all_tags | uniq | sort_natural -%}
+		{%- assign tags = documents | map: "tags" | compact | uniq | sort_natural -%}
 
 		{%- comment -%}
 		Subset list of tags to those in data set
@@ -45,7 +41,6 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 		{%- endcomment -%}
 
 		{%- if page.data -%}
-
 			{%- assign data_set = site.data[page.data] -%}
 			{%- if data_set.size != empty -%}
 				{%- assign tags_subset = "" | split: "," -%}
@@ -56,7 +51,6 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 				{%- endfor -%}
 				{%- assign tags = tags_subset -%}
 			{%- endif -%}
-
 		{%- else -%}
 
 		{%- comment -%}
@@ -71,41 +65,6 @@ Link to individual tags by adding a hashtag and the tag name to the url. It work
 			{%- assign tags = sub_tags -%}
 		{%- endfor -%}
 
-		{%- endif -%}
-
-		{%- comment -%}
-		Get most used tags to feature
-		Sort by frequency of tag
-		Exclude tags which occur once
-		Prepend number to tag, padded with zeroes to max. possible number of digits
-		{%- endcomment -%}
-		
-		{%- assign featured_tags = "" | split: "," -%}
-		{%- for tag in tags -%}
-			{%- assign tag_count  = all_tags | where_exp: "item", "item == tag" | size -%}
-			{%- if tag_count > 1 -%}
-				{%- assign tag_mark   = tag | prepend: ", " | prepend: tag_count -%}
-				{%- assign tag_digits = tag_count | split: "" | size -%}
-				{%- assign tag_count_pad = all_tags | size | split: "" | size | minus: tag_digits -%}
-				{%- for i in (i..tag_count_pad) -%}
-					{%- assign tag_mark = tag_mark | prepend: "0" -%}
-				{%- endfor -%}
-				{%- assign featured_tags = featured_tags | push: tag_mark  -%}
-			{%- endif -%}
-		{%- endfor -%}
-		{%- assign featured_tags = featured_tags | sort_natural | reverse -%}
-		
-		{%- assign limited_featured_tags = "" | split: "," -%}
-		{%- for tag in featured_tags limit: 5 -%}
-			{%- assign tag_split = tag | split: ", " | last -%}
-			{%- capture tag_output -%}
-				<a href="#{{ tag_split | slugify }}" class="tag">{{ tag_split }}</a>
-			{%- endcapture -%}
-			{%- assign limited_featured_tags = limited_featured_tags | push: tag_output -%}
-		{%- endfor -%}
-
-		{%- if limited_featured_tags.size > 0 -%}
-			<p>The most used tag{%- if limited_featured_tags.size == 1 -%}{{" "}}is{%- else -%}s are{%- endif -%}{{" "}}{{ limited_featured_tags | array_to_sentence_string }}.</p>
 		{%- endif -%}
 
 		{%- include list-tags.html tags=tags -%}
