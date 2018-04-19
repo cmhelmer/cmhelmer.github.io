@@ -1,0 +1,25 @@
+---
+layout:	null
+---
+
+<p>{{ "test" | absolute_url }}</p>
+
+<p>{{ "/root" | absolute_url }}</p>
+
+<p>{{ "#hash" | absolute_url }}</p>
+
+<p>{{ "/#roothash" | absolute_url }}</p>
+
+<p>{{ "http://example.com" | absolute_url }}</p>
+
+<ol>
+{%- for pages in site.pages -%}
+
+	<li>{{ pages.url }}</li>
+
+{%- endfor -%}
+</ol>
+
+<p>site.url: <mark>{{ site.url }}</mark></p>
+
+<p>site.baseurl: <mark>{{ site.baseurl }}</mark></p>
