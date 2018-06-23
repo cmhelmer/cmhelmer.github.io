@@ -1,0 +1,16 @@
+---
+uid: 201806231749
+reference: 
+  url: https://www.nytimes.com/2018/06/21/opinion/marvel-video-games-religion.html
+  title: "The Fourth Great Awakening"
+  author: David Brooks
+  publication: The New York Times
+  date: Jun 20, 2018 at 8:00 PM
+  accessed: Jun 23, 2018 at 5:49 PM
+tags: [politics, worldview, storytelling]
+---
+
+> All of a sudden, we are surrounded by myth. As parable-based religion has receded from the public square, heroic myth, and the competitive virtues it celebrates, has rushed in to fill the space. …
+> 
+> [Myths] tend to see the line between good and evil as running between groups, not, as in parable, down the middle of every human heart.
+
