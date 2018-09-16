@@ -173,6 +173,8 @@ pre + .output {
 	.icon {
 		float: left;
 		margin-left: ( $gap * -1 );
+		margin-right: 0; // override .icon
+		padding-right: .5rem; // in place of margin-right to avoid gap in link
 	}
 
 	.ref {

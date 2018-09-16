@@ -44,7 +44,7 @@ Include note article
 			{%- endif -%}
 
 			{%- capture doc_date -%}{%- include doc-date.html doc=doc -%}{%- endcapture -%}
-			<time class="doc-id doc-meta" datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}" class="dt-published u-uid">{{ doc.uid }}</time>
+			<time class="doc-id doc-meta dt-published u-uid" datetime="{{ doc_date }}" title="{{ doc_date | date_to_rfc822 }}">{{ doc.uid }}</time>
 
 		</div>
 
