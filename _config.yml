@@ -9,6 +9,8 @@ author:
 #  linkedin: 
 #  facebook: 
 #  googleplus: 
+#  tumblr: 
+#  instagram: 
 
 url: https://cmhelmer.com
 
@@ -18,7 +20,9 @@ url: https://cmhelmer.com
 google_static_maps: AIzaSyC4L16R7aBCbJcmz4ukMpMKwNOpK0azZ4Y
 
 # See https://en.m.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone: Asia/Kolkata
+# timezone: Asia/Kolkata
+# timezone: America/New_York
+timezone: America/Chicago
 date_format: "%b %-d, %Y"
 
 title_separator: "/"

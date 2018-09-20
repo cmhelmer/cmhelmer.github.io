@@ -7,4 +7,4 @@ menu:
 
 # Tags
 
-See also [Scripture tags](/tags/scripture/).
+See also [Scripture tags](./scripture/).
