@@ -8,4 +8,4 @@ data: scripture
 
 # Scripture Tags
 
-See also [all tags](/tags/).
+See also [all tags](../).
