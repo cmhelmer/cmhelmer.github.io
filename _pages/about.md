@@ -6,15 +6,15 @@ menu:
 
 # About
 
-C. M. Helmer works abroad as a web developer, student teacher and Christian missionary.
+C. M. Helmer works abroad as a web developer, teacher and Christian missionary.
 
 Personal writings on past websites are on this site as [collections](#browse).
 
 ----
 
-This site has no ads, sponsored content, affiliate links or tracking.
+This site has no ads, sponsored content, affiliate links or third-party tracking.
 
-I coded this site myself. Besides my domain name, computer and time, the site has no costs. Thanks to the people behind these great projects:
+I coded this site myself. Besides my domain name, computer and time, the site has no regular costs. Thanks to the people behind these great projects:
 
 - CSS:
 	- [Normalize.css](http://necolas.github.io/normalize.css/)

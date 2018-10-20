@@ -4,8 +4,8 @@
 // 	height: 56.25vw; // aspect ratio 16:9
 // 	margin: ( $gap * -1 ); // fallback
 // 	margin: calc(var(--gutter) * -1); // revert body margin
-	height: calc((100vw - #{$gap}) * .5625); // fallback
-	height: calc((100vw - var(--gutter)) * .5625); // aspect ratio 16:9
+//	height: calc((100vw - #{$gap}) * .5625); // fallback
+//	height: calc((100vw - var(--gutter)) * .5625); // aspect ratio 16:9
 	margin: ( $gap / -2 ); // fallback
 	margin: calc(var(--gutter) / -2); // revert body margin
 	border-radius: ( $border-radius * 4 );
